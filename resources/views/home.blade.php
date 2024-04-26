@@ -93,77 +93,6 @@
                     </div>
                 </div>
                 <div id="carousel-categories" class="carousel slide carousel-team">
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <div class="container">
-                                <div class="row align-items-center">
-                                    <div class="col-md-5 ms-lg-auto">
-                                        <div class="p-3">
-                                            <img class="w-100 border-radius-xl h-100 fadeIn2 fadeInBottom"
-                                                src="{{ asset($categories[0]->category_image_url) }}" alt=""
-                                                loading="eager">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-5 me-lg-auto position-relative">
-                                        <h4
-                                            class="opacity-7 text-uppercase font-weight-bolder text-xxl-start fadeIn4 fadeInBottom">
-                                            {{ '1°' }}</h4>
-                                        <h1 class="text-dark display-3 font-weight-bolder fadeIn2 fadeInBottom">
-                                            {{ $categories[0]->category_name }}</h1>
-                                        <p class="my-4 lead fadeIn2 fadeInBottom">
-                                            {{ $categories[0]->category_description }}
-                                        </p>
-                                        <form action="{{ route('book.search2') }}" method="POST">
-                                            @csrf
-                                            <input type="hidden" name="category" id="category"
-                                                value="{{ $categories[0]->id }}">
-
-                                            <button type="submit" class="btn btn-warning">
-                                                <span>Explorar!</span>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        @for ($i = 2; $i < 5; $i++)
-                            <div class="carousel-item">
-                                <div class="container">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-5 ms-lg-auto">
-                                            <div class="p-3">
-                                                <img class="w-100 border-radius-xl h-100 fadeIn2 fadeInBottom"
-                                                    src="{{ $categories[$i - 1]->category_image_url }}" alt=""
-                                                    loading="eager">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-5 me-lg-auto position-relative">
-                                            <h4
-                                                class="opacity-7 text-uppercase font-weight-bolder text-xxl-start fadeIn4 fadeInBottom">
-                                                {{ $i . '°' }}</h4>
-                                            <h1 class="text-dark display-3 font-weight-bolder fadeIn2 fadeInBottom">
-                                                {{ $categories[$i - 1]->category_name }}</h1>
-                                            <p class="my-4 lead fadeIn2 fadeInBottom">
-                                                {{ $categories[$i - 1]->category_description }}
-                                            </p>
-                                            <form action="{{ route('book.search2') }}" method="POST">
-                                                @csrf
-                                                <input type="hidden" name="category" id="category"
-                                                    value="{{ $categories[$i - 1]->id }}">
-
-                                                <button type="submit" class="btn btn-warning">
-                                                    <span>Explorar!</span>
-                                                </button>
-                                            </form>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endfor
-
-                    </div>
-
                     <div class="position-relative mt-n6 carouselButtons">
                         <a class="carousel-control-prev text-dark position-absolute bottom-0 end-14 ms-auto"
                             href="#carousel-categories" role="button" data-bs-slide="prev"
@@ -187,18 +116,6 @@
                             {{--                        <span class="sr-only">Next</span> --}}
                         </a>
                     </div>
-                </div>
-                <div class="row" style="margin-top: 7rem">
-                    @for ($i = 0; $i < 4; $i++)
-                        <div class="col-lg-3 col-6 mb-lg-0 mb-4 text-center">
-                            <a href="javascript:;" class="text-lg text-gradient text-warning h3 ps-3 active"
-                                data-bs-target="#carousel-categories" data-bs-slide-to="{{ $i }}">
-                                <span>0{{ $i + 1 }}</span>
-                                <span class="ms-2">{{ $categories[$i]->category_name }}</span>
-                            </a>
-                        </div>
-                    @endfor
-
                 </div>
             </section>
 
