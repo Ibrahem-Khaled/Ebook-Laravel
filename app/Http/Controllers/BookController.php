@@ -53,6 +53,7 @@ class BookController extends Controller
 
     public function save(Request $request): RedirectResponse
     {
+        // Validate the incoming request
         $request->validate([
             'book_isbn' => 'required|min:8',
             'book_pdf' => 'required|mimes:pdf',
@@ -67,6 +68,8 @@ class BookController extends Controller
             'book_price' => 'required|min:0',
             'book_discount' => 'integer|max:100'
         ]);
+
+        // Handle PDF file upload
         if ($request->hasFile('book_pdf')) {
             $pdfFile = $request->file('book_pdf');
             $pdfFileName = Str::slug($request->book_isbn) . '.' . $pdfFile->getClientOriginalExtension();
@@ -74,19 +77,20 @@ class BookController extends Controller
             // Store the PDF file in the storage disk
             $pdfFilePath = $pdfFile->storeAs('pdfs', $pdfFileName, 'public');
         } else {
-            // Handle case when no PDF file is provided
+            // No PDF file provided, return with error
             return redirect()->back()->withInput()->withErrors(['book_pdf' => 'Please upload a PDF file']);
         }
 
-        // image upload script (edit)
+        // Handle book image upload
         if ($request->hasFile("book_image")) {
             $image = $request->file("book_image");
             $imageName = Str::slug($request->book_isbn) . "." . $image->guessExtension();
-            $route = public_path("img/books/");
+            $destinationPath = public_path("img/books/");
 
-            //$image->move($route, $imageName);
-            copy($image->getRealPath(), $route . $imageName);
+            // Move the uploaded image to the destination path
+            $image->move($destinationPath, $imageName);
 
+            // Create book record
             Book::create([
                 'book_isbn' => $request->book_isbn,
                 'book_pdf' => $pdfFilePath,
@@ -101,14 +105,12 @@ class BookController extends Controller
                 'book_image_url' => 'img/books/' . $imageName,
                 'book_price' => $request->book_price,
                 'book_discount' => $request->book_discount,
-                'created_at' => Carbon::now('UTC')->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::now('UTC')->format('Y-m-d H:i:s')
             ]);
         }
 
         return redirect()->route('book.index')->with('success', 'تم إنشاء الكتاب بنجاح.');
-
     }
+
 
     public function edit($id): View
     {
@@ -126,6 +128,7 @@ class BookController extends Controller
 
     public function update(Request $request, $id): RedirectResponse
     {
+        // Validate the incoming request
         $request->validate([
             'book_isbn' => 'required|min:8|max:13',
             'category_id' => 'required|min:1|integer',
@@ -139,8 +142,10 @@ class BookController extends Controller
             'book_discount' => 'integer|max:100'
         ]);
 
+        // Find the book by ID
         $book = Book::findOrFail($id);
 
+        // Handle PDF file upload
         if ($request->hasFile('book_pdf')) {
             $pdfFile = $request->file('book_pdf');
             $pdfFileName = Str::slug($request->book_isbn) . '.' . $pdfFile->getClientOriginalExtension();
@@ -149,22 +154,25 @@ class BookController extends Controller
             $pdfFilePath = $pdfFile->storeAs('pdfs', $pdfFileName, 'public');
         }
 
+        // Handle book image upload if provided
         if ($request->hasFile("book_image")) {
+            // Delete the old image if it exists
             if (Storage::exists(public_path($book->book_image_url))) {
                 Storage::delete(public_path($book->book_image_url));
             }
 
             $image = $request->file("book_image");
             $imageName = Str::slug($request->book_isbn) . "." . $image->guessExtension();
-            $route = public_path("img/books/");
+            $destinationPath = public_path("img/books/");
 
-            //$image->move($route, $imageName);
-            copy($image->getRealPath(), $route . $imageName);
+            // Move the uploaded image to the destination path
+            $image->move($destinationPath, $imageName);
 
+            // Update book record with new image
             $book->update([
                 'book_isbn' => $request->book_isbn,
                 'book_title' => $request->book_title,
-                'book_pdf' => $pdfFilePath,
+                'book_pdf' => isset($pdfFilePath) ? $pdfFilePath : $book->book_pdf,
                 'subcategory_id' => $request->subcategory_id,
                 'author_id' => $request->author_id,
                 'publisher_id' => $request->publisher_id,
@@ -174,14 +182,14 @@ class BookController extends Controller
                 'book_image_url' => 'img/books/' . $imageName,
                 'book_price' => $request->book_price,
                 'book_discount' => $request->book_discount,
-                'updated_at' => Carbon::now('UTC')->format('Y-m-d H:i:s')
+                'updated_at' => now()->toDateTimeString(),
             ]);
-
         } else {
+            // Update book record without changing the image URL
             $book->update([
                 'book_isbn' => $request->book_isbn,
                 'book_title' => $request->book_title,
-                'book_pdf' => $pdfFilePath,
+                'book_pdf' => isset($pdfFilePath) ? $pdfFilePath : $book->book_pdf,
                 'subcategory_id' => $request->subcategory_id,
                 'author_id' => $request->author_id,
                 'publisher_id' => $request->publisher_id,
@@ -190,9 +198,11 @@ class BookController extends Controller
                 'book_description' => $request->book_description,
                 'book_price' => $request->book_price,
                 'book_discount' => $request->book_discount,
-                'updated_at' => Carbon::now('UTC')->format('Y-m-d H:i:s')
+                'updated_at' => now()->toDateTimeString(),
             ]);
         }
+
+        // Redirect with success message
         return redirect()->route('book.index')->with('success', 'تم تحديث الكتاب بنجاح.');
     }
 
