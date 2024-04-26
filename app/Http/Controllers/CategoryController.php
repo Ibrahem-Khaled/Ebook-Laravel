@@ -85,43 +85,49 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // Validate the incoming request
         $request->validate([
             'category_name' => 'required',
-            'category_description' => 'required'
-            // Agrega más validaciones según sea necesario
+            'category_description' => 'required',
         ]);
 
+        // Find the category by ID
         $category = Category::findOrFail($id);
 
+        // Handle file upload if provided
         if ($request->hasFile("category_image")) {
+            // Delete the old image if it exists
             if (Storage::exists(public_path($category->category_image_url))) {
-                Storage::delete(public_path($category->categoory_image_url));
+                Storage::delete(public_path($category->category_image_url));
             }
 
             $image = $request->file("category_image");
             $imageName = Str::slug($request->category_name) . "." . $image->guessExtension();
-            $route = public_path("img/categories/");
+            $destinationPath = public_path("img/categories/");
 
-            //$image->move($route, $imageName);
-            copy($image->getRealPath(), $route . $imageName);
-
-            $category->update([
-                'category_name' => $request->category_name,
-                'category_description' => $request->category_description,
-                'category_image_url' => 'img/categories/' . $imageName,
-                'updated_at' => Carbon::now('UTC')->format('Y-m-d H:i:s')
-            ]);
-
+            // Attempt to move the uploaded file
+            if ($image->move($destinationPath, $imageName)) {
+                // Update category record with new image
+                $category->update([
+                    'category_name' => $request->category_name,
+                    'category_description' => $request->category_description,
+                    'category_image_url' => 'img/categories/' . $imageName,
+                    'updated_at' => now()->toDateTimeString(),
+                ]);
+            }
         } else {
+            // No file uploaded, update category record without changing the image URL
             $category->update([
                 'category_name' => $request->category_name,
                 'category_description' => $request->category_description,
-                'updated_at' => Carbon::now('UTC')->format('Y-m-d H:i:s')
+                'updated_at' => now()->toDateTimeString(),
             ]);
         }
 
+        // Redirect with success message
         return redirect()->route('category.index')->with('success', 'Categoria actualizada exitosamente.');
     }
+
 
     /**
      * Remove the specified resource from storage.
