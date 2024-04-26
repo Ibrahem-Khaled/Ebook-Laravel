@@ -26,7 +26,7 @@ return new class extends Migration {
         });
 
         DB::table('users')->insert([
-            ['id' => 1, 'name' => 'admin', 'email' => 'deibyfabianpradaquintero@gmail.com', 'password' => Hash::make('Defapra123+'), 'role_id' => 1]
+            ['id' => 1, 'name' => 'admin', 'email' => 'admin@admin.com', 'password' => Hash::make('admin123'), 'role_id' => 1]
         ]);
 
     }

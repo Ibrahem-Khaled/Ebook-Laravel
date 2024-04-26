@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Category;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ class CategoryController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('category.create',compact('categories'));
+        return view('category.create', compact('categories'));
     }
 
     /**
@@ -32,37 +33,33 @@ class CategoryController extends Controller
      */
     public function save(Request $request)
     {
-        $request->validate([
+        // Validate the incoming request
+        $validatedData = $request->validate([
             'category_name' => 'required',
             'category_description' => 'required',
-            'category_image' => 'required | image'
-            // Agrega más validaciones según sea necesario
+            'category_image' => 'required|image', // Adjusted validation rule
         ]);
 
-
-        // script para subir la imagen
-        if($request->hasFile("category_image")) {
-
+        if ($request->hasFile("category_image")) {
             $image = $request->file("category_image");
-            $imageName = Str::slug($request->category_name) . "." . $image->guessExtension();
-            $route = public_path("img/categories/");
+            $imageName = Str::slug($validatedData['category_name']) . "." . $image->guessExtension();
+            $destinationPath = public_path("img/categories/");
+            if ($image->move($destinationPath, $imageName)) {
+                Category::create([
+                    'category_name' => $validatedData['category_name'],
+                    'category_description' => $validatedData['category_description'],
+                    'category_image_url' => 'img/categories/' . $imageName,
+                ]);
 
-            //$image->move($route, $imageName);
-            copy($image->getRealPath(),$route.$imageName);
-
-            Category::create([
-                'category_name' => $request->category_name,
-                'category_description' => $request->category_description,
-                'category_image_url' => 'img/categories/' . $imageName,
-                'created_at' => Carbon::now('UTC')->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::now('UTC')->format('Y-m-d H:i:s')
-            ]);
+                return redirect()->route('category.index')->with('success', 'Categoría creada exitosamente.');
+            } else {
+                return redirect()->route('category.index')->with('danger', 'Error al subir la imagen');
+            }
         } else {
-            return redirect()->route('category.index')->with('danger', 'Error al subir la imagen');
+            return redirect()->route('category.index')->with('danger', 'No se ha seleccionado ninguna imagen.');
         }
-
-        return redirect()->route('category.index')->with('success', 'Categoría creada exitosamente.');
     }
+
 
     /**
      * Display the specified resource.
@@ -71,7 +68,7 @@ class CategoryController extends Controller
     {
         $category = Category::findOrFail($id);
         $categories = Category::all();
-        return view('category.show', compact('category','categories'));
+        return view('category.show', compact('category', 'categories'));
     }
 
     /**
@@ -96,8 +93,8 @@ class CategoryController extends Controller
 
         $category = Category::findOrFail($id);
 
-        if($request->hasFile("category_image")) {
-            if(Storage::exists(public_path($category->category_image_url))) {
+        if ($request->hasFile("category_image")) {
+            if (Storage::exists(public_path($category->category_image_url))) {
                 Storage::delete(public_path($category->categoory_image_url));
             }
 
@@ -106,7 +103,7 @@ class CategoryController extends Controller
             $route = public_path("img/categories/");
 
             //$image->move($route, $imageName);
-            copy($image->getRealPath(),$route.$imageName);
+            copy($image->getRealPath(), $route . $imageName);
 
             $category->update([
                 'category_name' => $request->category_name,
