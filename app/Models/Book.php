@@ -46,9 +46,13 @@ class Book extends Model
     {
         return $this->hasMany(Coupon::class, 'book_id');
     }
-    public function users()
+    public function userBooks()
     {
         return $this->belongsToMany(User::class, 'user_books');
+    }
+    public function userCart()
+    {
+        return $this->hasMany(UserCarts::class, 'book_id');
     }
 
     protected static function boot(): void

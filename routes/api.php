@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\api\authController;
 use App\Http\Controllers\api\booksController;
+use App\Http\Controllers\api\CartController;
 use App\Http\Controllers\api\homeController;
 use App\Http\Controllers\api\searchController;
 use Illuminate\Http\Request;
@@ -36,4 +37,10 @@ Route::get('search/coupon/{code}', [searchController::class, 'getCouponBook']);
 
 Route::get('book/details/{id}', [booksController::class, 'show']);
 Route::get('user/data/{type}/{id}', [booksController::class, 'publisherOrAuthor']);
+
+//this create cart and get 
+Route::get('user/cart', [CartController::class, 'index']);
+Route::post('user/add/cart', [CartController::class, 'addToCart']);
+Route::get('user/books', [CartController::class, 'userBook']);
+Route::post('add/books/from/user/books', [CartController::class, 'removedBooksFromCartAndAddToUserBooks']);
 
