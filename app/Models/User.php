@@ -7,8 +7,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+
+class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -44,12 +46,34 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function role() {
-        return $this->hasOne(Role::class,'id','role_id');
+    public function role()
+    {
+        return $this->hasOne(Role::class, 'id', 'role_id');
     }
 
     public function ShoppingCart()
     {
         return $this->belongsTo(ShoppingCart::class, 'usuario_id');
     }
+
+    public function books()
+    {
+        return $this->belongsToMany(Book::class, 'user_books');
+    }
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\api\authController;
 use App\Http\Controllers\api\booksController;
 use App\Http\Controllers\api\homeController;
 use App\Http\Controllers\api\searchController;
@@ -17,9 +18,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+//Auth JWT
+Route::post('login', [authController::class, 'login']);
+Route::post('register', [authController::class, 'register']);
+Route::post('logout', [authController::class, 'logout']);
+Route::post('me', [authController::class, 'me']);
+Route::post('auth/update', [authController::class, 'update']);
+Route::post('change/password', [authController::class, 'changePassword']);
 
 //this the home api
 Route::get('home/lastadded', [homeController::class, 'lastAdded']);
@@ -29,8 +34,6 @@ Route::get('home/category/{id}', [homeController::class, 'category']);
 //this search and coupon
 Route::get('search/coupon/{code}', [searchController::class, 'getCouponBook']);
 
-
 Route::get('book/details/{id}', [booksController::class, 'show']);
 Route::get('user/data/{type}/{id}', [booksController::class, 'publisherOrAuthor']);
-
 
