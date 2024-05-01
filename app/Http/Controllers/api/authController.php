@@ -107,7 +107,7 @@ class authController extends Controller
     {
         $user = auth()->guard('api')->user();
         if ($user) {
-            $user->is_login = false;
+            $user->is_login = 0;
             $user->save();
             return response()->json(['message' => 'Successfully logged out']);
         }

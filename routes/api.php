@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('login', [authController::class, 'login']);
 Route::post('register', [authController::class, 'register']);
 Route::post('logout', [authController::class, 'logout']);
-Route::post('me', [authController::class, 'me']);
+Route::get('me', [authController::class, 'me']);
 Route::post('auth/update', [authController::class, 'update']);
 Route::post('change/password', [authController::class, 'changePassword']);
 
