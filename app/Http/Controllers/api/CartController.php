@@ -42,6 +42,7 @@ class CartController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
     }
+
     public function addToCart(Request $request)
     {
         $user = auth()->guard('api')->user();
@@ -59,7 +60,27 @@ class CartController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
     }
-    
+    public function deleteFromCart(Request $request)
+    {
+        $user = auth()->guard('api')->user();
+        if ($user) {
+            $validatedData = $request->validate([
+                'cart_item_id' => 'required|exists:user_carts,id',
+            ]);
+            $cartItem = UserCarts::where('user_id', $user->id)
+                ->where('book_id', $validatedData['cart_item_id'])
+                ->first();
+            if ($cartItem) {
+                $cartItem->delete();
+                return response()->json(['success' => 'Item removed from cart successfully'], 200);
+            } else {
+                return response()->json(['error' => 'Cart item not found for the user'], 404);
+            }
+        } else {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+    }
+
     public function removedBooksFromCartAndAddToUserBooks()
     {
         $user = auth()->guard('api')->user();

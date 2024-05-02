@@ -41,6 +41,7 @@ Route::get('user/data/{type}/{id}', [booksController::class, 'publisherOrAuthor'
 //this create cart and get 
 Route::get('user/cart', [CartController::class, 'index']);
 Route::post('user/add/cart', [CartController::class, 'addToCart']);
+Route::post('user/delete/cart', [CartController::class, 'deleteFromCart']);
 Route::get('user/books', [CartController::class, 'userBook']);
 Route::post('add/books/from/user/books', [CartController::class, 'removedBooksFromCartAndAddToUserBooks']);
 
