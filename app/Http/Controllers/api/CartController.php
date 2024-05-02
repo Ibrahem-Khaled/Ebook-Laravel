@@ -25,7 +25,7 @@ class CartController extends Controller
                     $newPrice = $book->book_price - $cart->discount_price;
                     $book->book_price = $newPrice;
                     $sumPrice += $book->book_price;
-
+                    $book->cart_id = $cart->id;
                     $bookDetails[] = $book;
                 }
             }
@@ -68,7 +68,7 @@ class CartController extends Controller
                 'cart_item_id' => 'required|exists:user_carts,id',
             ]);
             $cartItem = UserCarts::where('user_id', $user->id)
-                ->where('book_id', $validatedData['cart_item_id'])
+                ->where('id', $validatedData['cart_item_id'])
                 ->first();
             if ($cartItem) {
                 $cartItem->delete();
