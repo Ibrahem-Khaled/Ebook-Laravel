@@ -81,6 +81,7 @@ class authController extends Controller
     {
         // Validate incoming request data
         $validator = Validator::make($request->all(), [
+            'old_password' => 'required|string',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
@@ -93,13 +94,16 @@ class authController extends Controller
         if (!$user) {
             return response()->json(['error' => 'Invalid token'], 401);
         }
+        if (!Hash::check($request->old_password, $user->password)) {
+            return response()->json(['error' => 'Old password is incorrect'], 422);
+        }
 
-        // Update the user's password
         $user->password = bcrypt($request->password);
         $user->save();
-
+        
         return response()->json(['message' => 'Password changed successfully'], 200);
     }
+
 
     public function me()
     {
