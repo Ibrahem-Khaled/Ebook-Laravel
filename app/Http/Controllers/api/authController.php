@@ -82,7 +82,7 @@ class authController extends Controller
         // Validate incoming request data
         $validator = Validator::make($request->all(), [
             'old_password' => 'required|string',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => 'required|string|min:8',
         ]);
 
         if ($validator->fails()) {
@@ -100,7 +100,7 @@ class authController extends Controller
 
         $user->password = bcrypt($request->password);
         $user->save();
-        
+
         return response()->json(['message' => 'Password changed successfully'], 200);
     }
 
