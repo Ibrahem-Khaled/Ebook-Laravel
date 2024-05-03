@@ -67,19 +67,15 @@ class authController extends Controller
     }
     public function update(Request $request)
     {
-        // Ensure the user is authenticated
         $user = auth()->guard('api')->user();
-
-        if (!$user) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        if ($user) {
+            $user->update($request->all());
+            return response()->json([
+                'message' => 'Update Successfully',
+                'data' => $user
+            ]);
         }
-        // Validate the request data
-        $validatedData = $request->validate([
-            'name' => 'sometimes|string|max:255',
-            'email' => 'sometimes|string|email|max:255|unique',
-        ]);
-        $user->update($validatedData);
-        return response()->json(['message' => 'Update successful'], 200);
+        return response()->json(['error' => 'Invalid token'], 401);
     }
     public function changePassword(Request $request)
     {
