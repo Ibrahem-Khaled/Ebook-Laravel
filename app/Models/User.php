@@ -68,6 +68,10 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Coupon::class, 'user_id');
     }
+    public function contactus()
+    {
+        return $this->hasMany(ContactUs::class, 'user_id');
+    }
 
     public function getJWTIdentifier()
     {

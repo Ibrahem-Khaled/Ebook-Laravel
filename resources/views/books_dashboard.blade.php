@@ -83,6 +83,18 @@
                         </div>
                     </a>
                 </div>
+                <div class="col my-2">
+                    <a href="{{ route('index.contactUs') }}">
+                        <div class="card move-on-hover" style="height: 100%">
+                            <div class="card-body text-center">
+                                <h1 class="text-gradient text-warning"><span id="status1">{{ count($contact) }}
+                                    </span>
+                                </h1>
+                                <h6 class="mb-0 font-weight-bolder">الشكاوي و المقترحات</h6>
+                            </div>
+                        </div>
+                    </a>
+                </div>
 
             </div>
             <div class="row my-4">

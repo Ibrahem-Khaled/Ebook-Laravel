@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Author;
 use App\Models\Book;
 use App\Models\Category;
+use App\Models\ContactUs;
 use App\Models\Coupon;
 use App\Models\Notifcation;
 use App\Models\Publisher;
@@ -23,6 +24,7 @@ class BookDashboardController extends Controller
         $coupons = Coupon::all();
         $slides = SlideShow::all();
         $notification = Notifcation::all();
+        $contact = ContactUs::all();
 
 
         $categories = Category::all();
@@ -37,6 +39,7 @@ class BookDashboardController extends Controller
                 'userBooks',
                 'coupons',
                 'notification',
+                'contact',
                 'slides',
                 'categories',
                 'subcategories',

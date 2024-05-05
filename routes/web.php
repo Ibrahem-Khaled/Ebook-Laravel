@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BookDashboardController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotifcationsController;
@@ -121,6 +122,8 @@ Route::middleware('UserAdmin')->group(function () {
     Route::post('notification/upload', [NotifcationsController::class, 'store'])->name('upload.notification');
     Route::post('notification/destroy/{notificationId}', [NotifcationsController::class, 'destroy'])->name('destroy.notification');
 
+    Route::get('contact/us/show', [ContactUsController::class, 'index'])->name('index.contactUs');
+    Route::post('contact/us/delete', [ContactUsController::class, 'destroy'])->name('destroy.contact');
 });
 
 //public books
