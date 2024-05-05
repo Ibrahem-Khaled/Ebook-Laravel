@@ -145,7 +145,8 @@
                     <div class="col" style="text-align: end"><a href="{{ route('publisher.create') }}"
                             class="btn btn-sm btn-warning">إنشاء الناشر</a></div>
                 </div>
-                @php if (isset($publishers)) {
+                @php 
+                if (isset($publishers)) {
                         $npublishers = count($publishers);
                 } @endphp
                 @if ($npublishers > 0)
@@ -161,6 +162,10 @@
                                         <th
                                             class="text-center  text-uppercase text-secondary  font-weight-bolder opacity-7">
                                             الاسم
+                                        </th>
+                                        <th
+                                            class="text-center  text-uppercase text-secondary  font-weight-bolder opacity-7">
+                                            عدد الكتب
                                         </th>
                                         <th
                                             class="text-center  text-uppercase text-secondary  font-weight-bolder opacity-7">
@@ -181,6 +186,9 @@
                                             </td>
                                             <td>
                                                 <p class=" mb-0">{{ $publisher->publisher_name }}</p>
+                                            </td>
+                                            <td>
+                                                <p class=" mb-0">{{ $publisher->books->count() }}</p>
                                             </td>
                                             <td class="align-middle text-center  ">
                                                 <p class=" mb-0">{{ $publisher->created_at }}</p>

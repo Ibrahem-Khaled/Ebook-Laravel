@@ -28,6 +28,6 @@ class HomeController extends Controller
     LIMIT 5';
         $latestBooks = DB::select($sql);
         $categories = Category::all();
-        return view('home', compact('latestBooks','categories'));
+        return view('home', compact('latestBooks', 'categories'));
     }
 }

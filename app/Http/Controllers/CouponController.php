@@ -35,4 +35,14 @@ class CouponController extends Controller
         // Redirect the user to a relevant page (e.g., the index page)
         return redirect()->route('coupons.index')->with('success', 'Coupons created successfully!');
     }
+
+    public function bookCoupon($bookId)
+    {
+        $book = Book::find($bookId);
+        if (!$book) {
+            return response()->json(['error' => 'Book not found.'], 404);
+        }
+        $coupons = $book->coupons;
+        return view('coupon.bookCoupons', compact('coupons'));
+    }
 }

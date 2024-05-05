@@ -47,58 +47,7 @@
         </div>
         <div class="container">
             <div class="section text-left my-4">
-                <div class="row">
-                    <div class="col" style="text-align: end">
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal"
-                            data-bs-target="#createCouponModal">
-                            إنشاء كود خصم
-                        </button>
-                    </div>
 
-                    <!-- Modal -->
-                    <div class="modal fade" id="createCouponModal" tabindex="-1"
-                        aria-labelledby="createCouponModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <!-- Modal Header -->
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="createCouponModalLabel">إنشاء كود خصم</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <!-- Modal Body -->
-                                <div class="modal-body">
-                                    <!-- Add your form or content for creating coupon here -->
-                                    <!-- Example form: -->
-                                    <form action="{{ route('coupon.store') }}" method="POST">
-                                        @csrf
-                                        <div class="mb-3">
-                                            <label for="count">عدد الاكواد</label>
-                                            <input type="number" class="form-control" id="count" name="count"
-                                                required min="0">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="book_id">اختر الكتاب:</label>
-                                            <select class="form-select" id="book_id" name="book_id" required>
-                                                <option value="" selected disabled>اختر الكتاب</option>
-                                                @foreach ($books as $book)
-                                                    <option value="{{ $book->id }}">{{ $book->book_title }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="discount">الخصم:</label>
-                                            <input type="number" class="form-control" id="discount" name="discount"
-                                                required min="0">
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">إنشاء</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 @php
                     if (isset($coupons)) {
@@ -112,11 +61,7 @@
                                     <tr>
                                         <th
                                             class="text-center  text-uppercase text-secondary  font-weight-bolder opacity-7">
-                                            id
-                                        </th>
-                                        <th
-                                            class="text-center  text-uppercase text-secondary  font-weight-bolder opacity-7">
-                                            الفئة التابع لها الكتاب
+                                            code
                                         </th>
                                         <th
                                             class="text-center  text-uppercase text-secondary  font-weight-bolder opacity-7">
@@ -124,7 +69,7 @@
                                         </th>
                                         <th
                                             class="text-center  text-uppercase text-secondary  font-weight-bolder opacity-7">
-                                            عدد اكواد الخصم للكتاب
+                                            من الذي استخدم الكود
                                         </th>
                                         <th
                                             class="text-center  text-uppercase text-secondary  font-weight-bolder opacity-7">
@@ -132,34 +77,35 @@
                                         </th>
                                         <th
                                             class="text-center  text-uppercase text-secondary  font-weight-bolder opacity-7">
-                                            تم التحديث
+                                            هل هو مستخدم
                                         </th>
                                         <th class="text-secondary opacity-7"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($books as $book)
+                                    @foreach ($coupons as $coupon)
                                         <tr>
                                             <td class="align-middle text-center ">
-                                                <p class=" mb-0">{{ $book->id }}</p>
+                                                <p class=" mb-0">{{ $coupon->code }}</p>
                                             </td>
                                             <td>
-                                                <p class=" mb-0">{{ $book->category->category_name }}</p>
+                                                <p class=" mb-0">{{ $coupon->book->book_title }}</p>
                                             </td>
                                             <td>
-                                                <p class=" mb-0">{{ $book->book_title }}</p>
-                                            </td>
-                                            <td>
-                                                <p class=" mb-0">{{ $book->coupons->count() }}</p>
+                                                <p class=" mb-0">{{ $coupon->user?->name }}</p>
                                             </td>
                                             <td class="align-middle text-center  ">
-                                                <p class=" mb-0">{{ $book->created_at }}</p>
+                                                <p class=" mb-0">{{ $coupon->created_at }}</p>
                                             </td>
                                             <td class="align-middle text-center ">
-                                                <p class=" mb-0">{{ $book->updated_at }}</p>
+                                                @if ($coupon->updated_at == $coupon->created_at)
+                                                    <p class=" mb-0">غير مستخدم</p>
+                                                @else
+                                                    <p class=" mb-0">مستخدم</p>
+                                                @endif
                                             </td>
                                             <td class="align-middle" style="text-align: center;">
-                                                <a href="{{ route('book.coupons', $book->id) }}"
+                                                <a href="{{ route('category.show', $coupon->id) }}"
                                                     class="text-secondary  mx-3 font-weight-normal "
                                                     data-toggle="tooltip" data-original-title="Edit user">
                                                     عرض

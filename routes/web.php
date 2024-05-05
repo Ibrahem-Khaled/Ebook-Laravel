@@ -7,10 +7,13 @@ use App\Http\Controllers\BookDashboardController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NotifcationsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublisherController;
 use App\Http\Controllers\ShoppingCartController;
+use App\Http\Controllers\SlideShowController;
 use App\Http\Controllers\SubcategoryController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -93,7 +96,7 @@ Route::middleware('UserAdmin')->group(function () {
     Route::post('/book/save', [BookController::class, 'save'])->name('book.save');
     Route::get('/book/edit/{book}', [BookController::class, 'edit'])->name('book.edit');
     Route::put('/book/update/{book}', [BookController::class, 'update'])->name('book.update');
-    Route::get('/book/show/{book}',[BookController::class, 'show'])->name('book.show');
+    Route::get('/book/show/{book}', [BookController::class, 'show'])->name('book.show');
     Route::delete('/book/delete/{book}', [BookController::class, 'delete'])->name('book.delete');
     Route::get('/book/search/{search}', [BookController::class, 'searchSelect'])->name('book.searchSelect');
 
@@ -101,12 +104,28 @@ Route::middleware('UserAdmin')->group(function () {
     //Coupons 
     Route::get('/coupons', [CouponController::class, 'index'])->name('coupons.index');
     Route::post('/coupon/store', [CouponController::class, 'store'])->name('coupon.store');
+    Route::get('/book/coupons/{bookId}', [CouponController::class, 'bookCoupon'])->name('book.coupons');
+
+    //users information
+    Route::get('users', [UsersController::class, 'index'])->name('users.index');
+    Route::get('users/{userId}', [UsersController::class, 'showBook'])->name('user.show.books');
+    Route::get('users/delete/{userId}', [UsersController::class, 'delete'])->name('user.delete');
+
+    //slideShow 
+    Route::get('slide/show', [SlideShowController::class, 'index'])->name('index.slide');
+    Route::post('create/slide/show', [SlideShowController::class, 'store'])->name('upload.slide');
+    Route::post('delete/slide/show/{slideId}', [SlideShowController::class, 'delete'])->name('delete.slide');
+
+    //notification 
+    Route::get('notification/show', [NotifcationsController::class, 'index'])->name('index.notification');
+    Route::post('notification/upload', [NotifcationsController::class, 'store'])->name('upload.notification');
+    Route::post('notification/destroy/{notificationId}', [NotifcationsController::class, 'destroy'])->name('destroy.notification');
 
 });
 
 //public books
-Route::get('/book/view/{book}',[BookController::class,'view'])->name('book.view');
-Route::get('/book/search',[BookController::class,'search'])->name('book.search');
-Route::POST('/book/search',[BookController::class,'search2'])->name('book.search2');
+Route::get('/book/view/{book}', [BookController::class, 'view'])->name('book.view');
+Route::get('/book/search', [BookController::class, 'search'])->name('book.search');
+Route::POST('/book/search', [BookController::class, 'search2'])->name('book.search2');
 
 require __DIR__ . '/auth.php';

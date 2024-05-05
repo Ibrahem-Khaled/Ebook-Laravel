@@ -3,7 +3,7 @@
 
 
 <head>
-    <title>اكواد الخصم</title>
+    <title>السلايد شو</title>
     <!-- العلامات الواجبة -->
     <meta charset="UTF-8">
 
@@ -48,63 +48,43 @@
         <div class="container">
             <div class="section text-left my-4">
                 <div class="row">
-                    <div class="col" style="text-align: end">
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal"
-                            data-bs-target="#createCouponModal">
-                            إنشاء كود خصم
-                        </button>
-                    </div>
-
-                    <!-- Modal -->
-                    <div class="modal fade" id="createCouponModal" tabindex="-1"
-                        aria-labelledby="createCouponModalLabel" aria-hidden="true">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#uploadSlideModal">
+                        رفع صورة السلايد
+                    </button>
+                    <div class="modal fade" id="uploadSlideModal" tabindex="-1" aria-labelledby="uploadSlideModalLabel"
+                        aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
-                                <!-- Modal Header -->
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="createCouponModalLabel">إنشاء كود خصم</h5>
+                                    <h5 class="modal-title" id="uploadSlideModalLabel">رفع صورة السلايد</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
-                                <!-- Modal Body -->
                                 <div class="modal-body">
-                                    <!-- Add your form or content for creating coupon here -->
-                                    <!-- Example form: -->
-                                    <form action="{{ route('coupon.store') }}" method="POST">
+                                    <form action="{{ route('upload.slide') }}" method="POST"
+                                        enctype="multipart/form-data">
                                         @csrf
                                         <div class="mb-3">
-                                            <label for="count">عدد الاكواد</label>
-                                            <input type="number" class="form-control" id="count" name="count"
-                                                required min="0">
+                                            <label for="slideImage" class="form-label">صورة السلايد</label>
+                                            <input type="file" class="form-control" id="slideImage" name="image">
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="book_id">اختر الكتاب:</label>
-                                            <select class="form-select" id="book_id" name="book_id" required>
-                                                <option value="" selected disabled>اختر الكتاب</option>
-                                                @foreach ($books as $book)
-                                                    <option value="{{ $book->id }}">{{ $book->book_title }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="discount">الخصم:</label>
-                                            <input type="number" class="form-control" id="discount" name="discount"
-                                                required min="0">
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">إنشاء</button>
+                                        <button type="submit" class="btn btn-primary">رفع</button>
                                     </form>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                    <div class="col">
+                        <h2 class="title">slideShow</h2>
+                    </div>
 
+                </div>
                 @php
-                    if (isset($coupons)) {
-                        $ncoupons = count($coupons);
+                    if (isset($slides)) {
+                        $nslides = count($slides);
                 } @endphp
-                @if ($ncoupons > 0)
+                @if ($nslides > 0)
                     <div class="card">
                         <div class="table-responsive">
                             <table class="table align-items-center mb-0">
@@ -112,59 +92,75 @@
                                     <tr>
                                         <th
                                             class="text-center  text-uppercase text-secondary  font-weight-bolder opacity-7">
-                                            id
+                                            الصورة
                                         </th>
                                         <th
                                             class="text-center  text-uppercase text-secondary  font-weight-bolder opacity-7">
-                                            الفئة التابع لها الكتاب
+                                            تاريخ الانضمام
                                         </th>
                                         <th
                                             class="text-center  text-uppercase text-secondary  font-weight-bolder opacity-7">
-                                            اسم الكتاب
-                                        </th>
-                                        <th
-                                            class="text-center  text-uppercase text-secondary  font-weight-bolder opacity-7">
-                                            عدد اكواد الخصم للكتاب
-                                        </th>
-                                        <th
-                                            class="text-center  text-uppercase text-secondary  font-weight-bolder opacity-7">
-                                            تم الإنشاء
-                                        </th>
-                                        <th
-                                            class="text-center  text-uppercase text-secondary  font-weight-bolder opacity-7">
-                                            تم التحديث
+                                            تاريخ اخر تحديث له
                                         </th>
                                         <th class="text-secondary opacity-7"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($books as $book)
+                                    @foreach ($slides as $slide)
                                         <tr>
                                             <td class="align-middle text-center ">
-                                                <p class=" mb-0">{{ $book->id }}</p>
-                                            </td>
-                                            <td>
-                                                <p class=" mb-0">{{ $book->category->category_name }}</p>
-                                            </td>
-                                            <td>
-                                                <p class=" mb-0">{{ $book->book_title }}</p>
-                                            </td>
-                                            <td>
-                                                <p class=" mb-0">{{ $book->coupons->count() }}</p>
+                                                <img src="{{ asset('storage/' . $slide->image) }}" alt="Slide Image"
+                                                    class="img-thumbnail" style="max-width: 100px;">
                                             </td>
                                             <td class="align-middle text-center  ">
-                                                <p class=" mb-0">{{ $book->created_at }}</p>
+                                                <p class=" mb-0">{{ $slide->created_at }}</p>
                                             </td>
                                             <td class="align-middle text-center ">
-                                                <p class=" mb-0">{{ $book->updated_at }}</p>
+                                                <p class=" mb-0">{{ $slide->updated_at }}</p>
                                             </td>
                                             <td class="align-middle" style="text-align: center;">
-                                                <a href="{{ route('book.coupons', $book->id) }}"
-                                                    class="text-secondary  mx-3 font-weight-normal "
-                                                    data-toggle="tooltip" data-original-title="Edit user">
-                                                    عرض
+
+                                                <a href="" class="text-secondary font-weight-normal "
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#deleteConfirm{{ $slide->id }}"
+                                                    data-toggle="tooltip" data-original-title="Delete user">
+                                                    حذف
                                                 </a>
+
                                             </td>
+                                            <div class="modal fade" id="deleteConfirm{{ $slide->id }}"
+                                                tabindex="-1" aria-labelledby="deleteConfirm{{ $slide->id }}"
+                                                aria-hidden="true">
+                                                <div class="modal-dialog" style="margin-top: 10rem;">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">تأكيد الحذف
+                                                            </h5>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            هل أنت متأكد أنك تريد حذف؟
+                                                            <br><br>
+                                                            هذا الإجراء لا يمكن التراجع عنه وقد يؤثر على جميع
+                                                            المرتبطة بهذه .
+                                                        </div>
+                                                        <div class="modal-footer justify-content-between">
+                                                            <button type="button" class="btn bg-gradient-dark mb-0"
+                                                                data-bs-dismiss="modal">إلغاء
+                                                            </button>
+                                                            <form method="POST"
+                                                                action="{{ route('delete.slide', $slide->id) }}">
+                                                                @csrf
+                                                                <button type="submit"
+                                                                    class="btn bg-gradient-danger mb-0">
+                                                                    حذف
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -175,8 +171,9 @@
                     <br>
                     <div class="row">
                         <div class="col">
+                            {{--                                                    <h3 class="title mt-3">{{$user->category_name}}</h3> --}}
                             <p class="display-4" style="font-size: x-large">لا توجد
-                                اكواد خصم.</p>
+                                فئات.</p>
                         </div>
                     </div>
                 @endif

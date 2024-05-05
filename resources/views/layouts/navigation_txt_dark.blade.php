@@ -130,6 +130,14 @@
                         من نحن
                     </a>
                 </li>
+                @if (Auth::check() && Auth::user()->role->role_name == 'admin')
+                    <li class="nav-item mx-2">
+                        <a href="{{ route('dashboard.books') }}"
+                            class="nav-link ps-2 d-flex cursor-pointer align-items-center">
+                            <span>لوحة التحكم</span>
+                        </a>
+                    </li>
+                @endif
             </ul>
             <ul class="navbar-nav navbar-nav-hover ms-auto">
                 @if (Auth::user() !== null)
@@ -141,18 +149,6 @@
                         <div class="dropdown-menu ms-n3 dropdown-menu-animation dropdown p-3 border-radius-lg mt-0 mt-lg-3"
                             aria-labelledby="dropdownMenuPages">
                             <div class="d-none d-lg-block">
-                                @if (Auth::user()->role->role_name == 'admin')
-                                    <h6
-                                        class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
-                                        إدارة
-                                    </h6>
-                                    <a href="{{ route('dashboard.books') }}" class="dropdown-item border-radius-md">
-                                        <span>الكتب</span>
-                                    </a>
-                                    <a href="#" class="dropdown-item border-radius-md">
-                                        <span>المنتجات</span>
-                                    </a>
-                                @endif
 
                                 <h6
                                     class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1 mt-1">
