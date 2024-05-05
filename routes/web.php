@@ -111,6 +111,7 @@ Route::middleware('UserAdmin')->group(function () {
     Route::get('users', [UsersController::class, 'index'])->name('users.index');
     Route::get('users/{userId}', [UsersController::class, 'showBook'])->name('user.show.books');
     Route::get('users/delete/{userId}', [UsersController::class, 'delete'])->name('user.delete');
+    Route::post('users/add/books', [UsersController::class, 'addBookFromUser'])->name('user.addBooks');
 
     //slideShow 
     Route::get('slide/show', [SlideShowController::class, 'index'])->name('index.slide');

@@ -115,11 +115,55 @@
                                                     عرض
                                                 </a>
 
-                                                <a href="{{ route('category.edit', $user->id) }}"
-                                                    class="text-secondary  mx-3 font-weight-normal "
-                                                    data-toggle="tooltip" data-original-title="Edit user">
+                                                <button type="button" data-bs-toggle="modal"
+                                                    data-bs-target="#addBookFromUser{{ $user->id }}"
+                                                    class="text-secondary  mx-3 font-weight-normal ">
                                                     اضافة كتب
-                                                </a>
+                                                </button>
+
+                                                <div class="modal fade" id="addBookFromUser{{ $user->id }}"
+                                                    tabindex="-1" aria-labelledby="createCouponModalLabel"
+                                                    aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <!-- Modal Header -->
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="createCouponModalLabel">
+                                                                    اضافة كتاب للمستخدم</h5>
+                                                                <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <!-- Modal Body -->
+                                                            <div class="modal-body">
+                                                                <form action="{{ route('user.addBooks') }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    <div class="mb-3">
+                                                                        <label for="count">{{$user->name}}</label>
+                                                                        <input type="number"
+                                                                            value="{{ $user->id }}"
+                                                                            class="form-control" id="count"
+                                                                            name="user_id" min="0" hidden>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="book_id">اختر الكتاب:</label>
+                                                                        <select class="form-select" id="book_id"
+                                                                            name="book_id" required>
+                                                                            <option value="" selected disabled>
+                                                                                اختر الكتاب</option>
+                                                                            @foreach ($books as $book)
+                                                                                <option value="{{ $book->id }}">
+                                                                                    {{ $book->book_title }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                    <button type="submit"
+                                                                        class="btn btn-primary">إنشاء</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
                                                 <a href="" class="text-secondary font-weight-normal "
                                                     data-bs-toggle="modal"

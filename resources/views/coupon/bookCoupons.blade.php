@@ -17,6 +17,10 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <!-- Material Kit CSS -->
     <link href={{ asset('css/material-kit.css') }} rel="stylesheet" />
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+
 </head>
 
 <body>
@@ -47,6 +51,7 @@
         </div>
         <div class="container">
             <div class="section text-left my-4">
+                <button class="btn btn-sm btn-warning" onclick="exportToExcel()">استخراج الاكواد في ملف اكسيل</button>
 
 
                 @php
@@ -56,7 +61,7 @@
                 @if ($ncoupons > 0)
                     <div class="card">
                         <div class="table-responsive">
-                            <table class="table align-items-center mb-0">
+                            <table class="table align-items-center mb-0" id="dataTable">
                                 <thead>
                                     <tr>
                                         <th
@@ -135,6 +140,31 @@
 
         </div>
     </div>
+
+    <script>
+        function exportToExcel() {
+            var wb = XLSX.utils.table_to_book(document.getElementById('dataTable'), {
+                sheet: "Sheet 1"
+            });
+            var wbout = XLSX.write(wb, {
+                bookType: 'xlsx',
+                type: 'binary'
+            });
+
+            function s2ab(s) {
+                var buf = new ArrayBuffer(s.length);
+                var view = new Uint8Array(buf);
+                for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+                return buf;
+            }
+
+            var fileName = "data.xlsx";
+            saveAs(new Blob([s2ab(wbout)], {
+                type: "application/octet-stream"
+            }), fileName);
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
     <script src="{{ asset('js/core/popper.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/core/bootstrap.min.js') }}" type="text/javascript"></script>
