@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\Category;
+use App\Models\Notifcation;
 use Illuminate\Http\Request;
 
 class homeController extends Controller
@@ -34,7 +35,11 @@ class homeController extends Controller
         }
         $category->books;
         return response()->json($category, 200);
-
+    }
+    public function notifications()
+    {
+        $notifications = Notifcation::all();
+        return response()->json($notifications, 200);
     }
 
 
