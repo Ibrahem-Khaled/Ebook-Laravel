@@ -25,15 +25,18 @@ class authController extends Controller
             'password' => Hash::make($validatedData['password']),
         ]);
 
-        $credentials = request(['email', 'password']);
-        $token = auth()->guard('api')->attempt($credentials);
+        $token = auth()->guard('api')->attempt($validatedData); // Using $validatedData directly here is cleaner
+
         if (!$token) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
+
         $user = auth()->guard('api')->user();
+
         if ($user->is_login == 1) {
             return response()->json(['error' => 'You must first log out from another device'], 401);
         }
+
         $user->is_login = true;
         $user->save();
 
@@ -41,10 +44,11 @@ class authController extends Controller
             'message' => 'User registered successfully',
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 9999999,
+            'expires_in' => auth('api')->factory()->getTTL() * 9999999, // This seems like an arbitrarily large number, consider revising
             'user' => $user,
         ], 201);
     }
+
     public function login()
     {
         $credentials = request(['email', 'password']);

@@ -55,6 +55,20 @@ class Book extends Model
         return $this->hasMany(UserCarts::class, 'book_id');
     }
 
+    public function scopeSearch($query, $term)
+    {
+        return $query->whereHas('author', function ($query) use ($term) {
+            $query->where('author_name', 'like', '%' . $term . '%');
+        })->orWhereHas('publisher', function ($query) use ($term) {
+            $query->where('publisher_name', 'like', '%' . $term . '%');
+        })->orWhere('book_title', 'like', '%' . $term . '%')
+            ->orWhere('book_description', 'like', '%' . $term . '%');
+    }
+
+    public function userFav()
+    {
+        return $this->belongsToMany(User::class, 'favorites');
+    }
     protected static function boot(): void
     {
         parent::boot();

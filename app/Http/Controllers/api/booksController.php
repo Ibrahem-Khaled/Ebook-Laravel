@@ -13,34 +13,22 @@ class booksController extends Controller
 {
     public function show($id)
     {
+        $user = auth()->guard('api')->user();
+
         $book = Book::find($id);
 
         if (!$book) {
             return response()->json(['message' => 'Book not found'], 404);
         }
 
-        if ($book->free_sample == 1) {
-            // Fetch the PDF file for the free sample (assuming it's stored in the storage/app/public directory)
-            $pdfPath = "free_samples/{$book->id}.pdf"; // Adjust this path according to your file structure
+        $isFavorite = $user->bookFav()->where('book_id', $book->id)->exists();
 
-            // Check if the PDF file exists
-            if (Storage::exists($pdfPath)) {
-                // Read the PDF file
-                $pdfContent = Storage::get($pdfPath);
+        $bookDetails = $book->toArray();
+        $bookDetails['is_favorite'] = $isFavorite;
 
-                // Return the PDF file as a downloadable response
-                return response()->streamDownload(function () use ($pdfContent) {
-                    echo $pdfContent;
-                }, "{$book->title}_free_sample.pdf");
-            } else {
-                // If the PDF file doesn't exist, return a message
-                return response()->json(['message' => 'Free sample PDF not found'], 404);
-            }
-        } else {
-            // If free sample is not activated, return the book details
-            return response()->json($book);
-        }
+        return response()->json($bookDetails);
     }
+
 
     public function publisherOrAuthor($type, $id)
     {

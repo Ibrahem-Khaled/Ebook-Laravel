@@ -5,6 +5,8 @@ use App\Http\Controllers\api\booksController;
 use App\Http\Controllers\api\CartController;
 use App\Http\Controllers\api\homeController;
 use App\Http\Controllers\api\searchController;
+use App\Http\Controllers\api\userFavoriteController;
+use App\Http\Controllers\ContactUsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,11 +32,14 @@ Route::post('change/password', [authController::class, 'changePassword']);
 //this the home api
 Route::get('home/lastadded', [homeController::class, 'lastAdded']);
 Route::get('notifications', [homeController::class, 'notifications']);
+Route::get('home/slide', [homeController::class, 'slideshow']);
 Route::get('home/categories', [homeController::class, 'index']);
 Route::get('home/category/{id}', [homeController::class, 'category']);
 
 //this search and coupon
 Route::get('search/coupon/{code}', [searchController::class, 'getCouponBook']);
+Route::get('search/{term}', [searchController::class, 'searchBooks']);
+Route::post('use/coupon', [searchController::class, 'useCoupon']);
 
 Route::get('book/details/{id}', [booksController::class, 'show']);
 Route::get('user/data/{type}/{id}', [booksController::class, 'publisherOrAuthor']);
@@ -46,3 +51,10 @@ Route::post('user/delete/cart', [CartController::class, 'deleteFromCart']);
 Route::get('user/books', [CartController::class, 'userBook']);
 Route::post('add/books/from/user/books', [CartController::class, 'removedBooksFromCartAndAddToUserBooks']);
 
+//user favorite
+Route::get('user/favorite', [userFavoriteController::class, 'favorite']);
+Route::post('user/add/favorite', [userFavoriteController::class, 'addForFavorite']);
+Route::post('user/delete/favorite', [userFavoriteController::class, 'deleteForFavorite']);
+
+//user feedBack
+Route::post('user/feed/back', [ContactUsController::class, 'store']);

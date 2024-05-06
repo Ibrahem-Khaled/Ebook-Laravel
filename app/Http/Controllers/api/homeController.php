@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\Category;
 use App\Models\Notifcation;
+use App\Models\SlideShow;
 use Illuminate\Http\Request;
 
 class homeController extends Controller
@@ -41,6 +42,13 @@ class homeController extends Controller
         $notifications = Notifcation::all();
         return response()->json($notifications, 200);
     }
+    public function slideShow()
+    {
+        $slide = SlideShow::all();
+        return response()->json($slide, 200);
+    }
+
+    
 
 
 }
