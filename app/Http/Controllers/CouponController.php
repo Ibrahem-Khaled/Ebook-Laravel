@@ -36,13 +36,23 @@ class CouponController extends Controller
         return redirect()->route('coupons.index')->with('success', 'Coupons created successfully!');
     }
 
-    public function bookCoupon($bookId)
+    public function bookCoupon(Request $request, $bookId)
     {
         $book = Book::find($bookId);
+        $q = $request->query('query');
+
         if (!$book) {
             return response()->json(['error' => 'Book not found.'], 404);
         }
-        $coupons = $book->coupons;
+
+        if ($q) {
+            $coupons = Coupon::where('code', 'like', '%' . $q . '%')
+                ->get();
+        } else {
+
+            $coupons = $book->coupons;
+        }
+
         return view('coupon.bookCoupons', compact('coupons'));
     }
 }

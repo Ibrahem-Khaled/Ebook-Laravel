@@ -12,11 +12,21 @@ use Illuminate\Support\Str;
 
 class AuthorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $authors = Author::all();
-        return view('author.index', compact('authors'));
+        $q = $request->query('query');
+
+        if ($q) {
+            $authors = Author::where('author_name', 'like', '%' . $q . '%')
+                ->orWhere('desc', 'like', '%' . $q . '%')
+                ->get();
+        } else {
+            $authors = Author::all();
+        }
+
+        return view('author.index', compact('authors', 'q'));
     }
+
 
     public function save(Request $request)
     {

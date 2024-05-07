@@ -3,20 +3,34 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\UserBook;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all();
-        $books = Book::all();
-        if ($users) {
-            return view('users.index', compact('users', 'books'));
+        $q = $request->query('query');
+
+        if ($q) {
+            $users = User::where('name', 'like', '%' . $q . '%')
+                ->orWhere('email', 'like', '%' . $q . '%')
+                ->get();
+            $books = Book::all();
+            $role = Role::all();
+
+        } else {
+            $users = User::all();
+            $books = Book::all();
+            $role = Role::all();
         }
+
+        return view('users.index', compact('users', 'books', 'role'));
     }
+
     public function showBook($userId)
     {
         $user = User::find($userId);
@@ -56,4 +70,22 @@ class UsersController extends Controller
             return redirect()->back()->with('message', 'Failed to add book');
         }
     }
+    public function addNewUser(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|unique:users,email',
+            'password' => 'required|string|min:8',
+        ]);
+
+        $user = User::create([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => Hash::make($validatedData['password']),
+            'role' => $request->role,
+        ]);
+
+        return redirect()->back()->with('message', 'User added successfully');
+    }
+
 }

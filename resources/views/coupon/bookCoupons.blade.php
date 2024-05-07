@@ -37,6 +37,15 @@
 
     <div style="" class="card card-body shadow-xl mt-n12 mx-3 mx-md-4">
         <div class="row mt-4">
+            <form action="{{ route('book.coupons', Route::current()->parameter('bookId')) }}" method="GET"
+                class="mb-3">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="query" placeholder="ابحث عن code">
+                    <button class="btn btn-primary" type="submit">بحث</button>
+                </div>
+            </form>
+
+
             <div class="col-md-3">
                 <a class="btn bg-white mb-0 mt-lg-auto w-100" href="{{ route('dashboard.books') }}"
                     class="btn bg-gradient-faded-secondary"
@@ -78,6 +87,10 @@
                                         </th>
                                         <th
                                             class="text-center  text-uppercase text-secondary  font-weight-bolder opacity-7">
+                                              بريد الذي استخدم الكود
+                                        </th>
+                                        <th
+                                            class="text-center  text-uppercase text-secondary  font-weight-bolder opacity-7">
                                             تم الإنشاء
                                         </th>
                                         <th
@@ -98,6 +111,9 @@
                                             </td>
                                             <td>
                                                 <p class=" mb-0">{{ $coupon->user?->name }}</p>
+                                            </td>
+                                            <td>
+                                                <p class=" mb-0">{{ $coupon->user?->email }}</p>
                                             </td>
                                             <td class="align-middle text-center  ">
                                                 <p class=" mb-0">{{ $coupon->created_at }}</p>

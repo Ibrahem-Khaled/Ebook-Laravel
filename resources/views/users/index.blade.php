@@ -47,14 +47,67 @@
         </div>
         <div class="container">
             <div class="section text-left my-4">
-                <div class="row">
-
-                    <div class="col">
-
-                        <h2 class="title">المستخدمين</h2>
+                <form action="{{ route('users.index') }}" method="GET" class="mb-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="query" placeholder="ابحث عن مستخدم">
+                        <button class="btn btn-primary" type="submit">بحث</button>
                     </div>
-
+                </form>
+                <div class="row">
+                    <div class="col">
+                        <h2 class="title">المستخدمين</h2>
+                        <!-- Button to trigger modal -->
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#addUserModal">
+                            اضافة مستخدم جديد
+                        </button>
+                    </div>
                 </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addUserModalLabel">اضافة مستخدم جديد</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Form to add a new user -->
+                                <form action="{{ route('add.newUser') }}" method="POST">
+                                    @csrf
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">الاسم</label>
+                                        <input type="text" class="form-control" id="name" name="name"
+                                            required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">الايميل</label>
+                                        <input type="email" class="form-control" id="email" name="email"
+                                            required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label">كلمة المرور</label>
+                                        <input type="password" class="form-control" id="password" name="password"
+                                            required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="role" class="form-label">الصلاحية</label>
+                                        <select class="form-control" id="role" name="role">
+                                            @foreach ($role as $item)
+                                                <option value="{{ $item->id }}">{{ $item->role_name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">اضافة</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 @php
                     if (isset($users)) {
                         $nusers = count($users);
@@ -117,7 +170,7 @@
 
                                                 <button type="button" data-bs-toggle="modal"
                                                     data-bs-target="#addBookFromUser{{ $user->id }}"
-                                                    class="text-secondary  mx-3 font-weight-normal ">
+                                                    class="btn btn-warn">
                                                     اضافة كتب
                                                 </button>
 
@@ -131,7 +184,8 @@
                                                                 <h5 class="modal-title" id="createCouponModalLabel">
                                                                     اضافة كتاب للمستخدم</h5>
                                                                 <button type="button" class="btn-close"
-                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    data-bs-dismiss="modal"
+                                                                    aria-label="Close"></button>
                                                             </div>
                                                             <!-- Modal Body -->
                                                             <div class="modal-body">
@@ -139,7 +193,8 @@
                                                                     method="POST">
                                                                     @csrf
                                                                     <div class="mb-3">
-                                                                        <label for="count">{{$user->name}}</label>
+                                                                        <label
+                                                                            for="count">{{ $user->name }}</label>
                                                                         <input type="number"
                                                                             value="{{ $user->id }}"
                                                                             class="form-control" id="count"

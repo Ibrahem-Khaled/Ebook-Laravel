@@ -139,14 +139,20 @@
                 <div class="row">
 
                     <div class="col">
+                        <form action="{{ route('publisher.index') }}" method="GET" class="mb-3">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="query" placeholder="ابحث عن المولف">
+                                <button class="btn btn-primary" type="submit">بحث</button>
+                            </div>
+                        </form>
 
                         <h2 class="title">الناشرين</h2>
                     </div>
                     <div class="col" style="text-align: end"><a href="{{ route('publisher.create') }}"
                             class="btn btn-sm btn-warning">إنشاء الناشر</a></div>
                 </div>
-                @php 
-                if (isset($publishers)) {
+                @php
+                    if (isset($publishers)) {
                         $npublishers = count($publishers);
                 } @endphp
                 @if ($npublishers > 0)

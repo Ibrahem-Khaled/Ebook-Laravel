@@ -10,10 +10,17 @@ use Illuminate\Support\Str;
 
 class PublisherController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $publishers = Publisher::all();
-        return view('publisher.index', compact('publishers'));
+        $q = $request->query('query');
+
+        if ($q) {
+            $publishers = Publisher::where('publisher_name', 'like', '%' . $q . '%')->get();
+        } else {
+            $publishers = Publisher::all();
+        }
+
+        return view('publisher.index', compact('publishers', 'q'));
     }
 
     public function create()

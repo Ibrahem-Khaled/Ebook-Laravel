@@ -30,7 +30,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'show'])->name('home');
-
+ 
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -49,6 +49,7 @@ Route::delete('/cart/remove/{cartId}', [ShoppingCartController::class, 'removeFr
 
 
 Route::middleware('UserAdmin')->group(function () {
+    
     // Dashboards
     Route::get('/dashboard/books', [BookDashboardController::class, 'index'])->name('dashboard.books');
 
@@ -112,6 +113,7 @@ Route::middleware('UserAdmin')->group(function () {
     Route::get('users/{userId}', [UsersController::class, 'showBook'])->name('user.show.books');
     Route::post('users/delete/{userId}', [UsersController::class, 'delete'])->name('user.delete');
     Route::post('users/add/books', [UsersController::class, 'addBookFromUser'])->name('user.addBooks');
+    Route::post('add/new/user', [UsersController::class, 'addNewUser'])->name('add.newUser');
 
     //slideShow 
     Route::get('slide/show', [SlideShowController::class, 'index'])->name('index.slide');
