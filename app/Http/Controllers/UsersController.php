@@ -87,5 +87,16 @@ class UsersController extends Controller
 
         return redirect()->back()->with('message', 'User added successfully');
     }
+    public function updateUserRole(Request $request, $userId)
+    {
+        $user = User::find($userId);
+
+        $user->update([
+            'role_id' => $request->role,
+        ]);
+
+        return redirect()->back()->with('message', 'User role updated successfully');
+    }
+
 
 }

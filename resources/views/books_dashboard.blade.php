@@ -177,6 +177,32 @@
                     </a>
                 </div>
             </div>
+            <div class="row my-4">
+                <div class="col my-2">
+                    <a href="{{ route('index.appSetting') }}">
+                        <div class="card move-on-hover">
+                            <div class="card-body text-center">
+                                <h1 class="text-gradient text-warning"><span id="status1">اعدادات الموقع</span>
+                                </h1>
+                                <h6 class="mb-0 font-weight-bolder">اعدادات التطبيق</h6>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="row my-4">
+                <div class="col my-2">
+                    <a href="#">
+                        <div class="card move-on-hover">
+                            <div class="card-body text-center">
+                                <h1 class="text-gradient text-warning"><span id="status1">.......</span>
+                                </h1>
+                                <h6 class="mb-0 font-weight-bolder">سجل الاعمال الادارية</h6>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
     <div class="container">

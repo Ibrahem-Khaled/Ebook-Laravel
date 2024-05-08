@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppSettingController;
 use App\Http\Controllers\Auth\GoogleLoginController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
@@ -30,7 +31,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'show'])->name('home');
- 
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -49,7 +50,7 @@ Route::delete('/cart/remove/{cartId}', [ShoppingCartController::class, 'removeFr
 
 
 Route::middleware('UserAdmin')->group(function () {
-    
+
     // Dashboards
     Route::get('/dashboard/books', [BookDashboardController::class, 'index'])->name('dashboard.books');
 
@@ -114,6 +115,7 @@ Route::middleware('UserAdmin')->group(function () {
     Route::post('users/delete/{userId}', [UsersController::class, 'delete'])->name('user.delete');
     Route::post('users/add/books', [UsersController::class, 'addBookFromUser'])->name('user.addBooks');
     Route::post('add/new/user', [UsersController::class, 'addNewUser'])->name('add.newUser');
+    Route::post('update/user/role/{userId}', [UsersController::class, 'updateUserRole'])->name('update.user.role');
 
     //slideShow 
     Route::get('slide/show', [SlideShowController::class, 'index'])->name('index.slide');
@@ -125,8 +127,13 @@ Route::middleware('UserAdmin')->group(function () {
     Route::post('notification/upload', [NotifcationsController::class, 'store'])->name('upload.notification');
     Route::post('notification/destroy/{notificationId}', [NotifcationsController::class, 'destroy'])->name('destroy.notification');
 
+    //feedBack Crud
     Route::get('contact/us/show', [ContactUsController::class, 'index'])->name('index.contactUs');
     Route::post('contact/us/delete', [ContactUsController::class, 'destroy'])->name('destroy.contact');
+
+    //App Setting
+    Route::get('app/setting/show', [AppSettingController::class, 'index'])->name('index.appSetting');
+    Route::post('app/setting/store', [AppSettingController::class, 'store'])->name('app-settings.store');
 });
 
 //public books

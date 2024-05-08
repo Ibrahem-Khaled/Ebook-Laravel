@@ -87,7 +87,7 @@
                                         </th>
                                         <th
                                             class="text-center  text-uppercase text-secondary  font-weight-bolder opacity-7">
-                                              بريد الذي استخدم الكود
+                                            بريد الذي استخدم الكود
                                         </th>
                                         <th
                                             class="text-center  text-uppercase text-secondary  font-weight-bolder opacity-7">
@@ -123,6 +123,7 @@
                                                     <p class=" mb-0">غير مستخدم</p>
                                                 @else
                                                     <p class=" mb-0">مستخدم</p>
+                                                    <p class=" mb-0">{{ $coupon->updated_at }}</p>
                                                 @endif
                                             </td>
                                             <td class="align-middle" style="text-align: center;">

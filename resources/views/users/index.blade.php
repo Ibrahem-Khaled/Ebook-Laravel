@@ -144,9 +144,52 @@
                                 <tbody>
                                     @foreach ($users as $user)
                                         <tr>
-                                            <td class="align-middle text-center ">
-                                                <p class=" mb-0">{{ $user->role->role_name }}</p>
+                                            <td class="align-middle text-center">
+                                                <button type="button"
+                                                    class="btn btn-secondary font-weight-normal"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#updateUserRoleModal{{ $user->id }}">
+                                                    {{ $user->role->role_name }}
+                                                </button>
                                             </td>
+                                            <div class="modal fade" id="updateUserRoleModal{{ $user->id }}"
+                                                tabindex="-1"
+                                                aria-labelledby="updateUserRoleModal{{ $user->id }}Label"
+                                                aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title"
+                                                                id="updateUserRoleModal{{ $user->id }}Label">تحديث
+                                                                الصلاحية</h5>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <!-- Form to update user role -->
+                                                            <form action="{{ route('update.user.role', $user->id) }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                <div class="mb-3">
+                                                                    <label for="role" class="form-label">الصلاحية
+                                                                        الجديدة</label>
+                                                                    <select class="form-control" id="role"
+                                                                        name="role">
+                                                                        @foreach ($role as $item)
+                                                                            <option value="{{ $item->id }}"
+                                                                                {{ $user->role_id == $item->id ? 'selected' : '' }}>
+                                                                                {{ $item->role_name }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                                <button type="submit"
+                                                                    class="btn btn-primary">تحديث</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <td>
                                                 <p class=" mb-0">{{ $user->name }}</p>
                                             </td>
