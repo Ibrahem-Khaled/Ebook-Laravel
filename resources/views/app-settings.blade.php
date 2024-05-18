@@ -235,9 +235,122 @@
                                                 <p class=" mb-0">{{ $appSetting->updated_at }}</p>
                                             </td>
                                             <td class="align-middle" style="text-align: center;">
-                                                <a href="" class="text-secondary font-weight-normal">
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                    data-bs-target="#editapp{{ $appSetting->id }}">
                                                     تعديل
-                                                </a>
+                                                </button>
+                                                <div class="modal fade" id="editapp{{ $appSetting->id }}"
+                                                    tabindex="-1" aria-labelledby="addSettingModalLabel"
+                                                    aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="addSettingModalLabel">
+                                                                    تعديل إعدادات التطبيق</h5>
+                                                                <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal"
+                                                                    aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <!-- Form to add a new setting -->
+                                                                <form
+                                                                    action="{{ route('app-settings.update', $appSetting->id) }}"
+                                                                    enctype="multipart/form-data" method="POST">
+                                                                    @csrf
+                                                                    <div class="mb-3">
+                                                                        <label for="privacy"
+                                                                            class="form-label">الخصوصية (PDF)</label>
+                                                                        <input type="file"
+                                                                            value="{{ $appSetting->privacy }}"
+                                                                            class="form-control" id="privacy"
+                                                                            name="privacy" required>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="Instructions"
+                                                                            class="form-label">التعليمات (PDF)</label>
+                                                                        <input type="file"
+                                                                            value="{{ $appSetting->Instructions }}"
+                                                                            class="form-control" id="Instructions"
+                                                                            name="Instructions" required>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="about_us"
+                                                                            class="form-label">حول</label>
+                                                                        <textarea class="form-control" id="about_us" name="about_us" rows="3"></textarea>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="yt"
+                                                                            class="form-label">YouTube</label>
+                                                                        <input type="text"
+                                                                            value="{{ $appSetting->yt }}"
+                                                                            class="form-control" id="yt"
+                                                                            name="yt">
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="fb"
+                                                                            class="form-label">Facebook</label>
+                                                                        <input type="text"
+                                                                            value="{{ $appSetting->fb }}"
+                                                                            class="form-control" id="fb"
+                                                                            name="fb">
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="instagram"
+                                                                            class="form-label">Instagram</label>
+                                                                        <input type="text"
+                                                                            value="{{ $appSetting->instagram }}"
+                                                                            class="form-control" id="instagram"
+                                                                            name="instagram">
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="twitter"
+                                                                            class="form-label">Twitter</label>
+                                                                        <input type="text"
+                                                                            value="{{ $appSetting->twitter }}"
+                                                                            class="form-control" id="twitter"
+                                                                            name="twitter">
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="telegram"
+                                                                            class="form-label">Telegram</label>
+                                                                        <input type="text"
+                                                                            value="{{ $appSetting->telegram }}"
+                                                                            class="form-control" id="telegram"
+                                                                            name="telegram">
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="email"
+                                                                            class="form-label">البريد
+                                                                            الإلكتروني</label>
+                                                                        <input type="email"
+                                                                            value="{{ $appSetting->email }}"
+                                                                            class="form-control" id="email"
+                                                                            name="email">
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="phone"
+                                                                            class="form-label">الهاتف</label>
+                                                                        <input type="text"
+                                                                            value="{{ $appSetting->phone }}"
+                                                                            class="form-control" id="phone"
+                                                                            name="phone">
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="whats_app"
+                                                                            class="form-label">واتساب</label>
+                                                                        <input type="text"
+                                                                            value="{{ $appSetting->whats_app }}"
+                                                                            class="form-control" id="whats_app"
+                                                                            name="whats_app">
+                                                                    </div>
+
+                                                                    <button type="submit"
+                                                                        class="btn btn-primary">إضافة</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach

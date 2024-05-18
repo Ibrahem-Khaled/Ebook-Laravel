@@ -134,6 +134,7 @@ Route::middleware('UserAdmin')->group(function () {
     //App Setting
     Route::get('app/setting/show', [AppSettingController::class, 'index'])->name('index.appSetting');
     Route::post('app/setting/store', [AppSettingController::class, 'store'])->name('app-settings.store');
+    Route::post('app/setting/update', [AppSettingController::class, 'update'])->name('app-settings.update');
 });
 
 //public books

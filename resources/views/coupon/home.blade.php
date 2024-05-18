@@ -90,7 +90,7 @@
                                         <div class="mb-3">
                                             <label for="discount">الخصم:</label>
                                             <input type="number" class="form-control" id="discount" name="discount"
-                                                required min="0">
+                                                required min="0" max="100" oninput="validateDiscount(this)">
                                         </div>
                                         <button type="submit" class="btn btn-primary">إنشاء</button>
                                     </form>
@@ -189,6 +189,15 @@
 
         </div>
     </div>
+
+    <script>
+        function validateDiscount(input) {
+            if (input.value > 100) {
+                input.value = 100;
+                alert("The discount cannot be more than 100%");
+            }
+        }
+    </script>
 
     <script src="{{ asset('js/core/popper.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/core/bootstrap.min.js') }}" type="text/javascript"></script>

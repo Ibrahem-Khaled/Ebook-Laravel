@@ -14,12 +14,12 @@ return new class extends Migration {
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
+            $table->string('name')->nullable();
+            $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->boolean('is_login')->default(0);
-            $table->unsignedBigInteger('role_id')->nullable(false)->default(2);
+            $table->string('password')->nullable();
+            $table->boolean('is_login')->default(0)->nullable();
+            $table->unsignedBigInteger('role_id')->nullable()->default(2);
             $table->rememberToken();
             $table->timestamps();
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('no action');

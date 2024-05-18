@@ -20,15 +20,15 @@ class UsersController extends Controller
                 ->orWhere('email', 'like', '%' . $q . '%')
                 ->get();
             $books = Book::all();
-            $role = Role::all();
+            $roles = Role::all();
 
         } else {
             $users = User::all();
             $books = Book::all();
-            $role = Role::all();
+            $roles = Role::all();
         }
 
-        return view('users.index', compact('users', 'books', 'role'));
+        return view('users.index', compact('users', 'books', 'roles'));
     }
 
     public function showBook($userId)
@@ -89,8 +89,13 @@ class UsersController extends Controller
     }
     public function updateUserRole(Request $request, $userId)
     {
+        $request->validate([
+            'role' => 'required|exists:roles,id',
+        ]);
         $user = User::find($userId);
-
+        if (!$user) {
+            return redirect()->back()->with('error', 'User not found');
+        }
         $user->update([
             'role_id' => $request->role,
         ]);

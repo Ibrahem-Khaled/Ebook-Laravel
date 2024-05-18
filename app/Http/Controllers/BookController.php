@@ -56,7 +56,7 @@ class BookController extends Controller
         // Validate the incoming request
         $request->validate([
             'book_isbn' => 'required|min:8',
-            'book_pdf' => 'required|mimes:pdf',
+            'book_pdf' => 'required',
             'category_id' => 'required|min:1|integer',
             'subcategory_id' => 'required|min:1|integer',
             'book_title' => 'required',
