@@ -360,9 +360,9 @@
                                                     <!-- Card body -->
                                                     <div class="col" style="min-width: 250px">
                                                         <div class="card-body">
-                                                            <h4 class="font-weight-normal mt-3">PDF</h4>
+                                                            <h4 class="font-weight-normal mt-3">ebup</h4>
                                                             <p class="card-text mb-4">
-                                                                تحميل PDF بتنسيق
+                                                                تحميل ebup بتنسيق
                                                             </p>
                                                             <x-input-error class="text-danger"
                                                                 :messages="$errors->get('book_pdf')"></x-input-error>
@@ -370,7 +370,7 @@
                                                                 <div class="col-md-4">
                                                                     <!-- Trigger file input -->
                                                                     <a onclick="document.getElementById('pdfinput').click()"
-                                                                        class="btn btn-outline-warning">تحميل PDF</a>
+                                                                        class="btn btn-outline-warning">تحميل ebup</a>
                                                                     <!-- Display selected filename -->
                                                                     <p id="pdf_selected">لم يتم اختيار أي ملف</p>
                                                                 </div>

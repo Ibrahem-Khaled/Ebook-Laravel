@@ -22,7 +22,6 @@ return new class extends Migration {
             $table->unsignedBigInteger('role_id')->nullable()->default(2);
             $table->rememberToken();
             $table->timestamps();
-            $table->foreign('role_id')->references('id')->on('roles')->onDelete('no action');
         });
 
         DB::table('users')->insert([

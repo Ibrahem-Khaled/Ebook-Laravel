@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\UserBook;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
@@ -44,12 +45,26 @@ class UsersController extends Controller
     public function delete($userId)
     {
         $user = User::find($userId);
+
         if (!$user) {
             return response()->json(['error' => 'User not found'], 404);
         }
-        $user->books()->delete();
-        $user->delete();
-        return back()->with('success', 'User and associated books deleted successfully');
+
+        DB::beginTransaction();
+
+        try {
+            $user->books()->detach();
+
+            $user->delete();
+
+            DB::commit();
+
+            return back()->with('success', 'User and associated books deleted successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json(['error' => 'An error occurred while deleting the user'], 500);
+        }
     }
 
     public function addBookFromUser(Request $request)
