@@ -39,7 +39,25 @@ class UsersController extends Controller
             return response()->json(['error' => 'User not found'], 404);
         }
         $userBooks = $user->books()->get();
-        return view('users.show', compact('userBooks'));
+        return view('users.show', compact('userBooks', 'userId'));
+    }
+
+    public function destroyBook($userId, $bookId)
+    {
+        $user = User::find($userId);
+        if (!$user) {
+            return redirect()->back()->withErrors(['error' => 'User not found']);
+        }
+
+        $user->books()->detach($bookId);
+
+        // Optionally, if you want to delete the book from the books table entirely, uncomment the following lines:
+        // $book = Book::find($bookId);
+        // if ($book) {
+        //     $book->delete();
+        // }
+
+        return redirect()->route('user.show.books', $userId)->with('success', 'Book detached successfully');
     }
 
     public function delete($userId)

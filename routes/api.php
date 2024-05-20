@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\api\AppSettingController;
 use App\Http\Controllers\api\authController;
 use App\Http\Controllers\api\booksController;
 use App\Http\Controllers\api\CartController;
@@ -58,3 +59,6 @@ Route::post('user/delete/favorite', [userFavoriteController::class, 'deleteForFa
 
 //user feedBack
 Route::post('user/feed/back', [ContactUsController::class, 'store']);
+
+//AppSetting
+Route::get('/MobileApi', [AppSettingController::class, 'index']);

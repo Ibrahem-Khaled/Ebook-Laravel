@@ -112,6 +112,7 @@ Route::middleware('UserAdmin')->group(function () {
     //users information
     Route::get('users', [UsersController::class, 'index'])->name('users.index');
     Route::get('users/{userId}', [UsersController::class, 'showBook'])->name('user.show.books');
+    Route::post('users/{userId}/books/{bookId}', [UsersController::class, 'destroyBook'])->name('user.books.destroy');
     Route::post('users/delete/{userId}', [UsersController::class, 'delete'])->name('user.delete');
     Route::post('users/add/books', [UsersController::class, 'addBookFromUser'])->name('user.addBooks');
     Route::post('add/new/user', [UsersController::class, 'addNewUser'])->name('add.newUser');
@@ -134,7 +135,7 @@ Route::middleware('UserAdmin')->group(function () {
     //App Setting
     Route::get('app/setting/show', [AppSettingController::class, 'index'])->name('index.appSetting');
     Route::post('app/setting/store', [AppSettingController::class, 'store'])->name('app-settings.store');
-    Route::post('app/setting/update', [AppSettingController::class, 'update'])->name('app-settings.update');
+    Route::post('app/setting/update/{id}', [AppSettingController::class, 'update'])->name('app-settings.update');
 });
 
 //public books

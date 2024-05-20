@@ -83,6 +83,10 @@
                                             class="text-center  text-uppercase text-secondary  font-weight-bolder opacity-7">
                                             تاريخ اخر تحديث له
                                         </th>
+                                        <th
+                                            class="text-center  text-uppercase text-secondary  font-weight-bolder opacity-7">
+                                            عمليات
+                                        </th>
                                         <th class="text-secondary opacity-7"></th>
                                     </tr>
                                 </thead>
@@ -103,6 +107,14 @@
                                             </td>
                                             <td class="align-middle text-center">
                                                 <p class="mb-0">{{ $book->updated_at }}</p>
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                <form action="{{ route('user.books.destroy', [$userId, $book->id]) }}"
+                                                    method="POST" style="display:inline;">
+                                                    @csrf
+                                                    <button type="submit"
+                                                        onclick="return confirm('Are you sure you want to delete this book?')">حذف</button>
+                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach
