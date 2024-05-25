@@ -56,7 +56,7 @@ class BookController extends Controller
         // Validate the incoming request
         $request->validate([
             'book_isbn' => 'required|min:8',
-            'book_pdf' => 'required',
+            'book_pdf' => 'required|file|max:102400',
             'category_id' => 'required|min:1|integer',
             'subcategory_id' => 'required|min:1|integer',
             'book_title' => 'required',
@@ -69,28 +69,22 @@ class BookController extends Controller
             'book_discount' => 'integer|max:100'
         ]);
 
-        // Handle PDF file upload
         if ($request->hasFile('book_pdf')) {
             $pdfFile = $request->file('book_pdf');
             $pdfFileName = Str::slug($request->book_isbn) . '.' . $pdfFile->getClientOriginalExtension();
 
-            // Store the PDF file in the storage disk
             $pdfFilePath = $pdfFile->storeAs('pdfs', $pdfFileName, 'public');
         } else {
-            // No PDF file provided, return with error
             return redirect()->back()->withInput()->withErrors(['book_pdf' => 'Please upload a PDF file']);
         }
 
-        // Handle book image upload
         if ($request->hasFile("book_image")) {
             $image = $request->file("book_image");
             $imageName = Str::slug($request->book_isbn) . "." . $image->guessExtension();
             $destinationPath = public_path("img/books/");
 
-            // Move the uploaded image to the destination path
             $image->move($destinationPath, $imageName);
 
-            // Create book record
             Book::create([
                 'book_isbn' => $request->book_isbn,
                 'book_pdf' => $pdfFilePath,
@@ -128,7 +122,6 @@ class BookController extends Controller
 
     public function update(Request $request, $id): RedirectResponse
     {
-        // Validate the incoming request
         $request->validate([
             'book_isbn' => 'required|min:8|max:13',
             'category_id' => 'required|min:1|integer',
@@ -142,21 +135,16 @@ class BookController extends Controller
             'book_discount' => 'integer|max:100'
         ]);
 
-        // Find the book by ID
         $book = Book::findOrFail($id);
 
-        // Handle PDF file upload
         if ($request->hasFile('book_pdf')) {
             $pdfFile = $request->file('book_pdf');
             $pdfFileName = Str::slug($request->book_isbn) . '.' . $pdfFile->getClientOriginalExtension();
 
-            // Store the PDF file in the storage disk
             $pdfFilePath = $pdfFile->storeAs('pdfs', $pdfFileName, 'public');
         }
 
-        // Handle book image upload if provided
         if ($request->hasFile("book_image")) {
-            // Delete the old image if it exists
             if (Storage::exists(public_path($book->book_image_url))) {
                 Storage::delete(public_path($book->book_image_url));
             }
@@ -165,10 +153,8 @@ class BookController extends Controller
             $imageName = Str::slug($request->book_isbn) . "." . $image->guessExtension();
             $destinationPath = public_path("img/books/");
 
-            // Move the uploaded image to the destination path
             $image->move($destinationPath, $imageName);
 
-            // Update book record with new image
             $book->update([
                 'book_isbn' => $request->book_isbn,
                 'book_title' => $request->book_title,
@@ -181,11 +167,8 @@ class BookController extends Controller
                 'book_description' => $request->book_description,
                 'book_image_url' => 'img/books/' . $imageName,
                 'book_price' => $request->book_price,
-                'book_discount' => $request->book_discount,
-                'updated_at' => now()->toDateTimeString(),
             ]);
         } else {
-            // Update book record without changing the image URL
             $book->update([
                 'book_isbn' => $request->book_isbn,
                 'book_title' => $request->book_title,
@@ -197,8 +180,6 @@ class BookController extends Controller
                 'book_publication_date' => $request->book_publication_date,
                 'book_description' => $request->book_description,
                 'book_price' => $request->book_price,
-                'book_discount' => $request->book_discount,
-                'updated_at' => now()->toDateTimeString(),
             ]);
         }
 

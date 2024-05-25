@@ -22,10 +22,12 @@ class booksController extends Controller
         }
 
         $isFavorite = $user->bookFav()->where('book_id', $book->id)->exists();
+        $ownsBook = $user->books()->where('book_id', $book->id)->exists();
 
         $bookDetails = $book->toArray();
         $bookDetails['is_favorite'] = $isFavorite;
-
+        $bookDetails['addtocart'] = !$ownsBook;
+        
         return response()->json($bookDetails);
     }
 

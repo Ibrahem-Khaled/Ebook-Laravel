@@ -22,7 +22,7 @@ class CartController extends Controller
             foreach ($carts as $cart) {
                 $book = Book::find($cart->book_id);
                 if ($book) {
-                    $newPrice = $book->book_price - $cart->discount_price;
+                    $newPrice = $book->book_price * (1 - $cart->discount_price / 100);
                     $book->book_price = $newPrice;
                     $sumPrice += $book->book_price;
                     $book->cart_id = $cart->id;
