@@ -124,69 +124,54 @@ class BookController extends Controller
     {
         $request->validate([
             'book_isbn' => 'required|min:8|max:13',
-            'category_id' => 'required|min:1|integer',
-            'subcategory_id' => 'required|min:1|integer',
+            'category_id' => 'required|integer',
+            'subcategory_id' => 'required|integer',
             'book_title' => 'required',
-            'author_id' => 'required|min:1|integer',
-            'publisher_id' => 'required|min:1|integer',
+            'author_id' => 'required|integer',
+            'publisher_id' => 'required|integer',
             'book_publication_date' => 'required|date',
             'book_number_pages' => 'required|integer|min:1',
-            'book_price' => 'required|min:0',
-            'book_discount' => 'integer|max:100'
+            'book_price' => 'required|numeric|min:0',
+            'book_discount' => 'integer|max:100|nullable'
         ]);
 
         $book = Book::findOrFail($id);
 
+        $pdfFilePath = $book->book_pdf;
         if ($request->hasFile('book_pdf')) {
             $pdfFile = $request->file('book_pdf');
             $pdfFileName = Str::slug($request->book_isbn) . '.' . $pdfFile->getClientOriginalExtension();
-
             $pdfFilePath = $pdfFile->storeAs('pdfs', $pdfFileName, 'public');
         }
 
-        if ($request->hasFile("book_image")) {
-            if (Storage::exists(public_path($book->book_image_url))) {
-                Storage::delete(public_path($book->book_image_url));
+        $bookImageUrl = $book->book_image_url;
+        if ($request->hasFile('book_image')) {
+            if (Storage::disk('public')->exists($book->book_image_url)) {
+                Storage::disk('public')->delete($book->book_image_url);
             }
-
-            $image = $request->file("book_image");
-            $imageName = Str::slug($request->book_isbn) . "." . $image->guessExtension();
-            $destinationPath = public_path("img/books/");
-
-            $image->move($destinationPath, $imageName);
-
-            $book->update([
-                'book_isbn' => $request->book_isbn,
-                'book_title' => $request->book_title,
-                'book_pdf' => isset($pdfFilePath) ? $pdfFilePath : $book->book_pdf,
-                'subcategory_id' => $request->subcategory_id,
-                'author_id' => $request->author_id,
-                'publisher_id' => $request->publisher_id,
-                'book_number_pages' => $request->book_number_pages,
-                'book_publication_date' => $request->book_publication_date,
-                'book_description' => $request->book_description,
-                'book_image_url' => 'img/books/' . $imageName,
-                'book_price' => $request->book_price,
-            ]);
-        } else {
-            $book->update([
-                'book_isbn' => $request->book_isbn,
-                'book_title' => $request->book_title,
-                'book_pdf' => isset($pdfFilePath) ? $pdfFilePath : $book->book_pdf,
-                'subcategory_id' => $request->subcategory_id,
-                'author_id' => $request->author_id,
-                'publisher_id' => $request->publisher_id,
-                'book_number_pages' => $request->book_number_pages,
-                'book_publication_date' => $request->book_publication_date,
-                'book_description' => $request->book_description,
-                'book_price' => $request->book_price,
-            ]);
+            $image = $request->file('book_image');
+            $imageName = Str::slug($request->book_isbn) . '.' . $image->guessExtension();
+            $bookImageUrl = $image->storeAs('img/books', $imageName, 'public');
         }
 
-        // Redirect with success message
+        $book->update([
+            'book_isbn' => $request->book_isbn,
+            'category_id' => $request->category_id,
+            'subcategory_id' => $request->subcategory_id,
+            'book_title' => $request->book_title,
+            'author_id' => $request->author_id,
+            'publisher_id' => $request->publisher_id,
+            'book_publication_date' => $request->book_publication_date,
+            'book_number_pages' => $request->book_number_pages,
+            'book_description' => $request->book_description,
+            'book_pdf' => $pdfFilePath,
+            'book_image_url' => $bookImageUrl,
+            'book_price' => $request->book_price,
+            'book_discount' => $request->book_discount
+        ]);
+
         return redirect()->route('book.index')->with('success', 'تم تحديث الكتاب بنجاح.');
     }
-
     public function show($id): View
     {
         $book = Book::findOrFail($id);
