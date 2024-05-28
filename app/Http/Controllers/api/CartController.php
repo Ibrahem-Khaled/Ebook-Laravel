@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Book;
+use App\Models\User;
 use App\Models\UserBook;
 use App\Models\UserCarts;
 use Illuminate\Http\Request;
@@ -81,9 +82,9 @@ class CartController extends Controller
         }
     }
 
-    public function removedBooksFromCartAndAddToUserBooks()
+    public function removedBooksFromCartAndAddToUserBooks($userId)
     {
-        $user = auth()->guard('api')->user();
+        $user = User::find($userId);
         if ($user) {
             $carts = $user->carts;
             foreach ($carts as $cart) {
@@ -93,7 +94,7 @@ class CartController extends Controller
                 ]);
                 $cart->delete();
             }
-            return response()->json(['success' => 'The books were removed from the cart and added to the user books'], 200);
+            return view('payment.success');
         } else {
             return response()->json(['error' => 'Unauthorized'], 401);
         }

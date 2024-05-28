@@ -51,7 +51,6 @@ Route::get('user/cart', [CartController::class, 'index']);
 Route::post('user/add/cart', [CartController::class, 'addToCart']);
 Route::post('user/delete/cart', [CartController::class, 'deleteFromCart']);
 Route::get('user/books', [CartController::class, 'userBook']);
-Route::post('add/books/from/user/books', [CartController::class, 'removedBooksFromCartAndAddToUserBooks']);
 
 //user favorite
 Route::get('user/favorite', [userFavoriteController::class, 'favorite']);
@@ -66,4 +65,4 @@ Route::get('/MobileApi', [AppSettingController::class, 'index']);
 
 
 //test payment
-Route::get('/payment/test', [paymentController::class, 'PaymentWeb']);
+Route::post('/payment/test', [paymentController::class, 'PaymentWeb']);

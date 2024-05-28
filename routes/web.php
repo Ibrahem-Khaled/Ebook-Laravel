@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\api\CartController;
 use App\Http\Controllers\AppSettingController;
 use App\Http\Controllers\Auth\GoogleLoginController;
 use App\Http\Controllers\AuthorController;
@@ -136,7 +137,11 @@ Route::middleware('UserAdmin')->group(function () {
     Route::get('app/setting/show', [AppSettingController::class, 'index'])->name('index.appSetting');
     Route::post('app/setting/store', [AppSettingController::class, 'store'])->name('app-settings.store');
     Route::post('app/setting/update/{id}', [AppSettingController::class, 'update'])->name('app-settings.update');
+
 });
+
+//payment pages
+Route::get('payment/page/successfuly/{userId}', [CartController::class, 'removedBooksFromCartAndAddToUserBooks'])->name('payment.page.successfuly');
 
 //public books
 Route::get('/book/view/{book}', [BookController::class, 'view'])->name('book.view');
