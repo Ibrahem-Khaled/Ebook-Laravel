@@ -130,7 +130,7 @@ Route::middleware('UserAdmin')->group(function () {
 
     //feedBack Crud
     Route::get('contact/us/show', [ContactUsController::class, 'index'])->name('index.contactUs');
-    Route::post('contact/us/delete', [ContactUsController::class, 'destroy'])->name('destroy.contact');
+    Route::post('contact/us/delete/{contactId}', [ContactUsController::class, 'destroy'])->name('destroy.contact');
 
     //App Setting
     Route::get('app/setting/show', [AppSettingController::class, 'index'])->name('index.appSetting');

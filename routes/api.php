@@ -8,6 +8,7 @@ use App\Http\Controllers\api\homeController;
 use App\Http\Controllers\api\searchController;
 use App\Http\Controllers\api\userFavoriteController;
 use App\Http\Controllers\ContactUsController;
+use App\Http\Controllers\Payment\paymentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -62,3 +63,7 @@ Route::post('user/feed/back', [ContactUsController::class, 'store']);
 
 //AppSetting
 Route::get('/MobileApi', [AppSettingController::class, 'index']);
+
+
+//test payment
+Route::get('/payment/test', [paymentController::class, 'PaymentWeb']);

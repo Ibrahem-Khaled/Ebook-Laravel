@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 
 class paymentController extends Controller
 {
-    public function PaymentWeb()
+    public function PaymentWeb(Request $request)
     {
+        $apiSecretKey = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+
         $curl = curl_init();
         curl_setopt_array($curl, [
             CURLOPT_URL => "https://pay.chargily.net/test/api/v2/checkouts",
@@ -18,9 +20,9 @@ class paymentController extends Controller
             CURLOPT_TIMEOUT => 30,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => "{\n  \"items\": [\n    {\n      \"price\": \"12\",\n      \"quantity\": 1\n    }\n  ],\n  \"amount\": 123,\n  \"currency\": \"dza\",\n  \"payment_method\": \"<string>\",\n  \"success_url\": \"<string>\",\n  \"customer_id\": \"<string>\",\n  \"failure_url\": \"<string>\",\n  \"webhook_endpoint\": \"<string>\",\n  \"description\": \"<string>\",\n  \"locale\": \"<string>\",\n  \"shipping_address\": \"<string>\",\n  \"collect_shipping_address\": true,\n  \"percentage_discount\": 123,\n  \"amount_discount\": 123,\n  \"metadata\": [\n    {}\n  ]\n}",
+            CURLOPT_POSTFIELDS => "{\n  \"amount\": 1000,\n  \"currency\": \"dzd\",\n  \"success_url\": \"https://example.com\"\n}",
             CURLOPT_HTTPHEADER => [
-                "Authorization: Bearer <token>",
+                "Authorization: Bearer $apiSecretKey",
                 "Content-Type: application/json"
             ],
         ]);
@@ -30,10 +32,39 @@ class paymentController extends Controller
 
         curl_close($curl);
 
-        if ($err) {
-            echo "cURL Error #:" . $err;
+        $signature = isset($_SERVER['HTTP_SIGNATURE']) ? $_SERVER['HTTP_SIGNATURE'] : null;
+
+        $payload = file_get_contents('php://input');
+
+        if (!$signature) {
+            exit;
+        }
+
+        $computedSignature = hash_hmac('sha256', $payload, $apiSecretKey);
+
+        if (!hash_equals($signature, $computedSignature)) {
+            exit();
         } else {
-            echo $response;
+            $event = json_decode($payload);
+
+            switch ($event->type) {
+                case 'checkout.paid':
+                    $checkout = $event->data;
+                    break;
+                case 'checkout.canceled':
+                    $checkout = $event->data;
+                    break;
+                case 'checkout.failed':
+                    $checkout = $event->data;
+                    break;
+            }
+        }
+        http_response_code(200);
+
+        if ($err) {
+            return response()->json("cURL Error #:" . $err);
+        } else {
+            return response()->json("cURL success #:" . $checkout);
         }
     }
 }
