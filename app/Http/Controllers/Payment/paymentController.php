@@ -44,7 +44,7 @@ class paymentController extends Controller
         // إعداد جلسة cURL
         $curl = curl_init();
         curl_setopt_array($curl, [
-            CURLOPT_URL => "https://pay.chargily.net/test/api/v2/checkouts",
+            CURLOPT_URL => "https://pay.chargily.net/api/v2/checkouts",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -53,7 +53,7 @@ class paymentController extends Controller
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POSTFIELDS => $payload,
             CURLOPT_HTTPHEADER => [
-                "Authorization: Bearer $apiSecretKeyTest",
+                "Authorization: Bearer $apiSecretKey",
                 "Content-Type: application/json"
             ],
         ]);

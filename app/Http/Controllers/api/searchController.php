@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\Coupon;
+use App\Models\UserBook;
 use App\Models\UserCarts;
 use Illuminate\Http\Request;
 
@@ -49,9 +50,11 @@ class searchController extends Controller
         if (!$coupon) {
             return response()->json(['message' => 'Coupon not found'], 404);
         }
+
         if ($coupon->is_used == 1) {
-            return response()->json(['message' => 'this coupon is used'], 404);
+            return response()->json(['message' => 'This coupon is used'], 404);
         }
+
         $book = $coupon->book;
         if (!$book) {
             return response()->json(['message' => 'Book not found for this coupon'], 404);
@@ -61,11 +64,20 @@ class searchController extends Controller
             'user_id' => $user->id,
             'is_used' => 1,
         ]);
-        UserCarts::create([
-            'user_id' => $user->id,
-            'book_id' => $coupon->book_id,
-            'discount_price' => $coupon->discount
-        ]);
+
+        if ($coupon->discount == 100) {
+            UserBook::create([
+                'user_id' => $user->id,
+                'book_id' => $coupon->book_id,
+            ]);
+        } else {
+            UserCarts::create([
+                'user_id' => $user->id,
+                'book_id' => $coupon->book_id,
+                'discount_price' => $coupon->discount,
+            ]);
+        }
+
         return response()->json(['message' => 'تم تطبيق الخصم بنجاح'], 200);
     }
 
