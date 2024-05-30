@@ -19,12 +19,16 @@ class CouponController extends Controller
     {
         $request->validate([
             'discount' => 'required|numeric|min:0',
-            'count' => 'required|integer|min:1', // Make sure count is provided and is at least 1
-            'book_id' => 'required', // Assuming you also need a book_id
+            'count' => 'required|integer|min:1',
+            'book_id' => 'required',
         ]);
 
         for ($i = 0; $i < $request->count; $i++) {
-            $code = Str::random(20);
+            $code = '';
+            for ($j = 0; $j < 10; $j++) {
+                $code .= mt_rand(0, 9);
+            }
+
             Coupon::create([
                 'book_id' => $request->book_id,
                 'code' => $code,
@@ -32,7 +36,6 @@ class CouponController extends Controller
             ]);
         }
 
-        // Redirect the user to a relevant page (e.g., the index page)
         return redirect()->route('coupons.index')->with('success', 'Coupons created successfully!');
     }
 
