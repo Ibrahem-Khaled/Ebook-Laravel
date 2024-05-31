@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->bigInteger('book_id');
             $table->bigInteger('user_id')->nullable();
-            $table->string('code', 9)->unique();
+            $table->string('code')->unique();
             $table->bigInteger('discount')->default(0);
             $table->boolean('is_used')->default(0);
             $table->timestamps();
