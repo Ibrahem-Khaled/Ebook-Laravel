@@ -257,6 +257,18 @@
                                             <x-input-error class="text-danger" :messages="$errors->get('book_publication_date')"></x-input-error>
                                         </div>
 
+                                        <div class="container mt-5">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="free_sample"
+                                                    id="toggle1" value="1">
+                                                <label class="form-check-label" for="toggle1">معاينة مجانية</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="free_sample"
+                                                    id="toggle0" value="0">
+                                                <label class="form-check-label" for="toggle0">لا يوجد معاينة مجانية</label>
+                                            </div>
+                                        </div>
                                         {{-- Description --}}
                                         <div class="input-group input-group-static mb-4 mt-md-0 mt-4">
                                             <label>ملخص</label>

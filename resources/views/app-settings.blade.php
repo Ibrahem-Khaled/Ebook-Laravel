@@ -85,6 +85,19 @@
                                         <input type="file" class="form-control" id="privacy" name="privacy"
                                             required>
                                     </div>
+                                    <div class="container mt-5">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="can_screen_shot"
+                                                id="toggle1" value="1">
+                                            <label class="form-check-label" for="toggle1">السماح بعمل لقطة شاشة</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="can_screen_shot"
+                                                id="toggle0" value="0">
+                                            <label class="form-check-label" for="toggle0">لا يمكن السماح بعمل لقطة
+                                                شاشة</label>
+                                        </div>
+                                    </div>
                                     <div class="mb-3">
                                         <label for="Instructions" class="form-label">التعليمات (PDF)</label>
                                         <input type="file" class="form-control" id="Instructions" name="Instructions"
@@ -272,6 +285,24 @@
                                                                             value="{{ $appSetting->Instructions }}"
                                                                             class="form-control" id="Instructions"
                                                                             name="Instructions" required>
+                                                                    </div>
+                                                                    <div class="container mt-5">
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input"
+                                                                                type="radio" name="can_screen_shot"
+                                                                                id="toggle1" value="1">
+                                                                            <label class="form-check-label"
+                                                                                for="toggle1">السماح بعمل لقطة
+                                                                                شاشة</label>
+                                                                        </div>
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input"
+                                                                                type="radio" name="can_screen_shot"
+                                                                                id="toggle0" value="0">
+                                                                            <label class="form-check-label"
+                                                                                for="toggle0">لا يمكن السماح بعمل لقطة
+                                                                                شاشة</label>
+                                                                        </div>
                                                                     </div>
                                                                     <div class="mb-3">
                                                                         <label for="about_us"

@@ -34,14 +34,14 @@ class authController extends Controller
         $user = auth()->guard('api')->user();
 
         if ($user->is_login == 1) {
-            return response()->json(['error' => 'You must first log out from another device'], 401);
+            return response()->json(['error' => 'يجب عليك تسجيل الخروج من جهاز آخر أولاً'], 401);
         }
 
         $user->is_login = true;
         $user->save();
 
         return response()->json([
-            'message' => 'User registered successfully',
+            'message' => 'تم تسجيل المستخدم بنجاح',
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth('api')->factory()->getTTL() * 9999999, // This seems like an arbitrarily large number, consider revising
@@ -58,7 +58,7 @@ class authController extends Controller
         }
         $user = auth()->guard('api')->user();
         if ($user->is_login == 1) {
-            return response()->json(['error' => 'You must first log out from another device'], 401);
+            return response()->json(['error' => 'يجب عليك تسجيل الخروج من جهاز آخر أولاً'], 401);
         }
         $user->is_login = true;
         $user->save();
@@ -75,7 +75,7 @@ class authController extends Controller
         if ($user) {
             $user->update($request->all());
             return response()->json([
-                'message' => 'Update Successfully',
+                'message' => 'تم التحديث بنجاح',
                 'data' => $user
             ]);
         }
@@ -99,13 +99,13 @@ class authController extends Controller
             return response()->json(['error' => 'Invalid token'], 401);
         }
         if (!Hash::check($request->old_password, $user->password)) {
-            return response()->json(['error' => 'Old password is incorrect'], 422);
+            return response()->json(['error' => 'كلمة سر قديمة ليست صحيحة'], 422);
         }
 
         $user->password = bcrypt($request->password);
         $user->save();
 
-        return response()->json(['message' => 'Password changed successfully'], 200);
+        return response()->json(['message' => 'تم تغيير الرقم السري بنجاح'], 200);
     }
 
 
@@ -114,15 +114,32 @@ class authController extends Controller
         return response()->json(auth()->guard('api')->user());
     }
 
+    public function deleteUser()
+    {
+        $user = auth()->guard('api')->user();
+
+        if ($user) {
+            $user->delete();
+            return response()->json([
+                'success' => true,
+                'message' => 'تم حذف المستخدم بنجاح'
+            ], 200);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'لم يتم العثور على المستخدم أو لم يتم التحقق من صحته'
+            ], 404);
+        }
+    }
     public function logout()
     {
         $user = auth()->guard('api')->user();
         if ($user) {
             $user->is_login = 0;
             $user->save();
-            return response()->json(['message' => 'Successfully logged out']);
+            return response()->json(['message' => 'تم تسجيل الخروج بنجاح']);
         }
-        return response()->json(['error' => 'you are alredy log out']);
+        return response()->json(['error' => 'لقد قمت بتسجيل الخروج بالفعل']);
     }
 
 }

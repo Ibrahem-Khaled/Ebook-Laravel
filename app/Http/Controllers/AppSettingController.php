@@ -41,6 +41,7 @@ class AppSettingController extends Controller
             'instagram' => $request->instagram,
             'twitter' => $request->twitter,
             'telegram' => $request->telegram,
+            'can_screen_shot' => $request->can_screen_shot,
             'email' => $request->email,
             'phone' => $request->phone,
             'whats_app' => $request->whats_app,
@@ -89,6 +90,7 @@ class AppSettingController extends Controller
         $appSetting->twitter = $request->twitter;
         $appSetting->telegram = $request->telegram;
         $appSetting->email = $request->email;
+        $appSetting->can_screen_shot = $request->can_screen_shot;
         $appSetting->phone = $request->phone;
         $appSetting->whats_app = $request->whats_app;
 

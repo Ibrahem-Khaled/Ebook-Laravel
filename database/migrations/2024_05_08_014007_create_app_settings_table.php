@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('app_settings', function (Blueprint $table) {
             $table->id();
+            $table->boolean('can_screen_shot')->default(0);
             $table->string('privacy')->nullable();
             $table->string('Instructions')->nullable();
             $table->text('about_us')->nullable();

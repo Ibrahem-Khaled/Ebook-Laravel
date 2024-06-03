@@ -11,7 +11,7 @@ class AppSettingController extends Controller
 
     public function index()
     {
-        $appSetting = AppSetting::find(1);
+        $appSetting = AppSetting::first();
 
         if ($appSetting) {
             return response()->json([
