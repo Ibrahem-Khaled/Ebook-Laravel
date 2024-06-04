@@ -72,6 +72,7 @@ class UsersController extends Controller
 
         try {
             $user->books()->detach();
+            $user->carts()->detach();
 
             $user->delete();
 
