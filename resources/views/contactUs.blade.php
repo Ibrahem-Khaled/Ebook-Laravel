@@ -2,13 +2,12 @@
 <html lang="ar">
 
 <head>
-    <title>الاشعارات</title>
+    <title>الشكاوي والمقترحات</title>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
     <link rel="stylesheet" type="text/css"
         href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
     <link rel="stylesheet" href="{{ asset('icons/icons.css') }}">
@@ -18,18 +17,19 @@
         .content {
             overflow: hidden;
             height: 3.6em;
+            /* Adjust this value as needed */
             line-height: 1.2em;
+            /* Adjust this value as needed */
             max-width: 200px;
-            transition: height 0.3s ease;
+            /* Adjust this value as needed */
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
     </style>
 </head>
 
 <body>
-    <!-- شريط التنقل الشفاف -->
     @include('layouts.navigation')
-    <!-- نهاية شريط التنقل -->
-
     @include('layouts.alerts')
 
     <div class="page-header" style="background-image: url({{ asset('img/bg-20.jpg') }}); height: 500px"></div>
@@ -85,14 +85,9 @@
                                                 <p class="mb-0">{{ $item->user?->name }}</p>
                                             </td>
                                             <td class="align-middle text-center">
-                                                <div class="content" id="content{{ $item->id }}">
-                                                    {{ \Illuminate\Support\Str::limit($item->desc, 100) }}
+                                                <div class="content">
+                                                    {{ $item->desc }}
                                                 </div>
-                                                @if (strlen($item->desc) > 100)
-                                                    <button class="btn btn-link p-0"
-                                                        onclick="toggleContent({{ $item->id }}, '{{ $item->desc }}')">قراءة
-                                                        المزيد</button>
-                                                @endif
                                             </td>
                                             <td class="align-middle text-center">
                                                 <p class="mb-0">{{ $item->created_at }}</p>
@@ -102,13 +97,11 @@
                                             </td>
                                             <td class="align-middle text-center">
                                                 <button type="button" class="btn btn-primary" data-toggle="modal"
-                                                    data-target="#deleteConfirm{{ $item->id }}">
-                                                    حذف
-                                                </button>
-
+                                                    data-target="#deleteConfirm{{ $item->id }}">حذف</button>
 
                                                 <div class="modal fade" id="deleteConfirm{{ $item->id }}"
-                                                    tabindex="-1" role="dialog" aria-labelledby="deleteConfirmLabel{{ $item->id }}"
+                                                    tabindex="-1" role="dialog"
+                                                    aria-labelledby="deleteConfirmLabel{{ $item->id }}"
                                                     aria-hidden="true">
                                                     <div class="modal-dialog" style="margin-top: 10rem;">
                                                         <div class="modal-content">
@@ -148,7 +141,7 @@
                 @else
                     <div class="row mt-4">
                         <div class="col">
-                            <p class="display-4" style="font-size: x-large">لا توجد فئات.</p>
+                            <p class="display-4" style="font-size: x-large">لا توجد شكاوي أو مقترحات.</p>
                         </div>
                     </div>
                 @endif
@@ -156,7 +149,6 @@
         </div>
     </div>
 
-    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
     </script>
@@ -165,22 +157,6 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
-    </script>
-
-    <script>
-        function toggleContent(id, fullText) {
-            var contentDiv = document.getElementById('content' + id);
-            var button = contentDiv.nextElementSibling;
-            if (contentDiv.style.height === 'auto') {
-                contentDiv.style.height = '3.6em';
-                contentDiv.innerHTML = fullText.substring(0, 100) + '...';
-                button.innerHTML = 'قراءة المزيد';
-            } else {
-                contentDiv.style.height = 'auto';
-                contentDiv.innerHTML = fullText;
-                button.innerHTML = 'إخفاء';
-            }
-        }
     </script>
 </body>
 

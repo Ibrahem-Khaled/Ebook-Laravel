@@ -58,6 +58,18 @@
                         </div>
                     </a>
                 </div>
+                <div class="col my-2">
+                    <a href="{{ route('payment.index') }}">
+                        <div class="card move-on-hover" style="height: 100%">
+                            <div class="card-body text-center">
+                                <h1 class="text-gradient text-warning"><span id="status1">{{ count($payment) }}
+                                    </span>
+                                </h1>
+                                <h6 class="mb-0 font-weight-bolder">عمليات الدفع الداخلية</h6>
+                            </div>
+                        </div>
+                    </a>
+                </div>
 
                 <div class="col my-2">
                     <a href="{{ route('index.slide') }}">
@@ -157,7 +169,8 @@
                     <a href="{{ route('book.index') }}">
                         <div class="card move-on-hover">
                             <div class="card-body text-center">
-                                <h1 class="text-gradient text-warning"><span id="status1">{{ count($books) }}</span>
+                                <h1 class="text-gradient text-warning"><span
+                                        id="status1">{{ count($books) }}</span>
                                 </h1>
                                 <h6 class="mb-0 font-weight-bolder">الكتب</h6>
                             </div>
@@ -185,6 +198,17 @@
                                 <h1 class="text-gradient text-warning"><span id="status1">اعدادات الموقع</span>
                                 </h1>
                                 <h6 class="mb-0 font-weight-bolder">اعدادات التطبيق</h6>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col my-2">
+                    <a href="{{ route('instructions.index') }}">
+                        <div class="card move-on-hover">
+                            <div class="card-body text-center">
+                                <h1 class="text-gradient text-warning"><span id="status1">التعليمات</span>
+                                </h1>
+                                <h6 class="mb-0 font-weight-bolder">هنا يتم اضافة تعليمات التطبيق</h6>
                             </div>
                         </div>
                     </a>

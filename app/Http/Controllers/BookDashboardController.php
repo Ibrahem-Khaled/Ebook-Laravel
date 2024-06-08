@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\ContactUs;
 use App\Models\Coupon;
 use App\Models\Notifcation;
+use App\Models\Payment;
 use App\Models\Publisher;
 use App\Models\SlideShow;
 use App\Models\Subcategory;
@@ -25,6 +26,7 @@ class BookDashboardController extends Controller
         $slides = SlideShow::all();
         $notification = Notifcation::all();
         $contact = ContactUs::all();
+        $payment = Payment::all();
 
 
         $categories = Category::all();
@@ -46,6 +48,7 @@ class BookDashboardController extends Controller
                 'authors',
                 'publishers',
                 'books',
+                'payment',
             )
         );
     }

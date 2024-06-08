@@ -23,8 +23,8 @@ return new class extends Migration {
             $table->integer('book_number_pages')->nullable();
             $table->date('book_publication_date')->nullable();
             $table->text('book_description')->nullable();
-            $table->string('book_image_url', 255)->nullable(false)->unique();
-            $table->double('book_price')->nullable(false);
+            $table->string('book_image_url', 255)->nullable()->unique();
+            $table->double('book_price')->nullable();
             $table->integer('book_discount')->nullable()->default(0);
             $table->timestamps();
             $table->foreign('author_id')->references('id')->on('authors')->onDelete('no action');

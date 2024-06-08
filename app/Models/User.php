@@ -84,6 +84,10 @@ class User extends Authenticatable implements JWTSubject
         return $this->getKey();
     }
 
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'user_id');
+    }
 
     /**
      * Return a key value array, containing any custom claims to be added to the JWT.

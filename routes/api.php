@@ -5,6 +5,7 @@ use App\Http\Controllers\api\authController;
 use App\Http\Controllers\api\booksController;
 use App\Http\Controllers\api\CartController;
 use App\Http\Controllers\api\homeController;
+use App\Http\Controllers\api\InstructionController;
 use App\Http\Controllers\api\searchController;
 use App\Http\Controllers\api\userFavoriteController;
 use App\Http\Controllers\ContactUsController;
@@ -64,6 +65,11 @@ Route::post('user/feed/back', [ContactUsController::class, 'store']);
 //AppSetting
 Route::get('/MobileApi', [AppSettingController::class, 'index']);
 
+//instruction
+Route::get('/instruction', [InstructionController::class, 'index']);
 
 //test payment
 Route::post('/payment/test', [paymentController::class, 'PaymentWeb']);
+
+//payment route
+Route::post('/payment/store', [\App\Http\Controllers\api\PaymentController::class, 'store']);

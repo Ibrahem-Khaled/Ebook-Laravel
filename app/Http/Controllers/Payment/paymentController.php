@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Payment;
 
 use App\Http\Controllers\Controller;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
-class paymentController extends Controller
+class PaymentController extends Controller
 {
     public function paymentWeb(Request $request)
     {
@@ -16,7 +18,7 @@ class paymentController extends Controller
         $apiSecretKey = env('CHARGILY_API_SECRET_KEY');
         $apiSecretKeyTest = env('CHARGILY_API_SECRET_KEY_TEST');
 
-        $validator = validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'price' => 'required|numeric|min:0.01',
         ]);
 
@@ -30,7 +32,7 @@ class paymentController extends Controller
 
         // إعداد البيانات للدفع
         $amount = $request->price;
-        $currency = 'dzd'; // التأكد من استخدام الأحرف الكبيرة للعملة
+        $currency = 'DZD'; // التأكد من استخدام الأحرف الكبيرة للعملة
         $successUrl = route('payment.page.successfuly', $user->id);
 
         // إنشاء الحمولة للطلب
@@ -39,7 +41,6 @@ class paymentController extends Controller
             'currency' => $currency,
             'success_url' => $successUrl,
         ]);
-
 
         // إعداد جلسة cURL
         $curl = curl_init();
@@ -74,5 +75,88 @@ class paymentController extends Controller
                 return response()->json(['error' => 'Invalid JSON response from API'], 500);
             }
         }
+    }
+
+    public function index()
+    {
+        $payments = Payment::all();
+        return view('payment', compact('payments'));
+    }
+
+    public function store(Request $request)
+    {
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'description' => 'required|string|max:255',
+            'amount' => 'required|numeric',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        // Handle file upload
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+        } else {
+            $imagePath = null;
+        }
+
+        // Create payment
+        $payment = Payment::create([
+            'description' => $request->description,
+            'amount' => $request->amount,
+            'image' => $imagePath,
+        ]);
+
+        return redirect()->back()->with('success', 'Payment created successfully.');
+    }
+
+    public function update(Request $request, Payment $payment)
+    {
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'description' => 'required|string|max:255',
+            'amount' => 'required|numeric',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        // Handle file upload
+        if ($request->hasFile('image')) {
+            // Delete the old image if it exists
+            if ($payment->image) {
+                Storage::disk('public')->delete($payment->image);
+            }
+            $imagePath = $request->file('image')->store('images', 'public');
+        } else {
+            $imagePath = $payment->image;
+        }
+
+        // Update payment
+        $payment->update([
+            'description' => $request->description,
+            'amount' => $request->amount,
+            'image' => $imagePath,
+        ]);
+
+        return redirect()->route('payments.index')->with('success', 'Payment updated successfully.');
+    }
+
+    public function destroy(Payment $payment)
+    {
+        // Delete the image if it exists
+        if ($payment->image) {
+            Storage::disk('public')->delete($payment->image);
+        }
+
+        // Delete the payment
+        $payment->delete();
+
+        return redirect()->route('payments.index')->with('success', 'Payment deleted successfully.');
     }
 }

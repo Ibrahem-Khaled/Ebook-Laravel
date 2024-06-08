@@ -10,7 +10,9 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InstructionController;
 use App\Http\Controllers\NotifcationsController;
+use App\Http\Controllers\Payment\paymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublisherController;
 use App\Http\Controllers\ShoppingCartController;
@@ -137,6 +139,16 @@ Route::middleware('UserAdmin')->group(function () {
     Route::get('app/setting/show', [AppSettingController::class, 'index'])->name('index.appSetting');
     Route::post('app/setting/store', [AppSettingController::class, 'store'])->name('app-settings.store');
     Route::post('app/setting/update/{id}', [AppSettingController::class, 'update'])->name('app-settings.update');
+
+
+    //instructions
+    Route::resource('instructions', InstructionController::class);
+
+    //payment
+    Route::get('payment', [paymentController::class, 'index'])->name('payment.index');
+    Route::post('payment/store', [paymentController::class, 'store'])->name('payments.store');
+    Route::post('payment/update/{payment}', [paymentController::class, 'update'])->name('payments.update');
+    Route::post('payment/destroy/{payment}', [paymentController::class, 'destroy'])->name('payments.destroy');
 
 });
 

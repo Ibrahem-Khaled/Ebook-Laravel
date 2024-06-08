@@ -16,9 +16,8 @@ class AppSettingController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'privacy' => 'required',
-            'Instructions' => 'required',
-            'about_us' => 'required',
+            'privacy' => 'nullable',
+            'about_us' => 'nullable',
             'yt' => 'nullable|string',
             'fb' => 'nullable|string',
             'instagram' => 'nullable|string',
@@ -30,11 +29,9 @@ class AppSettingController extends Controller
         ]);
 
         $privacyPath = $request->file('privacy')->store('privacy_pdfs');
-        $InstructionsPath = $request->file('Instructions')->store('Instructions_pdfs');
 
         $appSetting = AppSetting::create([
             'privacy' => $privacyPath,
-            'Instructions' => $InstructionsPath,
             'about_us' => $request->Instructions,
             'yt' => $request->yt,
             'fb' => $request->fb,
@@ -58,7 +55,6 @@ class AppSettingController extends Controller
         // Validate the incoming request data
         $request->validate([
             'privacy' => 'nullable|file',
-            'Instructions' => 'nullable|file',
             'about_us' => 'nullable|string',
             'yt' => 'nullable|string',
             'fb' => 'nullable|string',
@@ -74,12 +70,6 @@ class AppSettingController extends Controller
         if ($request->hasFile('privacy')) {
             $privacyPath = $request->file('privacy')->store('privacy_pdfs');
             $appSetting->privacy = $privacyPath;
-        }
-
-        // Check if a new Instructions file has been uploaded and store it
-        if ($request->hasFile('Instructions')) {
-            $InstructionsPath = $request->file('Instructions')->store('Instructions_pdfs');
-            $appSetting->Instructions = $InstructionsPath;
         }
 
         // Update other fields

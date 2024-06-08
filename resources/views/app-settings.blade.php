@@ -276,7 +276,7 @@
                                                                         <input type="file"
                                                                             value="{{ $appSetting->privacy }}"
                                                                             class="form-control" id="privacy"
-                                                                            name="privacy" required>
+                                                                            name="privacy">
                                                                     </div>
                                                                     <div class="mb-3">
                                                                         <label for="Instructions"
@@ -284,7 +284,7 @@
                                                                         <input type="file"
                                                                             value="{{ $appSetting->Instructions }}"
                                                                             class="form-control" id="Instructions"
-                                                                            name="Instructions" required>
+                                                                            name="Instructions">
                                                                     </div>
                                                                     <div class="container mt-5">
                                                                         <div class="form-check">
