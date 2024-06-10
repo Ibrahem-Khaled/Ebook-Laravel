@@ -107,6 +107,7 @@ class PaymentController extends Controller
         $payment = Payment::create([
             'description' => $request->description,
             'amount' => $request->amount,
+            'user_id' => $request->user_id,
             'image' => $imagePath,
         ]);
 

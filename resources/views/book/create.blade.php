@@ -266,7 +266,8 @@
                                             <div class="form-check">
                                                 <input class="form-check-input" type="radio" name="free_sample"
                                                     id="toggle0" value="0">
-                                                <label class="form-check-label" for="toggle0">لا يوجد معاينة مجانية</label>
+                                                <label class="form-check-label" for="toggle0">لا يوجد معاينة
+                                                    مجانية</label>
                                             </div>
                                         </div>
                                         {{-- Description --}}
