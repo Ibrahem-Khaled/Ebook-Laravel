@@ -24,10 +24,17 @@ class booksController extends Controller
         $isFavorite = $user->bookFav()->where('book_id', $book->id)->exists();
         $ownsBook = $user->books()->where('book_id', $book->id)->exists();
 
+        // Fetch related books, for example, books in the same category
+        $relatedBooks = Book::where('category_id', $book->category_id)
+            ->where('id', '!=', $book->id)
+            ->take(5)
+            ->get();
+
         $bookDetails = $book->toArray();
         $bookDetails['is_favorite'] = $isFavorite;
         $bookDetails['addtocart'] = !$ownsBook;
-        
+        $bookDetails['related_books'] = $relatedBooks;
+
         return response()->json($bookDetails);
     }
 

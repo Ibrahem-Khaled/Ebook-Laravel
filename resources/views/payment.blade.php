@@ -91,6 +91,9 @@
                                             المستخدم</th>
                                         <th
                                             class="text-center text-uppercase text-secondary font-weight-bolder opacity-7">
+                                            البريد الالكتروني</th>
+                                        <th
+                                            class="text-center text-uppercase text-secondary font-weight-bolder opacity-7">
                                             الوصف</th>
                                         <th
                                             class="text-center text-uppercase text-secondary font-weight-bolder opacity-7">
@@ -114,6 +117,7 @@
                                         <tr>
                                             <td class="align-middle text-center">{{ $payment->id }}</td>
                                             <td class="align-middle text-center">{{ $payment?->user?->name }}</td>
+                                            <td class="align-middle text-center">{{ $payment?->user?->email }}</td>
                                             <td class="align-middle text-center">{{ $payment->description }}</td>
                                             <td class="align-middle text-center">{{ $payment->amount }}</td>
                                             <td class="align-middle text-center">
