@@ -32,7 +32,7 @@ class PaymentController extends Controller
 
         // إعداد البيانات للدفع
         $amount = $request->price;
-        $currency = 'DZD'; // التأكد من استخدام الأحرف الكبيرة للعملة
+        $currency = 'dzd'; // التأكد من استخدام الأحرف الكبيرة للعملة
         $successUrl = route('payment.page.successfuly', $user->id);
 
         // إنشاء الحمولة للطلب
