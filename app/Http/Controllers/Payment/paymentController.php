@@ -150,14 +150,11 @@ class PaymentController extends Controller
 
     public function destroy(Payment $payment)
     {
-        // Delete the image if it exists
         if ($payment->image) {
             Storage::disk('public')->delete($payment->image);
         }
-
-        // Delete the payment
         $payment->delete();
 
-        return redirect()->route('payments.index')->with('success', 'Payment deleted successfully.');
+        return redirect()->back()->with('success', 'Payment deleted successfully.');
     }
 }

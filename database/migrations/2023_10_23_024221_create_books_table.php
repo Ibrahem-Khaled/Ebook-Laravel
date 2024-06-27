@@ -29,8 +29,8 @@ return new class extends Migration {
             $table->timestamps();
             $table->foreign('author_id')->references('id')->on('authors')->onDelete('no action');
             $table->foreign('publisher_id')->references('id')->on('publishers')->onDelete('no action');
-            $table->foreign('subcategory_id')->references('id')->on('subcategories')->onDelete('no action');
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('no action');
+            $table->foreign('subcategory_id')->references('id')->on('subcategories')->onDelete('cascade');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });
     }
 

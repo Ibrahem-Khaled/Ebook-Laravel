@@ -12,11 +12,12 @@ return new class extends Migration {
     {
         Schema::create('coupons', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('book_id');
+            $table->unsignedBigInteger('book_id');
             $table->bigInteger('user_id')->nullable();
             $table->string('code')->unique();
             $table->bigInteger('discount')->default(0);
             $table->boolean('is_used')->default(0);
+            $table->foreign('book_id')->references('id')->on('books')->onDelete('cascade');
             $table->timestamps();
         });
     }

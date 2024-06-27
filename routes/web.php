@@ -148,7 +148,7 @@ Route::middleware('UserAdmin')->group(function () {
     Route::get('payment', [paymentController::class, 'index'])->name('payment.index');
     Route::post('payment/store', [paymentController::class, 'store'])->name('payments.store');
     Route::post('payment/update/{payment}', [paymentController::class, 'update'])->name('payments.update');
-    Route::post('payment/destroy/{payment}', [paymentController::class, 'destroy'])->name('payments.destroy');
+    Route::delete('payment/destroy/{payment}', [paymentController::class, 'destroy'])->name('payments.destroy');
 
 });
 
