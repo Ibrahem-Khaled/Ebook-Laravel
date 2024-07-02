@@ -28,7 +28,6 @@ class BookDashboardController extends Controller
         $contact = ContactUs::all();
         $payment = Payment::all();
 
-
         $categories = Category::all();
         $subcategories = Subcategory::all();
         $authors = Author::all();
@@ -51,5 +50,11 @@ class BookDashboardController extends Controller
                 'payment',
             )
         );
+    }
+
+    public function bookSold()
+    {
+        $books = Book::with('userBooks')->get();
+        return view('dashboard.bookSold', compact('books'));
     }
 }

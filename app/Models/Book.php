@@ -16,9 +16,9 @@ class Book extends Model
         return $this->belongsTo(Author::class);
     }
 
-    public function publisher(): BelongsTo
+    public function publisher()
     {
-        return $this->belongsTo(Publisher::class);
+        return $this->belongsTo(Publisher::class, 'publisher_id');
     }
 
     // public function category(): HasOneThrough // TODO: Check this function later (edit)

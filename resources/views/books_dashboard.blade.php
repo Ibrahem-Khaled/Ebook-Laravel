@@ -47,7 +47,7 @@
                     </a>
                 </div>
                 <div class="col my-2">
-                    <a href="#">
+                    <a href="{{ route('book.sold') }}">
                         <div class="card move-on-hover" style="height: 100%">
                             <div class="card-body text-center">
                                 <h1 class="text-gradient text-warning"><span id="status1">{{ count($userBooks) }}

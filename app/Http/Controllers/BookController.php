@@ -22,24 +22,8 @@ class BookController extends Controller
     // in admin dashbhoard
     public function index(): View
     {
-        $sql = 'SELECT
-        books.id,
-        books.book_isbn,
-        books.book_title,
-        books.book_price,
-        authors.author_name,
-        publishers.publisher_name,
-        categories.category_name,
-        subcategories.subcategory_name
-        FROM books, authors, publishers, categories, subcategories
-        WHERE books.author_id = authors.id
-        AND books.publisher_id = publishers.id
-        AND books.subcategory_id = subcategories.id
-        AND subcategories.category_id = categories.id
-        ORDER BY books.updated_at DESC
-        LIMIT 30';
 
-        $books = DB::select($sql);
+        $books = Book::all();
         return view('book.index', compact('books'));
     }
 
@@ -71,10 +55,9 @@ class BookController extends Controller
         if ($request->hasFile('book_pdf')) {
             $pdfFile = $request->file('book_pdf');
             $pdfFileName = Str::slug($request->book_isbn) . '.' . $pdfFile->getClientOriginalExtension();
-
             $pdfFilePath = $pdfFile->storeAs('pdfs', $pdfFileName, 'public');
         } else {
-            return redirect()->back()->withInput()->withErrors(['book_pdf' => 'Please upload a PDF file']);
+            $pdfFilePath = null;
         }
 
         if ($request->hasFile("book_image")) {

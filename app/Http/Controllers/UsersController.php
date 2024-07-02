@@ -67,21 +67,11 @@ class UsersController extends Controller
         if (!$user) {
             return response()->json(['error' => 'User not found'], 404);
         }
-
-        DB::beginTransaction();
-
         try {
-            $user->books()->detach();
-            $user->carts()->detach();
-
             $user->delete();
-
-            DB::commit();
-
             return back()->with('success', 'User and associated books deleted successfully');
         } catch (\Exception $e) {
             DB::rollBack();
-
             return response()->json(['error' => 'An error occurred while deleting the user'], 500);
         }
     }

@@ -81,15 +81,9 @@
 
                         </div>
                     </div>
-
-
                 </div>
-
-
-                {{--            <div id="bookDisplay"> --}}
-
-                {{--            </div> --}}
-                @php if (isset($books)) {
+                @php
+                    if (isset($books)) {
                         $nbooks = count($books);
                 } @endphp
                 @if ($nbooks > 0)
@@ -136,11 +130,8 @@
                                     @endphp
                                     @foreach ($books as $book)
                                         @php
-                                            // Example of usage
-
-                                            $number = $book->book_isbn; // Your 13-digit number
+                                            $number = $book->book_isbn;
                                             $isbn = convertToISBN($number);
-
                                         @endphp
                                         <tr>
                                             <td class="align-middle text-center  ">
@@ -153,8 +144,9 @@
                                             </td>
                                             <td class="align-middle ">
                                                 <p class="mb-0 truncated-text-short" data-bs-toggle='tooltip'
-                                                    data-bs-placement='top' title='{{ $book->publisher_name }}'>
-                                                    {{ $book->publisher_name }}</p>
+                                                    data-bs-placement='top'
+                                                    title='{{ $book->publisher->publisher_name }}'>
+                                                    {{ $book->publisher->publisher_name }}</p>
                                             </td>
                                             <td class="align-middle ">
                                                 <p class="mb-0">$ {{ number_format($book->book_price) }}</p>

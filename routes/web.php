@@ -105,7 +105,7 @@ Route::middleware('UserAdmin')->group(function () {
     Route::get('/book/show/{book}', [BookController::class, 'show'])->name('book.show');
     Route::delete('/book/delete/{book}', [BookController::class, 'delete'])->name('book.delete');
     Route::get('/book/search/{search}', [BookController::class, 'searchSelect'])->name('book.searchSelect');
-
+    Route::get('/books/sold', [BookDashboardController::class, 'bookSold'])->name('book.sold');
 
     //Coupons 
     Route::get('/coupons', [CouponController::class, 'index'])->name('coupons.index');

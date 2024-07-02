@@ -1,10 +1,10 @@
-
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
 
 
-        let typingTimer;  // Variable para almacenar el temporizador de escritura
-        const doneTypingInterval = 2000;  // Intervalo de tiempo después del cual se considera que la escritura ha terminado (en milisegundos)
+        let typingTimer; // Variable para almacenar el temporizador de escritura
+        const doneTypingInterval =
+        2000; // Intervalo de tiempo después del cual se considera que la escritura ha terminado (en milisegundos)
         let loaderTimeout; // Variable para almacenar el temporizador de la animación de carga
 
         // Función para mostrar la animación de carga
@@ -21,11 +21,11 @@
         }
 
         // Evento keyup para el campo de búsqueda
-        $('#searchBook').keyup(function () {
-            clearTimeout(typingTimer);  // Reinicia el temporizador en cada pulsación de tecla
-            clearTimeout(loaderTimeout);  // Reinicia el temporizador de la animación de carga
+        $('#searchBook').keyup(function() {
+            clearTimeout(typingTimer); // Reinicia el temporizador en cada pulsación de tecla
+            clearTimeout(loaderTimeout); // Reinicia el temporizador de la animación de carga
 
-            showLoader();  // Muestra la animación de carga
+            showLoader(); // Muestra la animación de carga
 
             // Inicia un nuevo temporizador para detectar cuando la escritura ha terminado
             typingTimer = setTimeout(doneTyping, doneTypingInterval);
@@ -33,7 +33,7 @@
 
         // Función que se ejecuta cuando la escritura ha terminado
         function doneTyping() {
-            hideLoader();  // Oculta la animación de carga después de que haya pasado el intervalo de tiempo
+            hideLoader(); // Oculta la animación de carga después de que haya pasado el intervalo de tiempo
 
 
         }
@@ -44,20 +44,23 @@
     // Ajax request according to what's in the search box
     function get_books(search) {
         $.ajax({
-            url: `book/search/${search}`,
-            type: 'GET',
-            dataType: 'json',
-            data: {'search': search},
-        })
-            .done(function (books) {
+                url: `book/search/${search}`,
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    'search': search
+                },
+            })
+            .done(function(books) {
                 function convertToISBN(number) {
-                    return 'ISBN ' + number.substring(0, 3) + '-' + number.substring(3, 4) + '-' + number.substring(4, 8) + '-' + number.substring(8, 12) + '-' + number.substring(12, 13);
+                    return 'ISBN ' + number.substring(0, 3) + '-' + number.substring(3, 4) + '-' + number.substring(
+                        4, 8) + '-' + number.substring(8, 12) + '-' + number.substring(12, 13);
                 }
 
                 let resultsList;
                 resultsList = ""; // Create a variable to store the list of results
 
-                books.forEach(function (book) {
+                books.forEach(function(book) {
 
                     let isbn = convertToISBN(book.book_isbn);
 
@@ -110,7 +113,7 @@
                 $("#bookDisplay").html(resultsList);
 
                 let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-                let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                let tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
                     return new bootstrap.Tooltip(tooltipTriggerEl)
                 });
 
@@ -138,7 +141,7 @@
     // Function to implement debounce for delaying Ajax calls
     function debounce(func, delay) {
         let timer;
-        return function () {
+        return function() {
             const context = this;
             const args = arguments;
             clearTimeout(timer);
@@ -151,13 +154,13 @@
 
     // book
     // Wrapped Ajax function with debounce
-    const BookDelayedRequest = debounce(function (search) {
+    const BookDelayedRequest = debounce(function(search) {
         get_books(search);
     }, 2000); // 300ms delay, adjustable based on your needs
 
     // book
     // 'input' event using the debounce function
-    $(document).on('input', '#searchBook', function () {
+    $(document).on('input', '#searchBook', function() {
         const searchValue = $('#searchBook').val();
         if (searchValue !== "") {
             BookDelayedRequest(searchValue);

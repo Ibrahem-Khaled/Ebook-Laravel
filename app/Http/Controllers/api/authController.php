@@ -118,14 +118,8 @@ class authController extends Controller
     public function deleteUser()
     {
         $user = auth()->guard('api')->user();
-        DB::beginTransaction();
-
         if ($user) {
-            $user->books()->detach();
-            $user->carts()->detach();
             $user->delete();
-            DB::commit();
-
             return response()->json([
                 'success' => true,
                 'message' => 'تم حذف المستخدم بنجاح'
