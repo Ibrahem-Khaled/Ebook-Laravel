@@ -13,11 +13,11 @@ class homeController extends Controller
 {
     public function index()
     {
-        $categories = Category::with([
-            'books' => function ($query) {
-                $query->limit(4);
-            }
-        ])->get();
+        $categories = Category::all();
+
+        $categories->each(function ($category) {
+            $category->setRelation('books', $category->books()->limit(4)->get());
+        });
 
         return response()->json($categories);
     }
