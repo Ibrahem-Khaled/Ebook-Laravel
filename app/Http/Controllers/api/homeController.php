@@ -13,15 +13,19 @@ class homeController extends Controller
 {
     public function index()
     {
-        $categories = Category::all();
+        // جلب الفئات التي تحتوي على كتب
+        $categories = Category::whereHas('books')->get();
+
+        // تحميل الكتب بحد أقصى 5 كتب لكل فئة
         $categories->load([
             'books' => function ($query) {
-                $query->take(5);
+                $query->limit(5);
             }
         ]);
 
         return response()->json($categories);
     }
+
 
     public function lastAdded()
     {
