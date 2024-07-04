@@ -13,12 +13,12 @@ class homeController extends Controller
 {
     public function index()
     {
-        // Retrieve all categories
         $categories = Category::with([
             'books' => function ($query) {
-                $query->orderBy('created_at', 'desc')->take(5);
+                $query->take(5);
             }
         ])->get();
+
         return response()->json($categories);
     }
 
@@ -48,7 +48,7 @@ class homeController extends Controller
         return response()->json($slide, 200);
     }
 
-    
+
 
 
 }
