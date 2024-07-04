@@ -13,7 +13,7 @@ class homeController extends Controller
 {
     public function index()
     {
-        $categories = Category::whereHas('books')->get();
+        $categories = Category::with('books')->get();
         return response()->json($categories);
     }
 
