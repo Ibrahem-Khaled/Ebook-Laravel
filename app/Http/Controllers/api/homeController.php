@@ -13,16 +13,7 @@ class homeController extends Controller
 {
     public function index()
     {
-        // جلب الفئات التي تحتوي على كتب
         $categories = Category::whereHas('books')->get();
-
-        // تحميل الكتب بحد أقصى 5 كتب لكل فئة
-        $categories->load([
-            'books' => function ($query) {
-                $query->limit(5);
-            }
-        ]);
-
         return response()->json($categories);
     }
 
