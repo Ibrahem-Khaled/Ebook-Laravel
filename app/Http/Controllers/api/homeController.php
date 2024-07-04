@@ -13,11 +13,12 @@ class homeController extends Controller
 {
     public function index()
     {
-        $categories = Category::with([
+        $categories = Category::all();
+        $categories->load([
             'books' => function ($query) {
                 $query->take(5);
             }
-        ])->get();
+        ]);
 
         return response()->json($categories);
     }
