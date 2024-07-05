@@ -119,6 +119,7 @@ class BookController extends Controller
 
         $book = Book::findOrFail($id);
 
+        // Update PDF if a new file is uploaded
         $pdfFilePath = $book->book_pdf;
         if ($request->hasFile('book_pdf')) {
             $pdfFile = $request->file('book_pdf');
@@ -126,16 +127,20 @@ class BookController extends Controller
             $pdfFilePath = $pdfFile->storeAs('pdfs', $pdfFileName, 'public');
         }
 
+        // Update image if a new file is uploaded
         $bookImageUrl = $book->book_image_url;
         if ($request->hasFile('book_image')) {
             if (Storage::disk('public')->exists($book->book_image_url)) {
                 Storage::disk('public')->delete($book->book_image_url);
             }
-            $image = $request->file('book_image');
-            $imageName = Str::slug($request->book_isbn) . '.' . $image->guessExtension();
-            $bookImageUrl = $image->storeAs('img/books', $imageName, 'public');
+            $image = $request->file("book_image");
+            $imageName = Str::slug($request->book_isbn) . "." . $image->guessExtension();
+            $destinationPath = public_path("img/books/");
+            $image->move($destinationPath, $imageName);
+            $bookImageUrl = 'img/books/' . $imageName;
         }
 
+        // Update book record
         $book->update([
             'book_isbn' => $request->book_isbn,
             'category_id' => $request->category_id,
@@ -155,6 +160,7 @@ class BookController extends Controller
 
         return redirect()->route('book.index')->with('success', 'تم تحديث الكتاب بنجاح.');
     }
+
     public function show($id): View
     {
         $book = Book::findOrFail($id);
