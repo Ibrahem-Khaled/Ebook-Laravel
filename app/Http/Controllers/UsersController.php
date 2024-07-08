@@ -127,5 +127,10 @@ class UsersController extends Controller
         return redirect()->back()->with('message', 'User role updated successfully');
     }
 
+    public function profile()
+    {
+        $user = User::find(auth()->user()->id);
+        return view('users.profile', compact('user'));
+    }
 
 }
