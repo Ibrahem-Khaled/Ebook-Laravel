@@ -34,7 +34,7 @@ class BookDashboardController extends Controller
         $publishers = Publisher::all();
         $books = Book::all();
         return view(
-            'books_dashboard',
+            'dashboard.books_dashboard',
             compact(
                 'users',
                 'userBooks',

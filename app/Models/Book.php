@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\File;
 
 class Book extends Model
 {
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     public function author(): BelongsTo
     {

@@ -10,7 +10,7 @@ class AppSettingController extends Controller
     public function index()
     {
         $appSettings = AppSetting::all();
-        return view('app-settings', compact('appSettings'));
+        return view('dashboard.app-settings', compact('appSettings'));
     }
 
     public function store(Request $request)

@@ -9,7 +9,7 @@ class InstructionController extends Controller
     public function index()
     {
         $instructions = Instructions::all();
-        return view('instructions', compact('instructions'));
+        return view('dashboard.instructions', compact('instructions'));
     }
 
     public function create()

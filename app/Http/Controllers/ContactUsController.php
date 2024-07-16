@@ -10,7 +10,7 @@ class ContactUsController extends Controller
     public function index()
     {
         $contact = ContactUs::all();
-        return view('contactUs', compact('contact'));
+        return view('dashboard.contactUs', compact('contact'));
     }
     public function destroy($contactId)
     {
