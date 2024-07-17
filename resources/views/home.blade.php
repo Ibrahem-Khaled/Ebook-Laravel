@@ -3,6 +3,7 @@
 
 <head>
     <title>الخزانة - alkazana</title>
+
     <!-- Required meta tags -->
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
@@ -14,10 +15,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap" rel="stylesheet">
     <link rel="stylesheet" href={{ asset('icons/icons.css') }}>
+
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Material Kit CSS -->
     <link href="{{ asset('css/material-kit.css') }}" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="{{ asset('css/home.css') }}">
@@ -112,6 +112,7 @@
         </div>
 
         <!-- Book with Category Name Section -->
+
         <section class="pt-3 pt-md-5 pb-md-5 pt-lg-8">
             <div class="container">
                 @foreach ($categories as $category)
@@ -128,9 +129,8 @@
                                             <img src="{{ asset($book->book_image_url) }}" alt="book image" height="200" style="object-fit: cover"
                                                 class="card-img-top">
                                             <div class="card-body">
-                                                <h6 class="card-title">{{ $book->book_title }}</h6>
-                                                <p class="card-text">{{ $book->book_author }}</p>
-                                                <p class="card-text">{{ $book->book_description }}</p>
+                                                <h5 class="card-title">{{ $book->book_title }}</h5>
+                                                <h6 class="card-text font-black" style="color: var(--main-color)">{{ $book->book_price === null ? 'مجانا' : $book->book_price . '  د.ج' }}</h6>
                                             </div>
                                         </div>
                                     </div>
@@ -177,7 +177,7 @@
                     </div>
                 </div>
                 <div class="text-center mt-4">
-                    <p>&copy; 2023 الخزانة. جميع الحقوق محفوظة.</p>
+                    <p>&copy; {{ date('Y') }} الخزانة. جميع الحقوق محفوظة.</p>
                 </div>
             </div>
         </footer>
