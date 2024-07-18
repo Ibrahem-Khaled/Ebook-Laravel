@@ -3,7 +3,6 @@
 
 <head>
     <title>الخزانة - alkazana</title>
-
     <!-- Required meta tags -->
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
@@ -14,14 +13,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href={{ asset('icons/icons.css') }}>
-
+    <link rel="stylesheet" href="{{ asset('icons/icons.css') }}">
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
-    <!-- Material Kit CSS -->
-    <link href="{{ asset('css/material-kit.css') }}" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/home.css') }}">
-
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <style>
         :root {
             --main-color: #D1935E;
@@ -37,39 +34,6 @@
 
         .main-bg-color {
             background-color: var(--main-color);
-        }
-
-        .footer {
-            background-color: #f8f9fa;
-            padding: 40px 0;
-            border-top: 1px solid #e7e7e7;
-        }
-
-        .footer h5 {
-            color: var(--main-color);
-            font-weight: bold;
-        }
-
-        .footer .social-icons a {
-            color: #333;
-            margin-right: 15px;
-            font-size: 18px;
-        }
-
-        .footer .newsletter input {
-            width: 70%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-right: 5px;
-        }
-
-        .footer .newsletter button {
-            padding: 10px 20px;
-            border: none;
-            background-color: var(--main-color);
-            color: white;
-            border-radius: 5px;
         }
     </style>
 </head>
@@ -126,11 +90,13 @@
                                 @foreach ($category->books as $book)
                                     <div class="col-md-4">
                                         <div class="book-item card shadow-sm mb-4">
-                                            <img src="{{ asset($book->book_image_url) }}" alt="book image" height="200" style="object-fit: cover"
-                                                class="card-img-top">
+                                            <img src="{{ asset($book->book_image_url) }}" alt="book image"
+                                                height="200" style="object-fit: cover" class="card-img-top">
                                             <div class="card-body">
                                                 <h5 class="card-title">{{ $book->book_title }}</h5>
-                                                <h6 class="card-text font-black" style="color: var(--main-color)">{{ $book->book_price === null ? 'مجانا' : $book->book_price . '  د.ج' }}</h6>
+                                                <h6 class="card-text font-black" style="color: var(--main-color)">
+                                                    {{ $book->book_price === null ? 'مجانا' : $book->book_price . '  د.ج' }}
+                                                </h6>
                                             </div>
                                         </div>
                                     </div>
@@ -184,13 +150,18 @@
     </div>
 
     <!-- Bootstrap and necessary plugins -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    </script>
     <script src="{{ asset('js/core/popper.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/material-kit.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('js/plugins/perfect-scrollbar.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/perfect-scrollbar.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/home.js') }}" type="text/javascript"></script>
 </body>
 

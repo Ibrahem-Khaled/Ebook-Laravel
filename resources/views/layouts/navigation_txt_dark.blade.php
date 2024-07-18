@@ -1,168 +1,79 @@
-<style>
-    @media (min-width: 992px) {
-        .dropdown-xl {
-            width: 75rem;
-            z-index: auto;
-            left: -400% !important;
-        }
-    }
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">
+        <img src="{{ asset('img/logos/Home_Logo.png') }}" alt="Logo" style="max-width: 150px" class="navbar-brand-img">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-    @media (min-width: 1300px) {
-        .dropdown-xl {
-            width: 75rem;
-            z-index: auto;
-            left: -300% !important;
-        }
-    }
-
-    .dropdown-item {
-        width: 95% !important;
-        transition: background-color 0.2s ease, color 0.2s ease;
-    }
-</style>
-<nav class="navbar navbar-expand-lg position-absolute top-0 z-index-3  shadow-none w-100 my-3 navbar-dark">
-    <div class="container" style="max-width: 100%">
-        <a class="navbar-brand text-dark text-8xl" style="margin-right: 0;" href="#">
-            <img src="{{ asset('img/logos/Home_Logo.png') }}" alt="Logo" style="max-width: 200px"
-                class="navbar-brand-img">
-        </a>
-
-        <button class="navbar-toggler shadow-none ms-md-2" type="button" data-bs-toggle="collapse"
-            data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false"
-            aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon mt-2">
-                <span class="navbar-toggler-bar bar1"></span>
-                <span class="navbar-toggler-bar bar2"></span>
-                <span class="navbar-toggler-bar bar3"></span>
-            </span>
-        </button>
-        <div class="collapse bg-white navbar-collapse w-100 pt-3 pb-2 py-lg-0 ps-lg-5" id="navigation"
-            style="border-radius: 10px; padding-left: 10px !important;">
-            <ul class="navbar-nav navbar-nav-hover">
-                <li class="nav-item mx-2 ms-lg-6">
-                    <a href="{{ route('home') }}" class="nav-link ps-2 d-flex cursor-pointer align-items-center">
-                        الصفحة الرئيسية
-                    </a>
+    <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="{{ route('home') }}">الصفحة الرئيسية</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    الكتب
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    @forelse($categories as $category)
+                        <li>
+                            <h6 class="dropdown-header">{{ $category->category_name }}</h6>
+                        </li>
+                        @forelse($category->subcategories as $subcategory)
+                            <li><a class="dropdown-item" href="#">{{ $subcategory->subcategory_name }}</a>
+                            </li>
+                        @empty
+                            <li class="dropdown-item">لا توجد فئات فرعية لـ {{ $category->category_name }}</li>
+                        @endforelse
+                    @empty
+                        <li class="dropdown-item">لا توجد فئات</li>
+                    @endforelse
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">المنتجات</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">من نحن</a>
+            </li>
+            @if (Auth::check() && Auth::user()->role->role_name == 'admin')
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('dashboard.books') }}">لوحة التحكم</a>
                 </li>
-
-                <li class="nav-item dropdown dropdown-hover mx-2">
-                    <a id="dropdownBooks" role="button" class="nav-link ps-2 d-flex cursor-pointer align-items-center"
+            @endif
+        </ul>
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            @if (Auth::user() !== null)
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        الكتب
-                        <img src="{{ asset('img/down-arrow-dark.svg') }}" alt="down-arrow"
-                            class="arrow ms-auto ms-md-2">
+                        {{ Auth::user()->name }}
                     </a>
-                    <div class="dropdown-menu dropdown-menu-animation ms-n3 dropdown-xl p-3 border-radius-xl mt-0 mt-lg-3"
-                        aria-labelledby="dropdownBooks" data-bs-popper="static">
-                        <div class="row d-none d-lg-block">
-                            <div class="col-12 px-4 py-2">
-                                <div class="row">
-                                    
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-lg-none">
-                            @forelse($categories as $category)
-                                <div style="color: #344767"
-                                    class="dropdown-header font-weight-bolder d-flex align-items-center px-0">
-                                    {{ $category->category_name }}
-                                </div>
-                                @forelse($category->subcategories as $subcategory)
-                                    <a href="#" class="dropdown-item border-radius-md">
-                                        {{ $subcategory->subcategory_name }}
-                                    </a>
-                                @empty
-                                    <p>لا توجد فئات فرعية لـ {{ $category }}</p>
-                                @endforelse
-                            @empty
-                                لا توجد فئات
-                            @endforelse
-
-                        </div>
-                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li>
+                            <h6 class="dropdown-header">الحساب</h6>
+                        </li>
+                        <li><a class="dropdown-item" href="#">تعديل الملف الشخصي</a></li>
+                        <li>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="dropdown-item">تسجيل الخروج</button>
+                            </form>
+                        </li>
+                    </ul>
                 </li>
-
-                <li class="nav-item mx-2">
-                    <a class="nav-link ps-2 d-flex cursor-pointer align-items-center">
-
-                        المنتجات
-                    </a>
+            @else
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('register') }}">التسجيل</a>
                 </li>
-                <li class="nav-item mx-2">
-                    <a class="nav-link ps-2 d-flex cursor-pointer align-items-center">
-                        من نحن
-                    </a>
+                <li class="nav-item">
+                    <a class="btn btn-sm me-1" style="background-color: #D1935E; color: white;"
+                        href="{{ route('login') }}">تسجيل الدخول</a>
                 </li>
-                @if (Auth::check() && Auth::user()->role->role_name == 'admin')
-                    <li class="nav-item mx-2">
-                        <a href="{{ route('dashboard.books') }}"
-                            class="nav-link ps-2 d-flex cursor-pointer align-items-center">
-                            <span>لوحة التحكم</span>
-                        </a>
-                    </li>
-                @endif
-            </ul>
-            <ul class="navbar-nav navbar-nav-hover ms-auto">
-                @if (Auth::user() !== null)
-                    <li class="nav-item dropdown dropdown-hover mx-2" style="margin-right: 3.5rem !important;">
-                        <a class="nav-link ps-2 d-flex align-items-center user-select-none cursor-default">
-                            {{ Auth::user()->name }} <img src="{{ asset('img/down-arrow-white.svg') }}"
-                                alt="down-arrow" class="arrow ms-auto ms-md-2">
-                        </a>
-                        <div class="dropdown-menu ms-n3 dropdown-menu-animation dropdown p-3 border-radius-lg mt-0 mt-lg-3"
-                            aria-labelledby="dropdownMenuPages">
-                            <div class="d-none d-lg-block">
-
-                                <h6
-                                    class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1 mt-1">
-                                    الحساب
-                                </h6>
-                                <a href="#" class="dropdown-item border-radius-md">
-                                    <span>تعديل الملف الشخصي</span>
-                                </a>
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @method('POST')
-                                    @csrf
-                                    <button type="submit" class="dropdown-item border-radius-md">
-                                        <span>تسجيل الخروج</span>
-                                    </button>
-                                </form>
-                            </div>
-                            <div class="d-lg-none">
-                                <h6 class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
-                                    الخيارات
-                                </h6>
-                                <a href="#" class="dropdown-item border-radius-md">
-                                    <span>الخيار 1</span>
-                                </a>
-
-                                <h6
-                                    class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1 mt-3">
-                                    الحساب
-                                </h6>
-                                <a href="#" class="dropdown-item border-radius-md">
-                                    <span>تعديل الملف الشخصي</span>
-                                </a>
-                                <a href="#" class="dropdown-item border-radius-md">
-                                    <span>تسجيل الخروج</span>
-                                </a>
-                            </div>
-                        </div>
-
-                    </li>
-                @else
-                    <li class="nav-item mx-2">
-                        <a href="{{ route('register') }}"
-                            class="nav-link ps-2 d-flex cursor-pointer align-items-center">
-                            التسجيل
-                        </a>
-                    </li>
-                    <li class="nav-item ms-lg-auto my-auto ms-3 ms-lg-0 mt-2" style="margin-top: 2px !important">
-                        <a class="btn btn-sm mb-0 me-1 mt-2 mt-md-0"  style="background-color: #D1935E !important ; color: white !important"
-                            href={{ route('login') }}>تسجيل الدخول</a>
-                    </li>
-                @endif
-            </ul>
-        </div>
+            @endif
+        </ul>
     </div>
 </nav>
