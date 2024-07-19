@@ -19,6 +19,8 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <style>
         :root {
             --main-color: #D1935E;
@@ -35,6 +37,124 @@
         .main-bg-color {
             background-color: var(--main-color);
         }
+
+        .footer {
+            background-color: #f8f9fa;
+            padding: 40px 0;
+            border-top: 1px solid #e7e7e7;
+        }
+
+        .footer h5 {
+            color: var(--main-color);
+            margin-bottom: 20px;
+        }
+
+        .footer p {
+            color: #555;
+        }
+
+        .footer .list-unstyled a {
+            color: #555;
+            text-decoration: none;
+        }
+
+        .footer .list-unstyled a:hover {
+            color: var(--main-color);
+        }
+
+        .footer .social-icons a {
+            margin-right: 15px;
+            font-size: 24px;
+            color: #555;
+            text-decoration: none;
+        }
+
+        .footer .social-icons a:hover {
+            color: var(--main-color);
+        }
+
+        .footer .newsletter input[type="email"] {
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            padding: 10px;
+            width: calc(100% - 110px);
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .footer .newsletter button {
+            background-color: var(--main-color);
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .footer .newsletter button:hover {
+            background-color: darken(var(--main-color), 10%);
+        }
+
+        .footer .social-icons i {
+            font-size: 24px;
+        }
+
+        .carousel-item {
+            height: 500px;
+        }
+
+        .carousel-item img.background-blur {
+            filter: blur(8px);
+            -webkit-filter: blur(8px);
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .carousel-caption {
+            bottom: 20%;
+        }
+
+        .carousel-caption img.book-cover {
+            height: 300px;
+            width: 150px;
+            object-fit: cover;
+            margin: 20px;
+        }
+
+        .carousel-caption h5,
+        .carousel-caption p {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .authors-section .swiper-slide {
+            opacity: 0.5;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .authors-section .swiper-slide-active {
+            transform: scale(1.2);
+            opacity: 1;
+        }
+
+        .authors-section .author-img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .swiper-container {
+            padding: 20px 0;
+        }
+
+        .swiper-button-next,
+        .swiper-button-prev {
+            color: var(--main-color);
+        }
     </style>
 </head>
 
@@ -46,7 +166,7 @@
         @include('layouts.navigation_txt_dark')
 
         <!-- Slider Section -->
-        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="5000">
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="7000">
             <ol class="carousel-indicators">
                 @foreach ($books as $index => $book)
                     <li data-target="#carouselExampleIndicators" data-slide-to="{{ $index }}"
@@ -56,9 +176,11 @@
             <div class="carousel-inner">
                 @foreach ($books as $index => $book)
                     <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
-                        <img class="d-block w-100" style="height: 500px; object-fit: cover"
-                            src="{{ asset($book->book_image_url) }}" alt="الشريحة {{ $index + 1 }}">
-                        <div class="carousel-caption d-none d-md-block">
+                        <img class="d-block w-100 background-blur" src="{{ asset($book->book_image_url) }}"
+                            alt="الشريحة {{ $index + 1 }}">
+                        <div class="carousel-caption d-flex flex-column align-items-center text-center">
+                            <img class="book-cover" src="{{ asset($book->book_image_url) }}"
+                                alt="{{ $book->book_title }}">
                             <h5 class="main-color">{{ $book->book_title }}</h5>
                             <p>{{ $book->book_description }}</p>
                         </div>
@@ -75,20 +197,64 @@
             </a>
         </div>
 
+        <!-- Authors Section -->
+        <section class="authors-section py-5">
+            <div class="container">
+                <h2 class="text-center mb-4">المؤلفون</h2>
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        @foreach ($authors as $author)
+                            <div class="swiper-slide text-center">
+                                <img src="{{ Storage::disk('public')->url($author->image) }}" alt="{{ $author->author_name }}"
+                                    class="author-img">
+                                <h5>{{ $author->author_name }}</h5>
+                            </div>
+                        @endforeach
+                    </div>
+                    <!-- Add Pagination -->
+                    <div class="swiper-pagination"></div>
+                    <!-- Add Navigation -->
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </div>
+        </section>
+        <section class="authors-section py-5">
+            <div class="container">
+                <h2 class="text-center mb-4">دار النشر</h2>
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        @foreach ($publishers as $publisher)
+                            <div class="swiper-slide text-center">
+                                <img src="{{ Storage::disk('public')->url($publisher->image) }}"
+                                    alt="{{ $publisher->publisher_name }}" class="author-img">
+                                <h5>{{ $publisher->publisher_name }}</h5>
+                            </div>
+                        @endforeach
+                    </div>
+                    <!-- Add Pagination -->
+                    <div class="swiper-pagination"></div>
+                    <!-- Add Navigation -->
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </div>
+        </section>
+
         <!-- Book with Category Name Section -->
 
         <section class="pt-3 pt-md-5 pb-md-5 pt-lg-8">
             <div class="container">
                 @foreach ($categories as $category)
                     <div class="category-section">
-                        <div class="category-header">
+                        <div class="category-header"
+                            style="color: var(--main-color); margin: 20px; font-size: 20px;font-weight: bold">
                             {{ $category->category_name }}
                         </div>
                         <div class="category-body">
-                            <p>{{ $category->category_description }}</p>
                             <div class="row">
                                 @foreach ($category->books as $book)
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="book-item card shadow-sm mb-4">
                                             <img src="{{ asset($book->book_image_url) }}" alt="book image"
                                                 height="200" style="object-fit: cover" class="card-img-top">
@@ -159,10 +325,37 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
     </script>
-    <script src="{{ asset('js/core/popper.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('js/material-kit.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('js/plugins/perfect-scrollbar.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('js/home.js') }}" type="text/javascript"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        var swiper = new Swiper('.swiper-container', {
+            slidesPerView: 3,
+            spaceBetween: 30,
+            centeredSlides: true,
+            loop: true,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            breakpoints: {
+                640: {
+                    slidesPerView: 1,
+                    spaceBetween: 10,
+                },
+                768: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                },
+                1024: {
+                    slidesPerView: 3,
+                    spaceBetween: 30,
+                },
+            }
+        });
+    </script>
 </body>
 
 </html>

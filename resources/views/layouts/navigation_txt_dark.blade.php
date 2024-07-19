@@ -1,3 +1,4 @@
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#">
         <img src="{{ asset('img/logos/Home_Logo.png') }}" alt="Logo" style="max-width: 150px" class="navbar-brand-img">

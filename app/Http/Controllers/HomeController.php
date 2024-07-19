@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Author;
 use App\Models\Book;
 use App\Models\Category;
+use App\Models\Publisher;
 use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
@@ -16,6 +18,9 @@ class HomeController extends Controller
             $category->setRelation('books', $category->books()->limit(4)->get());
         });
 
-        return view('home', compact('categories', 'books'));
+        $authors = Author::all();
+        $publishers = Publisher::all();
+
+        return view('home', compact('categories', 'books', 'authors', 'publishers'));
     }
 }
