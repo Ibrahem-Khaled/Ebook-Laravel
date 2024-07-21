@@ -23,4 +23,10 @@ class HomeController extends Controller
 
         return view('home', compact('categories', 'books', 'authors', 'publishers'));
     }
+
+    public function author($id)
+    {
+        $author = Author::with('books')->findOrFail($id);
+        return view('author', compact('author'));
+    }
 }

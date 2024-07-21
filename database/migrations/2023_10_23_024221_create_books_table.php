@@ -16,8 +16,8 @@ return new class extends Migration {
             $table->string('book_title')->nullable(false)->unique();
             $table->string('book_pdf')->nullable();
             $table->integer('free_sample')->default(0)->nullable();
-            $table->unsignedBigInteger('author_id')->nullable(false);
-            $table->unsignedBigInteger('publisher_id')->nullable(false);
+            $table->unsignedBigInteger('author_id')->nullable();
+            $table->unsignedBigInteger('publisher_id')->nullable();
             $table->unsignedBigInteger('subcategory_id')->nullable();
             $table->unsignedBigInteger('category_id')->nullable();
             $table->integer('book_number_pages')->nullable();
@@ -27,8 +27,8 @@ return new class extends Migration {
             $table->double('book_price')->nullable();
             $table->integer('book_discount')->nullable()->default(0);
             $table->timestamps();
-            $table->foreign('author_id')->references('id')->on('authors')->onDelete('no action');
-            $table->foreign('publisher_id')->references('id')->on('publishers')->onDelete('no action');
+            $table->foreign('author_id')->references('id')->on('authors')->onDelete('cascade');
+            $table->foreign('publisher_id')->references('id')->on('publishers')->onDelete('cascade');
             $table->foreign('subcategory_id')->references('id')->on('subcategories')->onDelete('cascade');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });

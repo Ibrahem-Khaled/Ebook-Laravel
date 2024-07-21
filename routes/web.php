@@ -34,6 +34,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'show'])->name('home');
+Route::get('/authors/{id}', [HomeController::class, 'author'])->name('author');
 
 
 Route::middleware('auth')->group(function () {

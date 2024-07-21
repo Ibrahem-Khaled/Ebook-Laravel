@@ -53,7 +53,7 @@
                                 <div class="display-4 text-md">تم إنشاؤه في {{ $author->created_at }} وتم تحديثه لآخر
                                     مرة في {{ $author->updated_at }}</div>
                                 <p>{{ $author->desc }}</p> <!-- Description -->
-                                <img src="{{ Storage::disk('public')->url($author->image) }}" alt="Author Image">
+                                <img src="{{ asset('public/storage/' . $author->image) }}" alt="Author Image">
                                 <ul>
                                     <li>Facebook: {{ $author->fb }}</li>
                                     <li>YouTube: {{ $author->yt }}</li>

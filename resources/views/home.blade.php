@@ -38,67 +38,6 @@
             background-color: var(--main-color);
         }
 
-        .footer {
-            background-color: #f8f9fa;
-            padding: 40px 0;
-            border-top: 1px solid #e7e7e7;
-        }
-
-        .footer h5 {
-            color: var(--main-color);
-            margin-bottom: 20px;
-        }
-
-        .footer p {
-            color: #555;
-        }
-
-        .footer .list-unstyled a {
-            color: #555;
-            text-decoration: none;
-        }
-
-        .footer .list-unstyled a:hover {
-            color: var(--main-color);
-        }
-
-        .footer .social-icons a {
-            margin-right: 15px;
-            font-size: 24px;
-            color: #555;
-            text-decoration: none;
-        }
-
-        .footer .social-icons a:hover {
-            color: var(--main-color);
-        }
-
-        .footer .newsletter input[type="email"] {
-            border: 1px solid #ddd;
-            border-radius: 3px;
-            padding: 10px;
-            width: calc(100% - 110px);
-            display: inline-block;
-            margin-right: 10px;
-        }
-
-        .footer .newsletter button {
-            background-color: var(--main-color);
-            color: white;
-            border: none;
-            border-radius: 3px;
-            padding: 10px 20px;
-            cursor: pointer;
-        }
-
-        .footer .newsletter button:hover {
-            background-color: darken(var(--main-color), 10%);
-        }
-
-        .footer .social-icons i {
-            font-size: 24px;
-        }
-
         .carousel-item {
             height: 500px;
         }
@@ -204,11 +143,9 @@
                 <div class="swiper-container">
                     <div class="swiper-wrapper">
                         @foreach ($authors as $author)
-                            <div class="swiper-slide text-center">
-                                <img src="{{ Storage::disk('public')->url($author->image) }}" alt="{{ $author->author_name }}"
-                                    class="author-img">
+                            <a href="{{ route('author', $author->id) }}" class="swiper-slide text-center">
                                 <h5>{{ $author->author_name }}</h5>
-                            </div>
+                            </a>
                         @endforeach
                     </div>
                     <!-- Add Pagination -->
@@ -219,6 +156,7 @@
                 </div>
             </div>
         </section>
+
         <section class="authors-section py-5">
             <div class="container">
                 <h2 class="text-center mb-4">دار النشر</h2>
@@ -226,12 +164,11 @@
                     <div class="swiper-wrapper">
                         @foreach ($publishers as $publisher)
                             <div class="swiper-slide text-center">
-                                <img src="{{ Storage::disk('public')->url($publisher->image) }}"
-                                    alt="{{ $publisher->publisher_name }}" class="author-img">
                                 <h5>{{ $publisher->publisher_name }}</h5>
                             </div>
                         @endforeach
                     </div>
+
                     <!-- Add Pagination -->
                     <div class="swiper-pagination"></div>
                     <!-- Add Navigation -->
@@ -275,44 +212,7 @@
         </section>
 
         <!-- Footer -->
-        <footer class="footer">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-3">
-                        <h5>عن الخزانة</h5>
-                        <p>نحن مكتبة تقدم أفضل الكتب من جميع أنحاء العالم.</p>
-                    </div>
-                    <div class="col-md-3">
-                        <h5>روابط مفيدة</h5>
-                        <ul class="list-unstyled">
-                            <li><a href="#">الرئيسية</a></li>
-                            <li><a href="#">من نحن</a></li>
-                            <li><a href="#">خدماتنا</a></li>
-                            <li><a href="#">اتصل بنا</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-3">
-                        <h5>تابعنا</h5>
-                        <div class="social-icons">
-                            <a href="#"><i class="material-icons">facebook</i></a>
-                            <a href="#"><i class="material-icons">twitter</i></a>
-                            <a href="#"><i class="material-icons">instagram</i></a>
-                            <a href="#"><i class="material-icons">youtube</i></a>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <h5>النشرة الإخبارية</h5>
-                        <div class="newsletter">
-                            <input type="email" placeholder="ادخل بريدك الإلكتروني">
-                            <button>اشترك</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="text-center mt-4">
-                    <p>&copy; {{ date('Y') }} الخزانة. جميع الحقوق محفوظة.</p>
-                </div>
-            </div>
-        </footer>
+       @include('layouts.footer')
     </div>
 
     <!-- Bootstrap and necessary plugins -->
