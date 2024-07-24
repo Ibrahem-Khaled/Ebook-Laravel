@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Route;
 //Auth JWT
 Route::post('login', [authController::class, 'login']);
 Route::post('register', [authController::class, 'register']);
+Route::post('socialAuth', [authController::class, 'socialAuth']);
 Route::post('logout', [authController::class, 'logout']);
 Route::get('me', [authController::class, 'me']);
 Route::get('delete/user', [authController::class, 'deleteUser']);

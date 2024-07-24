@@ -13,7 +13,6 @@ class authController extends Controller
 {
     public function register(Request $request)
     {
-        // Validate incoming registration request
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|unique:users,email',
@@ -26,7 +25,7 @@ class authController extends Controller
             'password' => Hash::make($validatedData['password']),
         ]);
 
-        $token = auth()->guard('api')->attempt($validatedData); // Using $validatedData directly here is cleaner
+        $token = auth()->guard('api')->attempt($validatedData);
 
         if (!$token) {
             return response()->json(['error' => 'Unauthorized'], 401);
@@ -45,9 +44,32 @@ class authController extends Controller
             'message' => 'تم تسجيل المستخدم بنجاح',
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 9999999, // This seems like an arbitrarily large number, consider revising
+            'expires_in' => auth('api')->factory()->getTTL() * 9999999, 
             'user' => $user,
         ], 201);
+    }
+
+    public function socialAuth(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make('default_password'),
+            ]);
+        } else {
+            $user->name = $request->name;
+            $user->save();
+        }
+
+        $token = auth()->guard('api')->attempt(['email' => $request->email, 'password' => 'default_password']);
+
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth('api')->factory()->getTTL() * 9999999
+        ]);
     }
 
     public function login()
