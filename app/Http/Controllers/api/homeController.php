@@ -16,7 +16,7 @@ class homeController extends Controller
         $categories = Category::all();
 
         $categories->each(function ($category) {
-            $category->setRelation('books', $category->books()->limit(4)->get());
+            $category->setRelation('books', $category->books()->limit(10)->get());
         });
 
         return response()->json($categories);
