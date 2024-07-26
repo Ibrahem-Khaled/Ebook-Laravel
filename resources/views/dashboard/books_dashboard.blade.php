@@ -9,13 +9,26 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <!--     Fonts and icons     -->
-    <link rel="stylesheet" type="text/css"
-        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href={{ asset('icons/icons.css') }}>
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <!-- Material Kit CSS -->
     <link href={{ asset('css/material-kit.css') }} rel="stylesheet" />
+
+    <style>
+        body {
+            font-family: "Cairo", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: <weight>;
+            font-style: normal;
+            font-variation-settings:
+                "slnt" 0;
+        }
+    </style>
 </head>
 
 <body>
@@ -25,7 +38,6 @@
 
 
     <div class="page-header" style="background-image: url({{ asset('img/bg-20.jpg') }}); height: 500px">
-        {{--        <span class="mask bg-gradient-dark opacity-6"></span> --}}
     </div>
 
     <div style="margin-top: -20rem !important;" class="card card-body shadow-xl mt-n12 mx-3 mx-md-4">
@@ -41,7 +53,7 @@
                                 <h1 class="text-gradient text-warning"><span id="status1">{{ count($users) }}
                                     </span>
                                 </h1>
-                                <h6 class="mb-0 font-weight-bolder">المستخدمين</h6>
+                                <h6 class="mb-0">المستخدمين</h6>
                             </div>
                         </div>
                     </a>
@@ -53,7 +65,7 @@
                                 <h1 class="text-gradient text-warning"><span id="status1">{{ count($userBooks) }}
                                     </span>
                                 </h1>
-                                <h6 class="mb-0 font-weight-bolder">الكتب المباعة</h6>
+                                <h6 class="mb-0">الكتب المباعة</h6>
                             </div>
                         </div>
                     </a>
@@ -65,7 +77,7 @@
                                 <h1 class="text-gradient text-warning"><span id="status1">{{ count($payment) }}
                                     </span>
                                 </h1>
-                                <h6 class="mb-0 font-weight-bolder">عمليات الدفع الداخلية</h6>
+                                <h6 class="mb-0">عمليات الدفع الداخلية</h6>
                             </div>
                         </div>
                     </a>
@@ -78,7 +90,7 @@
                                 <h1 class="text-gradient text-warning"><span id="status1">{{ count($slides) }}
                                     </span>
                                 </h1>
-                                <h6 class="mb-0 font-weight-bolder">السلايد شو</h6>
+                                <h6 class="mb-0">السلايد شو</h6>
                             </div>
                         </div>
                     </a>
@@ -90,7 +102,7 @@
                                 <h1 class="text-gradient text-warning"><span id="status1">{{ count($notification) }}
                                     </span>
                                 </h1>
-                                <h6 class="mb-0 font-weight-bolder">الاشعارات</h6>
+                                <h6 class="mb-0">الاشعارات</h6>
                             </div>
                         </div>
                     </a>
@@ -102,7 +114,7 @@
                                 <h1 class="text-gradient text-warning"><span id="status1">{{ count($contact) }}
                                     </span>
                                 </h1>
-                                <h6 class="mb-0 font-weight-bolder">الشكاوي و المقترحات</h6>
+                                <h6 class="mb-0">الشكاوي و المقترحات</h6>
                             </div>
                         </div>
                     </a>
@@ -117,7 +129,7 @@
                                 <h1 class="text-gradient text-warning"><span id="status1">{{ count($categories) }}
                                     </span>
                                 </h1>
-                                <h6 class="mb-0 font-weight-bolder">الفئات</h6>
+                                <h6 class="mb-0">الفئات</h6>
                             </div>
                         </div>
                     </a>
@@ -131,7 +143,7 @@
                                         {{ count($subcategories) }}
                                     </span>
                                 </h1>
-                                <h6 class="mb-0 font-weight-bolder">الفئات الفرعية</h6>
+                                <h6 class="mb-0">الفئات الفرعية</h6>
                             </div>
                         </div>
                     </a>
@@ -146,7 +158,7 @@
                                 <h1 class="text-gradient text-warning"><span
                                         id="status1">{{ count($authors) }}</span>
                                 </h1>
-                                <h6 class="mb-0 font-weight-bolder">المؤلفون</h6>
+                                <h6 class="mb-0">المؤلفون</h6>
                             </div>
                         </div>
                     </a>
@@ -157,7 +169,7 @@
                             <div class="card-body text-center">
                                 <h1 class="text-gradient text-warning"><span
                                         id="status1">{{ count($publishers) }}</span></h1>
-                                <h6 class="mb-0 font-weight-bolder">الناشرون</h6>
+                                <h6 class="mb-0">الناشرون</h6>
                             </div>
                         </div>
                     </a>
@@ -172,7 +184,7 @@
                                 <h1 class="text-gradient text-warning"><span
                                         id="status1">{{ count($books) }}</span>
                                 </h1>
-                                <h6 class="mb-0 font-weight-bolder">الكتب</h6>
+                                <h6 class="mb-0">الكتب</h6>
                             </div>
                         </div>
                     </a>
@@ -184,7 +196,7 @@
                                 <h1 class="text-gradient text-warning"><span
                                         id="status1">{{ count($coupons) }}</span>
                                 </h1>
-                                <h6 class="mb-0 font-weight-bolder">اضافة كود خصم للكتاب</h6>
+                                <h6 class="mb-0">اضافة كود خصم للكتاب</h6>
                             </div>
                         </div>
                     </a>
@@ -197,7 +209,29 @@
                             <div class="card-body text-center">
                                 <h1 class="text-gradient text-warning"><span id="status1">اعدادات الموقع</span>
                                 </h1>
-                                <h6 class="mb-0 font-weight-bolder">اعدادات التطبيق</h6>
+                                <h6 class="mb-0">اعدادات التطبيق</h6>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col my-2">
+                    <a href="{{ route('suggest.book.index') }}">
+                        <div class="card move-on-hover">
+                            <div class="card-body text-center">
+                                <h1 class="text-gradient text-warning"><span id="status1">الكتب المقترحة</span>
+                                </h1>
+                                <h6 class="mb-0">الكتب المقترحة من العملاء</h6>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col my-2">
+                    <a href="{{ route('rating.book.index') }}">
+                        <div class="card move-on-hover">
+                            <div class="card-body text-center">
+                                <h1 class="text-gradient text-warning">تقييمات الكتاب
+                                </h1>
+                                <h6 class="mb-0">تقييمات الكتاب من العملاء</h6>
                             </div>
                         </div>
                     </a>
@@ -208,7 +242,7 @@
                             <div class="card-body text-center">
                                 <h1 class="text-gradient text-warning"><span id="status1">التعليمات</span>
                                 </h1>
-                                <h6 class="mb-0 font-weight-bolder">هنا يتم اضافة تعليمات التطبيق</h6>
+                                <h6 class="mb-0">هنا يتم اضافة تعليمات التطبيق</h6>
                             </div>
                         </div>
                     </a>
@@ -221,7 +255,7 @@
                             <div class="card-body text-center">
                                 <h1 class="text-gradient text-warning"><span id="status1">.......</span>
                                 </h1>
-                                <h6 class="mb-0 font-weight-bolder">سجل الاعمال الادارية</h6>
+                                <h6 class="mb-0">سجل الاعمال الادارية</h6>
                             </div>
                         </div>
                     </a>

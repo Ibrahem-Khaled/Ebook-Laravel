@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\api\BookRatingController;
 use App\Http\Controllers\api\CartController;
+use App\Http\Controllers\api\SuggestBookController;
 use App\Http\Controllers\AppSettingController;
 use App\Http\Controllers\Auth\GoogleLoginController;
 use App\Http\Controllers\AuthorController;
@@ -150,6 +152,14 @@ Route::middleware('UserAdmin')->group(function () {
     Route::post('payment/update/{payment}', [paymentController::class, 'update'])->name('payments.update');
     Route::delete('payment/destroy/{payment}', [paymentController::class, 'destroy'])->name('payments.destroy');
 
+
+    //this route suggest book
+    Route::get('suggest/book', [SuggestBookController::class, 'index'])->name('suggest.book.index');
+    Route::delete('suggest/book/destroy/{suggestBook}', [SuggestBookController::class, 'destroy'])->name('suggest.book.destroy');
+ 
+    //this route rating book
+    Route::get('rating/book', [BookRatingController::class, 'index'])->name('rating.book.index');
+    Route::delete('rating/book/destroy/{ratingBook}', [BookRatingController::class, 'destroy'])->name('rating.book.destroy');
 });
 
 //payment pages

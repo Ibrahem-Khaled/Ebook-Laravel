@@ -52,11 +52,6 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasOne(Role::class, 'id', 'role_id');
     }
 
-    public function ShoppingCart()
-    {
-        return $this->belongsTo(ShoppingCart::class, 'usuario_id');
-    }
-
     public function books()
     {
         return $this->belongsToMany(Book::class, 'user_books');
@@ -79,21 +74,20 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsToMany(Book::class, 'favorites');
     }
 
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-
     public function payments()
     {
         return $this->hasMany(Payment::class, 'user_id');
     }
 
-    /**
-     * Return a key value array, containing any custom claims to be added to the JWT.
-     *
-     * @return array
-     */
+    public function userRatings()
+    {
+        return $this->hasMany(BookRating::class, 'user_id');
+    }
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
     public function getJWTCustomClaims()
     {
         return [];

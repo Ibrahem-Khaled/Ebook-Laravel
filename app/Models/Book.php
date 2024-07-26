@@ -84,4 +84,10 @@ class Book extends Model
             }
         });
     }
+
+
+    public function bookRatings()
+    {
+        return $this->hasMany(BookRating::class, 'book_id');
+    }
 }

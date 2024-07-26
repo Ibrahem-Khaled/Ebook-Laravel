@@ -2,11 +2,13 @@
 
 use App\Http\Controllers\api\AppSettingController;
 use App\Http\Controllers\api\authController;
+use App\Http\Controllers\api\BookRatingController;
 use App\Http\Controllers\api\booksController;
 use App\Http\Controllers\api\CartController;
 use App\Http\Controllers\api\homeController;
 use App\Http\Controllers\api\InstructionController;
 use App\Http\Controllers\api\searchController;
+use App\Http\Controllers\api\SuggestBookController;
 use App\Http\Controllers\api\userFavoriteController;
 use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\Payment\paymentController;
@@ -74,3 +76,9 @@ Route::post('/payment/test', [paymentController::class, 'PaymentWeb']);
 
 //payment route
 Route::post('/payment/store', [\App\Http\Controllers\api\PaymentController::class, 'store']);
+
+//suggest book
+Route::post('/suggest/book', [SuggestBookController::class, 'store']);
+
+//rating book
+Route::post('/rating/book', [BookRatingController::class, 'store']);
