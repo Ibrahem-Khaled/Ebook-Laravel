@@ -64,12 +64,9 @@
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger btn-sm"
                         onclick="return confirm('هل أنت متأكد من حذف الأكواد المحددة؟')">حذف الأكواد المحددة</button>
-                </form>
-                <div class="row">
                     @php
-                        $ncoupons = $coupons->count();
+                        $ncoupons = count($coupons);
                     @endphp
-
                     @if ($ncoupons > 0)
                         <div class="card">
                             <div class="table-responsive">
@@ -156,54 +153,55 @@
                             </div>
                         </div>
                     @endif
-                    </form>
-                </div>
+                </form>
             </div>
+
         </div>
-        <div class="container">
-            <div class="row">
+    </div>
+    <div class="container">
+        <div class="row">
 
-            </div>
         </div>
+    </div>
 
-        <script>
-            function exportToExcel() {
-                var wb = XLSX.utils.table_to_book(document.getElementById('dataTable'), {
-                    sheet: "Sheet 1"
-                });
-                var wbout = XLSX.write(wb, {
-                    bookType: 'xlsx',
-                    type: 'binary'
-                });
+    <script>
+        function exportToExcel() {
+            var wb = XLSX.utils.table_to_book(document.getElementById('dataTable'), {
+                sheet: "Sheet 1"
+            });
+            var wbout = XLSX.write(wb, {
+                bookType: 'xlsx',
+                type: 'binary'
+            });
 
-                function s2ab(s) {
-                    var buf = new ArrayBuffer(s.length);
-                    var view = new Uint8Array(buf);
-                    for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
-                    return buf;
-                }
-
-                var fileName = "data.xlsx";
-                saveAs(new Blob([s2ab(wbout)], {
-                    type: "application/octet-stream"
-                }), fileName);
+            function s2ab(s) {
+                var buf = new ArrayBuffer(s.length);
+                var view = new Uint8Array(buf);
+                for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+                return buf;
             }
 
-            function toggleSelectAll() {
-                var selectAllCheckbox = document.getElementById('selectAll');
-                var checkboxes = document.querySelectorAll('input[type="checkbox"][name="coupons[]"]');
-                checkboxes.forEach(function(checkbox) {
-                    checkbox.checked = selectAllCheckbox.checked;
-                });
-            }
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+            var fileName = "data.xlsx";
+            saveAs(new Blob([s2ab(wbout)], {
+                type: "application/octet-stream"
+            }), fileName);
+        }
 
-        <script src="{{ asset('js/core/popper.min.js') }}" type="text/javascript"></script>
-        <script src="{{ asset('js/core/bootstrap.min.js') }}" type="text/javascript"></script>
-        <script src="{{ asset('js/plugins/perfect-scrollbar.min.js') }}"></script>
-        <!-- مركز التحكم لواجهة المستخدم المادية: تأثيرات التدرج، النصوص لصفحات المثال وما إلى ذلك -->
-        <script src="{{ asset('js/material-kit.min.js') }}" type="text/javascript"></script>
+        function toggleSelectAll() {
+            var selectAllCheckbox = document.getElementById('selectAll');
+            var checkboxes = document.querySelectorAll('input[type="checkbox"][name="coupons[]"]');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+    <script src="{{ asset('js/core/popper.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/core/bootstrap.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/plugins/perfect-scrollbar.min.js') }}"></script>
+    <!-- مركز التحكم لواجهة المستخدم المادية: تأثيرات التدرج، النصوص لصفحات المثال وما إلى ذلك -->
+    <script src="{{ asset('js/material-kit.min.js') }}" type="text/javascript"></script>
 </body>
 
 </html>
