@@ -39,6 +39,18 @@ class CouponController extends Controller
         return redirect()->route('coupons.index')->with('success', 'Coupons created successfully!');
     }
 
+    public function deleteCoupons(Request $request)
+    {
+        $couponIds = $request->input('coupons');
+
+        if ($couponIds) {
+            Coupon::whereIn('id', $couponIds)->delete();
+            return redirect()->back()->with('success', 'تم حذف الأكواد المحددة بنجاح.');
+        }
+
+        return redirect()->back()->with('error', 'لم يتم تحديد أي أكواد لحذفها.');
+    }
+
     public function bookCoupon(Request $request, $bookId)
     {
         $book = Book::find($bookId);

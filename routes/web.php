@@ -107,16 +107,20 @@ Route::middleware('UserAdmin')->group(function () {
     Route::get('/book/show/{book}', [BookController::class, 'show'])->name('book.show');
     Route::delete('/book/delete/{book}', [BookController::class, 'delete'])->name('book.delete');
     Route::get('/book/search/{search}', [BookController::class, 'searchSelect'])->name('book.searchSelect');
-    Route::get('/books/sold', [BookDashboardController::class, 'bookSold'])->name('book.sold');
 
+    //Book sold data
+    Route::get('/books/sold', [BookDashboardController::class, 'bookSold'])->name('book.sold');
+    Route::get('/book/sold/details/{bookId}', [BookDashboardController::class, 'soldBookDetails'])->name('book.sold.details');
     //Coupons 
     Route::get('/coupons', [CouponController::class, 'index'])->name('coupons.index');
     Route::post('/coupon/store', [CouponController::class, 'store'])->name('coupon.store');
+    Route::delete('/coupons/delete', [CouponController::class, 'deleteCoupons'])->name('coupons.delete');
     Route::get('/book/coupons/{bookId}', [CouponController::class, 'bookCoupon'])->name('book.coupons');
 
     //users information
     Route::get('users', [UsersController::class, 'index'])->name('users.index');
     Route::get('users/{userId}', [UsersController::class, 'showBook'])->name('user.show.books');
+    Route::post('user/update/{userId}/', [UsersController::class, 'update'])->name('user.update');
     Route::post('users/{userId}/books/{bookId}', [UsersController::class, 'destroyBook'])->name('user.books.destroy');
     Route::post('users/delete/{userId}', [UsersController::class, 'delete'])->name('user.delete');
     Route::post('users/add/books', [UsersController::class, 'addBookFromUser'])->name('user.addBooks');
@@ -156,7 +160,7 @@ Route::middleware('UserAdmin')->group(function () {
     //this route suggest book
     Route::get('suggest/book', [SuggestBookController::class, 'index'])->name('suggest.book.index');
     Route::delete('suggest/book/destroy/{suggestBook}', [SuggestBookController::class, 'destroy'])->name('suggest.book.destroy');
- 
+
     //this route rating book
     Route::get('rating/book', [BookRatingController::class, 'index'])->name('rating.book.index');
     Route::delete('rating/book/destroy/{ratingBook}', [BookRatingController::class, 'destroy'])->name('rating.book.destroy');

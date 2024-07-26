@@ -52,9 +52,44 @@ class BookDashboardController extends Controller
         );
     }
 
-    public function bookSold()
+    public function bookSold(Request $request)
     {
-        $books = Book::with('userBooks')->get();
+        $query = Book::query();
+
+        if ($request->has('start_date') && $request->has('end_date')) {
+            $start_date = $request->input('start_date');
+            $end_date = $request->input('end_date');
+            $query->whereBetween('created_at', [$start_date, $end_date]);
+        }
+
+        if ($request->has('author')) {
+            $author = $request->input('author');
+            $query->whereHas('author', function ($q) use ($author) {
+                $q->where('author_name', 'like', "%{$author}%");
+            });
+        }
+
+        if ($request->has('publisher')) {
+            $publisher = $request->input('publisher');
+            $query->whereHas('publisher', function ($q) use ($publisher) {
+                $q->where('publisher_name', 'like', "%{$publisher}%");
+            });
+        }
+
+        if ($request->has('book_title')) {
+            $book_title = $request->input('book_title');
+            $query->where('book_title', 'like', "%{$book_title}%");
+        }
+
+        $books = $query->get();
+
         return view('dashboard.bookSold', compact('books'));
+    }
+
+
+    public function soldBookDetails($bookId)
+    {
+        $book = Book::with('userBooks')->find($bookId);
+        return view('dashboard.soldBookDetails', compact('book'));
     }
 }

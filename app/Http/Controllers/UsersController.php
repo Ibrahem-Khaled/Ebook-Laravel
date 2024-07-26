@@ -32,6 +32,25 @@ class UsersController extends Controller
         return view('users.index', compact('users', 'books', 'roles'));
     }
 
+    public function update(Request $request, $userId)
+    {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+        ]);
+        $user = User::find($userId);
+        if (!$user) {
+            return redirect()->back()->withErrors(['error' => 'User not found']);
+        }
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+        return redirect()->back()->with('success', 'User updated successfully');
+    }
+
+
     public function showBook($userId)
     {
         $user = User::find($userId);
@@ -50,13 +69,6 @@ class UsersController extends Controller
         }
 
         $user->books()->detach($bookId);
-
-        // Optionally, if you want to delete the book from the books table entirely, uncomment the following lines:
-        // $book = Book::find($bookId);
-        // if ($book) {
-        //     $book->delete();
-        // }
-
         return redirect()->route('user.show.books', $userId)->with('success', 'Book detached successfully');
     }
 

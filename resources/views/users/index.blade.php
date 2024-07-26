@@ -206,7 +206,6 @@
                                             </td>
                                             <td class="align-middle" style="text-align: center;">
 
-
                                                 <a href="{{ route('user.show.books', $user->id) }}"
                                                     class="text-secondary  mx-3 font-weight-normal "
                                                     data-toggle="tooltip" data-original-title="Edit user">
@@ -271,6 +270,58 @@
                                                     data-toggle="tooltip" data-original-title="Delete user">
                                                     حذف
                                                 </a>
+
+                                                <button type="button" data-bs-toggle="modal"
+                                                    data-bs-target="#editUserModal{{ $user->id }}"
+                                                    class="btn btn-warn">
+                                                    تعديل
+                                                </button>
+
+                                                <div class="modal fade" id="editUserModal{{ $user->id }}"
+                                                    tabindex="-1" aria-labelledby="createCouponModalLabel"
+                                                    aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <!-- Modal Header -->
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="createCouponModalLabel">
+                                                                    تعديل بيانات المستخدم</h5>
+                                                                <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal"
+                                                                    aria-label="Close"></button>
+                                                            </div>
+                                                            <!-- Modal Body -->
+                                                            <div class="modal-body">
+                                                                <form action="{{ route('user.update', $user->id) }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    <div class="mb-3">
+                                                                        <label
+                                                                            for="name">{{ $user->name }}</label>
+                                                                        <input type="text"
+                                                                            value="{{ $user->name }}"
+                                                                            class="form-control" id="name"
+                                                                            name="name" required>
+
+                                                                        <label for="email">الايميل</label>
+                                                                        <input type="email"
+                                                                            value="{{ $user->email }}"
+                                                                            class="form-control" id="email"
+                                                                            name="email">
+
+                                                                        <label for="password">كلمة المرور</label>
+                                                                        <input type="password" class="form-control"
+                                                                            id="password" name="password">
+                                                                    </div>
+                                                                    <button type="submit"
+                                                                        class="btn btn-primary">تحديث</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
 
                                             </td>
                                             <div class="modal fade" id="deleteConfirm{{ $user->id }}"
