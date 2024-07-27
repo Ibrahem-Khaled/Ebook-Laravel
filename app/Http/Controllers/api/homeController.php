@@ -13,8 +13,7 @@ class homeController extends Controller
 {
     public function index()
     {
-        $categories = Category::all();
-
+        $categories = Category::orderBy('order')->get();
         $categories->each(function ($category) {
             $category->setRelation('books', $category->books()->limit(10)->get());
         });

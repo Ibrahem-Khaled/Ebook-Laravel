@@ -59,9 +59,15 @@ Route::middleware('UserAdmin')->group(function () {
     // Dashboards
     Route::get('/dashboard/books', [BookDashboardController::class, 'index'])->name('dashboard.books');
 
+
+    Route::get('/authors', [BookDashboardController::class, 'getAuthors'])->name('getAuthors');
+    Route::get('/publishers', [BookDashboardController::class, 'getPublishers'])->name('getPublishers');
+
+
     // Categories
     Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
     Route::get('/category/create', [CategoryController::class, 'create'])->name('category.create');
+    Route::post('/categories/updateOrder', [CategoryController::class, 'updateOrder'])->name('categories.updateOrder');
     Route::post('/category/save', [CategoryController::class, 'save'])->name('category.save');
     Route::get('/category/edit/{category}', [CategoryController::class, 'edit'])->name('category.edit');
     Route::put('/category/update/{category}', [CategoryController::class, 'update'])->name('category.update');

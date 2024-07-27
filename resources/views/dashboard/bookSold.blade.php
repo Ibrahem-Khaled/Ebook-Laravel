@@ -15,6 +15,8 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <!-- Material Kit CSS -->
     <link href={{ asset('css/material-kit.css') }} rel="stylesheet" />
+    <!-- jQuery UI CSS -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 
 <body>
@@ -43,7 +45,6 @@
             </div>
         </div>
         <div class="container">
-            <!-- نموذج الفلترة -->
             <form action="{{ route('book.sold') }}" method="GET" class="mb-4">
                 <div class="row">
                     <div class="col-md-3">
@@ -81,7 +82,7 @@
                     </div>
                 </div>
             </form>
-            <!-- نهاية نموذج الفلترة -->
+
 
             <div class="section text-left my-4">
                 @if (isset($books) && count($books) > 0)
@@ -163,17 +164,50 @@
             </div>
         </div>
     </div>
-    <div class="container">
-        <div class="row">
 
-        </div>
-    </div>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="{{ asset('js/core/popper.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/core/bootstrap.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/plugins/perfect-scrollbar.min.js') }}"></script>
     <!-- مركز التحكم لواجهة المستخدم المادية: تأثيرات التدرج، النصوص لصفحات المثال وما إلى ذلك -->
     <script src="{{ asset('js/material-kit.min.js') }}" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        $(function() {
+            $("#author").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        url: "{{ route('getAuthors') }}",
+                        dataType: "json",
+                        data: {
+                            term: request.term
+                        },
+                        success: function(data) {
+                            response(data);
+                        }
+                    });
+                },
+                minLength: 1,
+            });
+
+            $("#publisher").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        url: "{{ route('getPublishers') }}",
+                        dataType: "json",
+                        data: {
+                            term: request.term
+                        },
+                        success: function(data) {
+                            response(data);
+                        }
+                    });
+                },
+                minLength: 1,
+            });
+        });
+    </script>
 </body>
 
 </html>

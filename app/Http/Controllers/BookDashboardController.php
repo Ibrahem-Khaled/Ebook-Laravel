@@ -55,28 +55,35 @@ class BookDashboardController extends Controller
     public function bookSold(Request $request)
     {
         $query = Book::query();
+        // return response()->json($request->end_date == null ? 'null' : 'beso');
 
-        if ($request->has('start_date') && $request->has('end_date')) {
+        $start = $request->start_date;
+        $end = $request->end_date;
+        $author = $request->author;
+        $publisher = $request->publisher;
+        $book_title = $request->book_title;
+
+        if ($start !== null && $end !== null) {
             $start_date = $request->input('start_date');
             $end_date = $request->input('end_date');
             $query->whereBetween('created_at', [$start_date, $end_date]);
         }
 
-        if ($request->has('author')) {
+        if ($author !== null) {
             $author = $request->input('author');
             $query->whereHas('author', function ($q) use ($author) {
                 $q->where('author_name', 'like', "%{$author}%");
             });
         }
 
-        if ($request->has('publisher')) {
+        if ($publisher !== null) {
             $publisher = $request->input('publisher');
             $query->whereHas('publisher', function ($q) use ($publisher) {
                 $q->where('publisher_name', 'like', "%{$publisher}%");
             });
         }
 
-        if ($request->has('book_title')) {
+        if ($book_title !== null) {
             $book_title = $request->input('book_title');
             $query->where('book_title', 'like', "%{$book_title}%");
         }
@@ -87,9 +94,26 @@ class BookDashboardController extends Controller
     }
 
 
+
     public function soldBookDetails($bookId)
     {
         $book = Book::with('userBooks')->find($bookId);
         return view('dashboard.soldBookDetails', compact('book'));
     }
+
+
+    public function getAuthors(Request $request)
+    {
+        $search = $request->get('term');
+        $authors = Author::where('author_name', 'LIKE', "%{$search}%")->pluck('author_name');
+        return response()->json($authors);
+    }
+
+    public function getPublishers(Request $request)
+    {
+        $search = $request->get('term');
+        $publishers = Publisher::where('publisher_name', 'LIKE', "%{$search}%")->pluck('publisher_name');
+        return response()->json($publishers);
+    }
+
 }

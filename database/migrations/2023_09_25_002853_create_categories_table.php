@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -15,7 +14,8 @@ return new class extends Migration
             $table->id();
             $table->string('category_name')->nullable(false);
             $table->longText('category_description')->nullable(true);
-            $table->string('category_image_url',255)->nullable(false)->unique();
+            $table->bigInteger('order')->nullable()->default(0);
+            $table->string('category_image_url', 255)->nullable(false)->unique();
             $table->timestamps();
         });
     }

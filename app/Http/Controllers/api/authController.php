@@ -44,7 +44,7 @@ class authController extends Controller
             'message' => 'تم تسجيل المستخدم بنجاح',
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 9999999, 
+            'expires_in' => auth('api')->factory()->getTTL() * 9999999,
             'user' => $user,
         ], 201);
     }
@@ -80,9 +80,9 @@ class authController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
         $user = auth()->guard('api')->user();
-        // if ($user->is_login == 1) {
-        //     return response()->json(['error' => 'يجب عليك تسجيل الخروج من جهاز آخر أولاً'], 401);
-        // }
+        if ($user->is_login == 1) {
+            return response()->json(['error' => 'يجب عليك تسجيل الخروج من جهاز آخر أولاً'], 401);
+        }
         $user->is_login = true;
         $user->save();
 

@@ -158,12 +158,6 @@
 
         </div>
     </div>
-    <div class="container">
-        <div class="row">
-
-        </div>
-    </div>
-
     <script>
         function exportToExcel() {
             var wb = XLSX.utils.table_to_book(document.getElementById('dataTable'), {

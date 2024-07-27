@@ -13,15 +13,25 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::all();
+        $categories = Category::orderBy('order')->get();
         return view('category.index', compact('categories'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    public function updateOrder(Request $request)
+    {
+        $order = $request->input('order');
+        foreach ($order as $index => $id) {
+            $category = Category::find($id);
+            if ($category) {
+                $category->order = $index;
+                $category->save();
+            }
+        }
+        return response()->json(['status' => 'success']);
+    }
+
     public function create()
     {
         $categories = Category::all();

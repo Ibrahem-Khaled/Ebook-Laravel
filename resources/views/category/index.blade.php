@@ -1,12 +1,10 @@
 <!doctype html>
 <html lang="ar">
 
-
 <head>
     <title>الفئات</title>
     <!-- العلامات الواجبة -->
     <meta charset="UTF-8">
-
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <!-- الخطوط والرموز -->
@@ -17,6 +15,8 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <!-- Material Kit CSS -->
     <link href={{ asset('css/material-kit.css') }} rel="stylesheet" />
+    <!-- jQuery UI CSS -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 
 <body>
@@ -26,12 +26,9 @@
 
     @include('layouts.alerts')
 
-    <div class="page-header" style="background-image: url({{ asset('img/bg-20.jpg') }}); height: 500px">
-        {{--        <span class="mask bg-gradient-dark opacity-6"></span> --}}
-    </div>
+    <div class="page-header" style="background-image: url({{ asset('img/bg-20.jpg') }}); height: 500px"></div>
 
-
-    <div style="" class="card card-body shadow-xl mt-n12 mx-3 mx-md-4">
+    <div class="card card-body shadow-xl mt-n12 mx-3 mx-md-4">
         <div class="row mt-4">
             <div class="col-md-3">
                 <a class="btn bg-white mb-0 mt-lg-auto w-100" href="{{ route('dashboard.books') }}"
@@ -48,17 +45,13 @@
         <div class="container">
             <div class="section text-left my-4">
                 <div class="row">
-
                     <div class="col">
-
                         <h2 class="title">الفئات</h2>
                     </div>
                     <div class="col" style="text-align: end"><a href="{{ route('category.create') }}"
                             class="btn btn-sm btn-warning">إنشاء فئة</a></div>
                 </div>
-                @php if (isset($categories)) {
-                        $ncategories = count($categories);
-                } @endphp
+                @php $ncategories = isset($categories) ? count($categories) : 0; @endphp
                 @if ($ncategories > 0)
                     <div class="card">
                         <div class="table-responsive">
@@ -66,62 +59,46 @@
                                 <thead>
                                     <tr>
                                         <th
-                                            class="text-center  text-uppercase text-secondary  font-weight-bolder opacity-7">
-                                            الكود
-                                        </th>
+                                            class="text-center text-uppercase text-secondary font-weight-bolder opacity-7">
+                                            الكود</th>
                                         <th
-                                            class="text-center  text-uppercase text-secondary  font-weight-bolder opacity-7">
-                                            الاسم
-                                        </th>
+                                            class="text-center text-uppercase text-secondary font-weight-bolder opacity-7">
+                                            الاسم</th>
                                         <th
-                                            class="text-center  text-uppercase text-secondary  font-weight-bolder opacity-7">
-                                            تم الإنشاء
-                                        </th>
+                                            class="text-center text-uppercase text-secondary font-weight-bolder opacity-7">
+                                            تم الإنشاء</th>
                                         <th
-                                            class="text-center  text-uppercase text-secondary  font-weight-bolder opacity-7">
-                                            تم التحديث
-                                        </th>
+                                            class="text-center text-uppercase text-secondary font-weight-bolder opacity-7">
+                                            تم التحديث</th>
                                         <th class="text-secondary opacity-7"></th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="sortable">
                                     @foreach ($categories as $category)
-                                        <tr>
-                                            <td class="align-middle text-center ">
-                                                <p class=" mb-0">{{ $category->id }}</p>
+                                        <tr id="{{ $category->id }}" class="{{ $category->fixed ? 'unsortable' : '' }}">
+                                            <td class="align-middle text-center">
+                                                <p class="mb-0">{{ $category->id }}</p>
                                             </td>
                                             <td>
-                                                <p class=" mb-0">{{ $category->category_name }}</p>
+                                                <p class="mb-0">{{ $category->category_name }}</p>
                                             </td>
-                                            <td class="align-middle text-center  ">
-                                                <p class=" mb-0">{{ $category->created_at }}</p>
+                                            <td class="align-middle text-center">
+                                                <p class="mb-0">{{ $category->created_at }}</p>
                                             </td>
-                                            <td class="align-middle text-center ">
-                                                <p class=" mb-0">{{ $category->updated_at }}</p>
+                                            <td class="align-middle text-center">
+                                                <p class="mb-0">{{ $category->updated_at }}</p>
                                             </td>
                                             <td class="align-middle" style="text-align: center;">
-
-
                                                 <a href="{{ route('category.show', $category->id) }}"
-                                                    class="text-secondary  mx-3 font-weight-normal "
-                                                    data-toggle="tooltip" data-original-title="Edit user">
-                                                    عرض
-                                                </a>
-
+                                                    class="text-secondary mx-3 font-weight-normal" data-toggle="tooltip"
+                                                    data-original-title="Edit user">عرض</a>
                                                 <a href="{{ route('category.edit', $category->id) }}"
-                                                    class="text-secondary  mx-3 font-weight-normal "
-                                                    data-toggle="tooltip" data-original-title="Edit user">
-                                                    تحرير
-                                                </a>
-
-
-                                                <a href="" class="text-secondary font-weight-normal "
+                                                    class="text-secondary mx-3 font-weight-normal" data-toggle="tooltip"
+                                                    data-original-title="Edit user">تحرير</a>
+                                                <a href="" class="text-secondary font-weight-normal"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#deleteConfirm{{ $category->id }}"
-                                                    data-toggle="tooltip" data-original-title="Delete user">
-                                                    حذف
-                                                </a>
-
+                                                    data-toggle="tooltip" data-original-title="Delete user">حذف</a>
                                             </td>
                                             <div class="modal fade" id="deleteConfirm{{ $category->id }}"
                                                 tabindex="-1" aria-labelledby="deleteConfirm{{ $category->id }}"
@@ -150,9 +127,7 @@
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <button type="submit"
-                                                                    class="btn bg-gradient-danger mb-0">
-                                                                    حذف
-                                                                </button>
+                                                                    class="btn bg-gradient-danger mb-0">حذف</button>
                                                             </form>
                                                         </div>
                                                     </div>
@@ -168,27 +143,41 @@
                     <br>
                     <div class="row">
                         <div class="col">
-                            {{--                                                    <h3 class="title mt-3">{{$category->category_name}}</h3> --}}
-                            <p class="display-4" style="font-size: x-large">لا توجد
-                                فئات.</p>
+                            <p class="display-4" style="font-size: x-large">لا توجد فئات.</p>
                         </div>
                     </div>
                 @endif
             </div>
-
         </div>
     </div>
-    <div class="container">
-        <div class="row">
-
-        </div>
-    </div>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="{{ asset('js/core/popper.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/core/bootstrap.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/plugins/perfect-scrollbar.min.js') }}"></script>
-    <!-- مركز التحكم لواجهة المستخدم المادية: تأثيرات التدرج، النصوص لصفحات المثال وما إلى ذلك -->
     <script src="{{ asset('js/material-kit.min.js') }}" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        $(function() {
+            $("#sortable").sortable({
+                items: "tr:not(.unsortable)",
+                update: function(event, ui) {
+                    var sortedIDs = $(this).sortable("toArray");
+                    $.ajax({
+                        url: "{{ route('categories.updateOrder') }}",
+                        method: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            order: sortedIDs
+                        },
+                        success: function(response) {
+                            console.log(response);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
