@@ -9,6 +9,7 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BookDashboardController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\HomeController;
@@ -172,6 +173,14 @@ Route::middleware('UserAdmin')->group(function () {
     //this route rating book
     Route::get('rating/book', [BookRatingController::class, 'index'])->name('rating.book.index');
     Route::delete('rating/book/destroy/{ratingBook}', [BookRatingController::class, 'destroy'])->name('rating.book.destroy');
+
+    //this route chat
+    Route::get('chats/{userId}', [ChatController::class, 'index'])->name('chats.index');
+    Route::get('users/chats/show', [ChatController::class, 'users'])->name('chats.users');
+    Route::post('chats', [ChatController::class, 'store'])->name('chats.store');
+    Route::put('chats/{id}', [ChatController::class, 'update'])->name('chats.update');
+    Route::delete('chats/{id}', [ChatController::class, 'destroy'])->name('chats.destroy');
+
 });
 
 //payment pages
