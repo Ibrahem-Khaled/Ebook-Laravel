@@ -1,4 +1,3 @@
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#">
         <img src="{{ asset('img/logos/Home_Logo.png') }}" alt="Logo" style="max-width: 150px" class="navbar-brand-img">
@@ -40,9 +39,16 @@
             <li class="nav-item">
                 <a class="nav-link" href="#">من نحن</a>
             </li>
-            @if (Auth::check() && Auth::user()->role->role_name == 'admin')
+            @if (Auth::user()->role->role_name == 'admin' ||
+                    Auth::user()->role->role_name == 'superAdmin' ||
+                    Auth::user()->role->role_name == 'supervisor')
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('dashboard.books') }}">لوحة التحكم</a>
+                </li>
+            @endif
+            @if (Auth::user()->author()->exists() || Auth::user()->publisher()->exists())
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('user.AuthorAndPublisher', Auth::user()->id) }}">متابعة الاحصائيات</a>
                 </li>
             @endif
         </ul>

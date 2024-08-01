@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Author;
 use App\Models\Book;
+use App\Models\Publisher;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\userAuthorPublisher;
 use App\Models\UserBook;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +32,9 @@ class UsersController extends Controller
             $roles = Role::all();
         }
 
-        return view('users.index', compact('users', 'books', 'roles'));
+        $publishers = Publisher::all();
+        $authors = Author::all();
+        return view('users.index', compact('users', 'books', 'roles', 'publishers', 'authors'));
     }
 
     public function update(Request $request, $userId)
@@ -144,5 +149,61 @@ class UsersController extends Controller
         $user = User::find(auth()->user()->id);
         return view('users.profile', compact('user'));
     }
+
+    public function addAuthorAndPublisherFromUser(Request $request, $userId)
+    {
+        $user = User::find($userId);
+        if (!$user) {
+            return redirect()->back()->with('error', 'User not found');
+        }
+        userAuthorPublisher::create([
+            'user_id' => $userId,
+            'author_id' => $request->author_id,
+            'publisher_id' => $request->publisher_id,
+        ]);
+
+        return redirect()->back()->with('message', 'Author and publisher added successfully');
+    }
+
+    public function getAuthorAndPublisherFromUser(Request $request, $userId)
+    {
+        $user = User::with(['author.books', 'publisher.books'])->find($userId);
+        if (!$user) {
+            return redirect()->back()->with('error', 'المستخدم غير موجود');
+        }
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        $books = collect();
+
+        foreach ($user->author as $author) {
+            $books = $books->merge($author->books);
+        }
+
+        foreach ($user->publisher as $publisher) {
+            $books = $books->merge($publisher->books);
+        }
+        $books = $books->unique('id');
+
+        // فلترة الكتب حسب التواريخ إذا كانت موجودة
+        if ($startDate || $endDate) {
+            $books = $books->filter(function ($book) use ($startDate, $endDate) {
+                $releaseDate = $book->release_date;
+
+                // التحقق من وجود تاريخ الإصدار
+                if (!$releaseDate) {
+                    return false;
+                }
+
+                // التحقق من مطابقة الكتاب للنطاق الزمني المطلوب
+                $withinStart = $startDate ? $releaseDate >= $startDate : true;
+                $withinEnd = $endDate ? $releaseDate <= $endDate : true;
+
+                return $withinStart && $withinEnd;
+            });
+        }
+        return view('users.author_publisher', compact('user', 'books'));
+    }
+
+
 
 }

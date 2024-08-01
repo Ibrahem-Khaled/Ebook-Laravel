@@ -16,16 +16,6 @@ class UserAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-
-        if (isset(Auth::user()->role)) {
-            if (Auth::user()->role->role_name == "admin") {
-                return $next($request);
-            } else {
-                return redirect()->route('home');
-            }
-        } else {
-            return redirect()->route('home');
-        }
-
+        return $next($request);
     }
 }

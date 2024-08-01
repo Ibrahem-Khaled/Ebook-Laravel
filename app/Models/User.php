@@ -13,35 +13,17 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
         'role_id',
     ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
         'role_id'
     ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
@@ -82,6 +64,16 @@ class User extends Authenticatable implements JWTSubject
     public function userRatings()
     {
         return $this->hasMany(BookRating::class, 'user_id');
+    }
+
+    public function author()
+    {
+        return $this->belongsToMany(Author::class, 'user_author_publishers', 'user_id', 'author_id');
+    }
+
+    public function publisher()
+    {
+        return $this->belongsToMany(Publisher::class, 'user_author_publishers', 'user_id', 'publisher_id');
     }
 
     public function getJWTIdentifier()

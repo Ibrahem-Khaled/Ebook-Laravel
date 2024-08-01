@@ -217,13 +217,14 @@
                                                     تحرير
                                                 </a>
 
-
-                                                <a href="" class="text-secondary font-weight-normal "
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#deleteConfirm{{ $author->id }}"
-                                                    data-toggle="tooltip" data-original-title="Delete user">
-                                                    حذف
-                                                </a>
+                                                @if (Auth::user()->role->role_name == 'admin')
+                                                    <a href="" class="text-secondary font-weight-normal "
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#deleteConfirm{{ $author->id }}"
+                                                        data-toggle="tooltip" data-original-title="Delete user">
+                                                        حذف
+                                                    </a>
+                                                @endif
 
                                             </td>
                                             <div class="modal fade" id="deleteConfirm{{ $author->id }}"

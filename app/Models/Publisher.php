@@ -14,4 +14,10 @@ class Publisher extends Model
     {
         return $this->hasMany(Book::class, 'publisher_id');
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_author_publishers', 'publisher_id', 'user_id');
+    }
+    
 }

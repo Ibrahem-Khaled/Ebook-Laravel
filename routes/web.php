@@ -132,6 +132,8 @@ Route::middleware('UserAdmin')->group(function () {
     Route::post('users/add/books', [UsersController::class, 'addBookFromUser'])->name('user.addBooks');
     Route::post('add/new/user', [UsersController::class, 'addNewUser'])->name('add.newUser');
     Route::post('update/user/role/{userId}', [UsersController::class, 'updateUserRole'])->name('update.user.role');
+    Route::post('user/add/author/publisher/{userId}', [UsersController::class, 'addAuthorAndPublisherFromUser'])->name('user.addAuthorAndPublisher');
+    Route::get('user/author/publisher/{userId}', [UsersController::class, 'getAuthorAndPublisherFromUser'])->name('user.AuthorAndPublisher');
 
     //slideShow 
     Route::get('slide/show', [SlideShowController::class, 'index'])->name('index.slide');

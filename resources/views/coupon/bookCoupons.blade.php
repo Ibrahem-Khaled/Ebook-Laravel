@@ -62,8 +62,11 @@
                 <form action="{{ route('coupons.delete') }}" method="POST" id="deleteForm">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger btn-sm"
-                        onclick="return confirm('هل أنت متأكد من حذف الأكواد المحددة؟')">حذف الأكواد المحددة</button>
+                    @if (Auth::user()->role->role_name == 'admin')
+                        <button type="submit" class="btn btn-danger btn-sm"
+                            onclick="return confirm('هل أنت متأكد من حذف الأكواد المحددة؟')">حذف الأكواد
+                            المحددة</button>
+                    @endif
                     @php
                         $ncoupons = count($coupons);
                     @endphp

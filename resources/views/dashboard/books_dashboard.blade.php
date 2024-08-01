@@ -45,82 +45,85 @@
             <div class="section text-left my-4">
                 <h2 class="title">إدارة الكتب</h2>
             </div>
-            <div class="row my-4">
-                <div class="col my-2">
-                    <a href="{{ route('users.index') }}">
-                        <div class="card move-on-hover" style="height: 100%">
-                            <div class="card-body text-center">
-                                <h1 class="text-gradient text-warning"><span id="status1">{{ count($users) }}
-                                    </span>
-                                </h1>
-                                <h6 class="mb-0">المستخدمين</h6>
+            @if (auth()->user()->role->role_name !== 'supervisor')
+                <div class="row my-4">
+                    <div class="col my-2">
+                        <a href="{{ route('users.index') }}">
+                            <div class="card move-on-hover" style="height: 100%">
+                                <div class="card-body text-center">
+                                    <h1 class="text-gradient text-warning"><span id="status1">{{ count($users) }}
+                                        </span>
+                                    </h1>
+                                    <h6 class="mb-0">المستخدمين</h6>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col my-2">
-                    <a href="{{ route('book.sold') }}">
-                        <div class="card move-on-hover" style="height: 100%">
-                            <div class="card-body text-center">
-                                <h1 class="text-gradient text-warning"><span id="status1">{{ count($userBooks) }}
-                                    </span>
-                                </h1>
-                                <h6 class="mb-0">الكتب المباعة</h6>
+                        </a>
+                    </div>
+                    <div class="col my-2">
+                        <a href="{{ route('book.sold') }}">
+                            <div class="card move-on-hover" style="height: 100%">
+                                <div class="card-body text-center">
+                                    <h1 class="text-gradient text-warning"><span id="status1">{{ count($userBooks) }}
+                                        </span>
+                                    </h1>
+                                    <h6 class="mb-0">الكتب المباعة</h6>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col my-2">
-                    <a href="{{ route('payment.index') }}">
-                        <div class="card move-on-hover" style="height: 100%">
-                            <div class="card-body text-center">
-                                <h1 class="text-gradient text-warning"><span id="status1">{{ count($payment) }}
-                                    </span>
-                                </h1>
-                                <h6 class="mb-0">عمليات الدفع الداخلية</h6>
+                        </a>
+                    </div>
+                    <div class="col my-2">
+                        <a href="{{ route('payment.index') }}">
+                            <div class="card move-on-hover" style="height: 100%">
+                                <div class="card-body text-center">
+                                    <h1 class="text-gradient text-warning"><span id="status1">{{ count($payment) }}
+                                        </span>
+                                    </h1>
+                                    <h6 class="mb-0">عمليات الدفع الداخلية</h6>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
+                        </a>
+                    </div>
 
-                <div class="col my-2">
-                    <a href="{{ route('index.slide') }}">
-                        <div class="card move-on-hover" style="height: 100%">
-                            <div class="card-body text-center">
-                                <h1 class="text-gradient text-warning"><span id="status1">{{ count($slides) }}
-                                    </span>
-                                </h1>
-                                <h6 class="mb-0">السلايد شو</h6>
+                    <div class="col my-2">
+                        <a href="{{ route('index.slide') }}">
+                            <div class="card move-on-hover" style="height: 100%">
+                                <div class="card-body text-center">
+                                    <h1 class="text-gradient text-warning"><span id="status1">{{ count($slides) }}
+                                        </span>
+                                    </h1>
+                                    <h6 class="mb-0">السلايد شو</h6>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col my-2">
-                    <a href="{{ route('index.notification') }}">
-                        <div class="card move-on-hover" style="height: 100%">
-                            <div class="card-body text-center">
-                                <h1 class="text-gradient text-warning"><span id="status1">{{ count($notification) }}
-                                    </span>
-                                </h1>
-                                <h6 class="mb-0">الاشعارات</h6>
+                        </a>
+                    </div>
+                    <div class="col my-2">
+                        <a href="{{ route('index.notification') }}">
+                            <div class="card move-on-hover" style="height: 100%">
+                                <div class="card-body text-center">
+                                    <h1 class="text-gradient text-warning"><span
+                                            id="status1">{{ count($notification) }}
+                                        </span>
+                                    </h1>
+                                    <h6 class="mb-0">الاشعارات</h6>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col my-2">
-                    <a href="{{ route('index.contactUs') }}">
-                        <div class="card move-on-hover" style="height: 100%">
-                            <div class="card-body text-center">
-                                <h1 class="text-gradient text-warning"><span id="status1">{{ count($contact) }}
-                                    </span>
-                                </h1>
-                                <h6 class="mb-0">الشكاوي و المقترحات</h6>
+                        </a>
+                    </div>
+                    <div class="col my-2">
+                        <a href="{{ route('index.contactUs') }}">
+                            <div class="card move-on-hover" style="height: 100%">
+                                <div class="card-body text-center">
+                                    <h1 class="text-gradient text-warning"><span id="status1">{{ count($contact) }}
+                                        </span>
+                                    </h1>
+                                    <h6 class="mb-0">الشكاوي و المقترحات</h6>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
+                        </a>
+                    </div>
 
-            </div>
+                </div>
+            @endif
             <div class="row my-4">
                 <div class="col my-2">
                     <a href="{{ route('category.index') }}">
@@ -189,83 +192,83 @@
                         </div>
                     </a>
                 </div>
-                <div class="col my-2">
-                    <a href="{{ route('coupons.index') }}">
-                        <div class="card move-on-hover">
-                            <div class="card-body text-center">
-                                <h1 class="text-gradient text-warning"><span
-                                        id="status1">{{ count($coupons) }}</span>
-                                </h1>
-                                <h6 class="mb-0">اضافة كود خصم للكتاب</h6>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="row my-4">
-                <div class="col my-2">
-                    <a href="{{ route('index.appSetting') }}">
-                        <div class="card move-on-hover">
-                            <div class="card-body text-center">
-                                <h1 class="text-gradient text-warning"><span id="status1">اعدادات الموقع</span>
-                                </h1>
-                                <h6 class="mb-0">اعدادات التطبيق</h6>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col my-2">
-                    <a href="{{ route('suggest.book.index') }}">
-                        <div class="card move-on-hover">
-                            <div class="card-body text-center">
-                                <h1 class="text-gradient text-warning"><span id="status1">الكتب المقترحة</span>
-                                </h1>
-                                <h6 class="mb-0">الكتب المقترحة من العملاء</h6>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col my-2">
-                    <a href="{{ route('rating.book.index') }}">
-                        <div class="card move-on-hover">
-                            <div class="card-body text-center">
-                                <h1 class="text-gradient text-warning">تقييمات الكتاب
-                                </h1>
-                                <h6 class="mb-0">تقييمات الكتاب من العملاء</h6>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col my-2">
-                    <a href="{{ route('instructions.index') }}">
-                        <div class="card move-on-hover">
-                            <div class="card-body text-center">
-                                <h1 class="text-gradient text-warning"><span id="status1">التعليمات</span>
-                                </h1>
-                                <h6 class="mb-0">هنا يتم اضافة تعليمات التطبيق</h6>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="row my-4">
-                <div class="col my-2">
-                    <a href="#">
-                        <div class="card move-on-hover">
-                            <div class="card-body text-center">
-                                <h1 class="text-gradient text-warning"><span id="status1">.......</span>
-                                </h1>
-                                <h6 class="mb-0">سجل الاعمال الادارية</h6>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container">
-        <div class="row">
 
+                @if (Auth::user()->role->role_name !== 'supervisor')
+                    <div class="col my-2">
+                        <a href="{{ route('coupons.index') }}">
+                            <div class="card move-on-hover">
+                                <div class="card-body text-center">
+                                    <h1 class="text-gradient text-warning"><span
+                                            id="status1">{{ count($coupons) }}</span>
+                                    </h1>
+                                    <h6 class="mb-0">اضافة كود خصم للكتاب</h6>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                @endif
+            </div>
+            @if (Auth::user()->role->role_name !== 'supervisor')
+                <div class="row my-4">
+                    <div class="col my-2">
+                        <a href="{{ route('index.appSetting') }}">
+                            <div class="card move-on-hover">
+                                <div class="card-body text-center">
+                                    <h1 class="text-gradient text-warning"><span id="status1">اعدادات الموقع</span>
+                                    </h1>
+                                    <h6 class="mb-0">اعدادات التطبيق</h6>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col my-2">
+                        <a href="{{ route('suggest.book.index') }}">
+                            <div class="card move-on-hover">
+                                <div class="card-body text-center">
+                                    <h1 class="text-gradient text-warning"><span id="status1">الكتب المقترحة</span>
+                                    </h1>
+                                    <h6 class="mb-0">الكتب المقترحة من العملاء</h6>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col my-2">
+                        <a href="{{ route('rating.book.index') }}">
+                            <div class="card move-on-hover">
+                                <div class="card-body text-center">
+                                    <h1 class="text-gradient text-warning">تقييمات الكتاب
+                                    </h1>
+                                    <h6 class="mb-0">تقييمات الكتاب من العملاء</h6>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col my-2">
+                        <a href="{{ route('instructions.index') }}">
+                            <div class="card move-on-hover">
+                                <div class="card-body text-center">
+                                    <h1 class="text-gradient text-warning"><span id="status1">التعليمات</span>
+                                    </h1>
+                                    <h6 class="mb-0">هنا يتم اضافة تعليمات التطبيق</h6>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="row my-4">
+                    <div class="col my-2">
+                        <a href="#">
+                            <div class="card move-on-hover">
+                                <div class="card-body text-center">
+                                    <h1 class="text-gradient text-warning"><span id="status1">.......</span>
+                                    </h1>
+                                    <h6 class="mb-0">سجل الاعمال الادارية</h6>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 
