@@ -46,7 +46,7 @@
                     <a class="nav-link" href="{{ route('dashboard.books') }}">لوحة التحكم</a>
                 </li>
             @endif
-            @if (Auth::user()->author()->exists() || Auth::user()->publisher()->exists())
+            @if (Auth::user()?->author()->exists() || Auth::user()?->publisher()->exists())
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('user.AuthorAndPublisher', Auth::user()->id) }}">متابعة الاحصائيات</a>
                 </li>
