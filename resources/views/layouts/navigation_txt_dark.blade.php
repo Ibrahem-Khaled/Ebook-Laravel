@@ -39,9 +39,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="#">من نحن</a>
             </li>
-            @if (Auth::user()->role->role_name == 'admin' ||
-                    Auth::user()->role->role_name == 'superAdmin' ||
-                    Auth::user()->role->role_name == 'supervisor')
+            @if (Auth::user()?->role?->role_name == 'admin' ||
+                    Auth::user()?->role?->role_name == 'superAdmin' ||
+                    Auth::user()?->role?->role_name == 'supervisor')
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('dashboard.books') }}">لوحة التحكم</a>
                 </li>
