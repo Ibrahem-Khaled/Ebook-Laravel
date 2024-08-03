@@ -55,8 +55,7 @@ Route::patch('/cart/update/{cartId}', [ShoppingCartController::class, 'updateCar
 Route::delete('/cart/remove/{cartId}', [ShoppingCartController::class, 'removeFromCart'])->name('cart.remove');
 
 
-Route::middleware('UserAdmin')->group(function () {
-
+Route::group(['middleware' => ['auth', 'UserAdmin']], function () {
     // Dashboards
     Route::get('/dashboard/books', [BookDashboardController::class, 'index'])->name('dashboard.books');
 

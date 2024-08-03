@@ -16,6 +16,9 @@ class UserAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        return $next($request);
+        if (\Auth::user()->role->role_name == 'admin' || \Auth::user()->role->role_name == 'supervisor' || \Auth::user()->role->role_name == 'maneger') {
+            return $next($request);
+        }
+        return redirect()->route('home')->with('error', 'أنت غير مفوض لدخول هذه الصفحة');
     }
 }
