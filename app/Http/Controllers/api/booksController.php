@@ -31,7 +31,7 @@ class booksController extends Controller
         $latestPaperbackLink = $book->bookInfo->latest()->first();
 
         // Check if the author is a translator
-        $isTranslator = $book->bookInfo->author ? $book->bookInfo->author : null;
+        $Translator = $book->bookInfo->author;
 
         $bookDetails = $book->toArray();
         $bookDetails['is_favorite'] = $isFavorite;
@@ -39,7 +39,7 @@ class booksController extends Controller
         $bookDetails['average_rating'] = $averageRating;
         $bookDetails['latest_paperback_link'] = $latestPaperbackLink ? $latestPaperbackLink->paper_url : null;
         $bookDetails['related_books'] = $relatedBooks;
-        $bookDetails['translators'] = $isTranslator;
+        $bookDetails['translators'] = $Translator;
 
         return response()->json($bookDetails);
     }
