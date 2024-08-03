@@ -14,7 +14,7 @@ class booksController extends Controller
     public function show($id)
     {
         $user = auth()->guard('api')->user();
-        $book = Book::find($id);
+        $book = Book::find($id)->with('bookInfo.author');
 
         if (!$book) {
             return response()->json(['message' => 'Book not found'], 404);
