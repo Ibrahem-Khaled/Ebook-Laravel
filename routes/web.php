@@ -18,7 +18,6 @@ use App\Http\Controllers\NotifcationsController;
 use App\Http\Controllers\Payment\paymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublisherController;
-use App\Http\Controllers\ShoppingCartController;
 use App\Http\Controllers\SlideShowController;
 use App\Http\Controllers\SubcategoryController;
 use App\Http\Controllers\UsersController;
@@ -48,12 +47,7 @@ Route::middleware('auth')->group(function () {
 Route::get('/login/google', [GoogleLoginController::class, 'redirectToGoogle'])->name("login.google");
 Route::get('/login/callback', [GoogleLoginController::class, 'handleGoogleCallback']);
 
-
-Route::get('/cart', [ShoppingCartController::class, 'index'])->name('cart.index');
-Route::post('/cart/add/{productId}', [ShoppingCartController::class, 'addToCart'])->name('cart.add');
-Route::patch('/cart/update/{cartId}', [ShoppingCartController::class, 'updateCart'])->name('cart.update');
-Route::delete('/cart/remove/{cartId}', [ShoppingCartController::class, 'removeFromCart'])->name('cart.remove');
-
+Route::get('user/author/publisher/{userId}', [UsersController::class, 'getAuthorAndPublisherFromUser'])->name('user.AuthorAndPublisher')->middleware('auth');
 
 Route::group(['middleware' => ['auth', 'UserAdmin']], function () {
     // Dashboards
@@ -133,7 +127,6 @@ Route::group(['middleware' => ['auth', 'UserAdmin']], function () {
     Route::post('add/new/user', [UsersController::class, 'addNewUser'])->name('add.newUser');
     Route::post('update/user/role/{userId}', [UsersController::class, 'updateUserRole'])->name('update.user.role');
     Route::post('user/add/author/publisher/{userId}', [UsersController::class, 'addAuthorAndPublisherFromUser'])->name('user.addAuthorAndPublisher');
-    Route::get('user/author/publisher/{userId}', [UsersController::class, 'getAuthorAndPublisherFromUser'])->name('user.AuthorAndPublisher');
 
     //slideShow 
     Route::get('slide/show', [SlideShowController::class, 'index'])->name('index.slide');

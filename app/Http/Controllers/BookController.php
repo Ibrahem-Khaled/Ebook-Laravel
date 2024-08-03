@@ -7,7 +7,6 @@ use App\Models\Book;
 use App\Models\Category;
 use App\Models\Publisher;
 use App\Models\Subcategory;
-use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -43,7 +42,7 @@ class BookController extends Controller
             'book_pdf' => 'nullable|file|max:102400',
             'category_id' => 'required|min:1|integer',
             'subcategory_id' => 'required|min:1|integer',
-            'book_title' => 'required',
+            'book_title' => 'required|unique:books,book_title',
             'author_id' => 'required|min:1|integer',
             'publisher_id' => 'required|min:1|integer',
             'book_publication_date' => 'required|date',
@@ -51,7 +50,7 @@ class BookController extends Controller
             'book_number_pages' => 'required|integer|min:1',
             'book_discount' => 'integer|max:100'
         ]);
-
+        
         if ($request->hasFile('book_pdf')) {
             $pdfFile = $request->file('book_pdf');
             $pdfFileName = Str::slug($request->book_isbn) . '.' . $pdfFile->getClientOriginalExtension();
