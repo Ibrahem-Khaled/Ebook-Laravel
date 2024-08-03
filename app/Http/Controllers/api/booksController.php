@@ -28,7 +28,7 @@ class booksController extends Controller
             ->get();
 
         $averageRating = $book->bookRatings()->avg('rating');
-        $latestPaperbackLink = $book->bookInfo->latest()->first();
+        $latestPaperbackLink = $book->bookInfo()->latest()->first();
 
         $bookDetails = $book->toArray();
         $bookDetails['is_favorite'] = $isFavorite;
