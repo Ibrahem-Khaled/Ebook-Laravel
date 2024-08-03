@@ -129,7 +129,7 @@
                                     @foreach ($users as $user)
                                         <tr>
                                             <td class="align-middle text-center">
-                                                @if ($user->role->role_name == 'admin')
+                                                @if (Auth::user()->role->role_name == 'admin')
                                                     <button type="button"
                                                         class="btn btn-secondary font-weight-normal"
                                                         data-bs-toggle="modal"
@@ -179,7 +179,7 @@
                                                         </div>
                                                     </div>
                                                 @else
-                                                    {{ $user->role->role_name }}
+                                                    {{ Auth::user()->role->role_name }}
                                                 @endif
                                             </td>
 
