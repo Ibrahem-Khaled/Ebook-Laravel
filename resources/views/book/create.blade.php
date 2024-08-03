@@ -30,8 +30,7 @@
                 <div class="card">
                     <div class="card-body p-4 shadow-lg">
 
-                        <form  method="POST" action="{{ route('book.save') }}"
-                            enctype="multipart/form-data">
+                        <form method="POST" action="{{ route('book.save') }}" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
                                 <!-- ISBN -->
@@ -168,6 +167,24 @@
                                     <x-input-error class="text-danger" :messages="$errors->get('book_discount')"></x-input-error>
                                 </div>
 
+                                <div class="input-group input-group-static mb-4">
+                                    <label>اضافة مترجم </label>
+                                    <select name="author_id_2" id="author_id_2" class="form-control"
+                                        value="{{ old('author_id_2') }}">
+                                        <option selected disabled>اختر مترجم</option>
+                                        @foreach ($authors as $author)
+                                            <option value="{{ $author->id }}">{{ $author->author_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="input-group input-group-static mb-4">
+                                    <label>اضافة رابط نسخة ورقية</label>
+                                    <input name="paper_url" id="paper_url" class="form-control" type="url"
+                                        placeholder="رابط نسخة ورقية الكتاب" value="{{ old('paper_url') }}">
+                                </div>
+
                                 <!-- Image Upload -->
                                 <div class="row mt-5">
                                     <div class="col-md-6">
@@ -187,8 +204,7 @@
                                                         <p class="card-text">تحميل ebup بتنسيق</p>
                                                         <x-input-error class="text-danger"
                                                             :messages="$errors->get('book_pdf')"></x-input-error>
-                                                        <input id="pdfinput" name="book_pdf" type="file"
-                                                          >
+                                                        <input id="pdfinput" name="book_pdf" type="file">
 
                                                     </div>
                                                 </div>

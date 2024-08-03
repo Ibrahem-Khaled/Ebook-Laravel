@@ -277,7 +277,7 @@
                                     </div>
                                     <x-input-error class="text-danger" :messages="$errors->get('publisher_id')"></x-input-error>
 
-                                    
+
                                     <div class="container mt-5">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="free_sample"
@@ -357,6 +357,24 @@
                                     @endif
                                 </div>
                                 <x-input-error class="text-danger" :messages="$errors->get('book_price')"></x-input-error>
+
+                                <div class="input-group input-group-static mb-4">
+                                    <label>اضافة مترجم </label>
+                                    <select name="author_id_2" id="author_id_2" class="form-control"
+                                        value="{{ old('author_id_2') }}">
+                                        <option selected disabled>اختر مترجم</option>
+                                        @foreach ($authors as $author)
+                                            <option value="{{ $author->id }}">{{ $author->author_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="input-group input-group-static mb-4">
+                                    <label>اضافة رابط نسخة ورقية</label>
+                                    <input name="paper_url" id="paper_url" class="form-control" type="url"
+                                        placeholder="رابط نسخة ورقية الكتاب" value="{{ old('paper_url') }}">
+                                </div>
 
                                 {{-- image display --}}
                                 <div class="row">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Author;
 use App\Models\Book;
+use App\Models\BookInfo;
 use App\Models\Category;
 use App\Models\Publisher;
 use App\Models\Subcategory;
@@ -50,7 +51,7 @@ class BookController extends Controller
             'book_number_pages' => 'required|integer|min:1',
             'book_discount' => 'integer|max:100'
         ]);
-        
+
         if ($request->hasFile('book_pdf')) {
             $pdfFile = $request->file('book_pdf');
             $pdfFileName = Str::slug($request->book_isbn) . '.' . $pdfFile->getClientOriginalExtension();
@@ -66,7 +67,7 @@ class BookController extends Controller
 
             $image->move($destinationPath, $imageName);
 
-            Book::create([
+            $book = Book::create([
                 'book_isbn' => $request->book_isbn,
                 'book_pdf' => $pdfFilePath,
                 'book_title' => $request->book_title,
@@ -82,6 +83,13 @@ class BookController extends Controller
                 'book_price' => $request->book_price,
                 'book_discount' => $request->book_discount,
             ]);
+            if ($book && $request->author_id_2 || $request->paper_url) {
+                BookInfo::create([
+                    'book_id' => $book->id,
+                    'author_id' => $request->author_id_2,
+                    'paper_url' => $request->paper_url
+                ]);
+            }
         }
 
         return redirect()->route('book.index')->with('success', 'تم إنشاء الكتاب بنجاح.');
@@ -156,6 +164,13 @@ class BookController extends Controller
             'book_price' => $request->book_price,
             'book_discount' => $request->book_discount
         ]);
+        if ($book && $request->author_id_2 || $request->paper_url) {
+            BookInfo::create([
+                'book_id' => $book->id,
+                'author_id' => $request->author_id_2,
+                'paper_url' => $request->paper_url
+            ]);
+        }
 
         return redirect()->route('book.index')->with('success', 'تم تحديث الكتاب بنجاح.');
     }

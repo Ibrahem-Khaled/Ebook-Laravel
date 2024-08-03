@@ -90,4 +90,9 @@ class Book extends Model
     {
         return $this->hasMany(BookRating::class, 'book_id');
     }
+
+    public function bookInfo()
+    {
+        return $this->hasMany(BookInfo::class, 'book_id');
+    }
 }

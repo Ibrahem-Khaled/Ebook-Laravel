@@ -22,4 +22,9 @@ class Author extends Model
         return $this->belongsToMany(User::class, 'user_author_publishers', 'author_id', 'user_id');
     }
 
+    public function bookInfo()
+    {
+        return $this->hasMany(BookInfo::class, 'author_id');
+    }
+
 }

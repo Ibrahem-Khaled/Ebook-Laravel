@@ -106,6 +106,10 @@
                                             الناشر
                                         </th>
                                         <th
+                                            class="text-center  text-uppercase text-secondary  font-weight-bolder opacity-7">
+                                            المترجمون
+                                        </th>
+                                        <th
                                             class="text-center text-uppercase text-secondary font-weight-bolder opacity-7">
                                             السعر
                                         </th>
@@ -148,6 +152,21 @@
                                                     title='{{ $book->publisher->publisher_name }}'>
                                                     {{ $book->publisher->publisher_name }}</p>
                                             </td>
+
+                                            <td class="align-middle">
+                                                <ul class="mb-0 list-unstyled">
+                                                    @foreach ($book->bookInfo as $author)
+                                                        @php
+                                                            $authorData = \App\Models\Author::find($author?->author_id);
+                                                        @endphp
+                                                        <li data-bs-toggle='tooltip' data-bs-placement='top'
+                                                            title='{{ $authorData?->author_name }}'>
+                                                            {{ $authorData?->author_name }}
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </td>
+
                                             <td class="align-middle ">
                                                 <p class="mb-0">$ {{ number_format($book->book_price) }}</p>
                                             </td>
