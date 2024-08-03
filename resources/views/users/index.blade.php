@@ -129,51 +129,58 @@
                                     @foreach ($users as $user)
                                         <tr>
                                             <td class="align-middle text-center">
-                                                <button type="button" class="btn btn-secondary font-weight-normal"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#updateUserRoleModal{{ $user->id }}">
-                                                    {{ $user->role->role_name }}
-                                                </button>
+                                                @if ($user->role->role_name == 'admin')
+                                                    <button type="button"
+                                                        class="btn btn-secondary font-weight-normal"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#updateUserRoleModal{{ $user->id }}">
+                                                        {{ $user->role->role_name }}
+                                                    </button>
 
-                                                <div class="modal fade" id="updateUserRoleModal{{ $user->id }}"
-                                                    tabindex="-1"
-                                                    aria-labelledby="updateUserRoleModal{{ $user->id }}Label"
-                                                    aria-hidden="true">
-                                                    <div class="modal-dialog" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title"
-                                                                    id="updateUserRoleModal{{ $user->id }}Label">
-                                                                    تحديث الصلاحية</h5>
-                                                                <button type="button" class="btn-close"
-                                                                    data-bs-dismiss="modal"
-                                                                    aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <form
-                                                                    action="{{ route('update.user.role', $user->id) }}"
-                                                                    method="POST">
-                                                                    @csrf
-                                                                    <div class="mb-3">
-                                                                        <label for="role"
-                                                                            class="form-label">الصلاحية الجديدة</label>
-                                                                        <select class="form-control" id="role"
-                                                                            name="role">
-                                                                            @foreach ($roles as $role)
-                                                                                <option value="{{ $role->id }}"
-                                                                                    {{ $user->role_id == $role->id ? 'selected' : '' }}>
-                                                                                    {{ $role->role_name }}
-                                                                                </option>
-                                                                            @endforeach
-                                                                        </select>
-                                                                    </div>
-                                                                    <button type="submit"
-                                                                        class="btn btn-primary">تحديث</button>
-                                                                </form>
+                                                    <div class="modal fade"
+                                                        id="updateUserRoleModal{{ $user->id }}" tabindex="-1"
+                                                        aria-labelledby="updateUserRoleModal{{ $user->id }}Label"
+                                                        aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title"
+                                                                        id="updateUserRoleModal{{ $user->id }}Label">
+                                                                        تحديث الصلاحية</h5>
+                                                                    <button type="button" class="btn-close"
+                                                                        data-bs-dismiss="modal"
+                                                                        aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form
+                                                                        action="{{ route('update.user.role', $user->id) }}"
+                                                                        method="POST">
+                                                                        @csrf
+                                                                        <div class="mb-3">
+                                                                            <label for="role"
+                                                                                class="form-label">الصلاحية
+                                                                                الجديدة</label>
+                                                                            <select class="form-control"
+                                                                                id="role" name="role">
+                                                                                @foreach ($roles as $role)
+                                                                                    <option
+                                                                                        value="{{ $role->id }}"
+                                                                                        {{ $user->role_id == $role->id ? 'selected' : '' }}>
+                                                                                        {{ $role->role_name }}
+                                                                                    </option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </div>
+                                                                        <button type="submit"
+                                                                            class="btn btn-primary">تحديث</button>
+                                                                    </form>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                @else
+                                                    {{ $user->role->role_name }}
+                                                @endif
                                             </td>
 
                                             <td>
