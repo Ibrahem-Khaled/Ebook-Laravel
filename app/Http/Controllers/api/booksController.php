@@ -14,7 +14,7 @@ class booksController extends Controller
     public function show($id)
     {
         $user = auth()->guard('api')->user();
-        $book = Book::with('bookInfo.author')->find($id);
+        $book = Book::with(['bookInfo.author'])->find($id);
 
         if (!$book) {
             return response()->json(['message' => 'Book not found'], 404);
@@ -28,15 +28,18 @@ class booksController extends Controller
             ->get();
 
         $averageRating = $book->bookRatings()->avg('rating');
+        $latestPaperbackLink = $book->bookInfo()->latest()->first();
 
         $bookDetails = $book->toArray();
         $bookDetails['is_favorite'] = $isFavorite;
         $bookDetails['addtocart'] = !$ownsBook;
         $bookDetails['average_rating'] = $averageRating;
+        $bookDetails['latest_paperback_link'] = $latestPaperbackLink ? $latestPaperbackLink->paper_url : null;
         $bookDetails['related_books'] = $relatedBooks;
 
         return response()->json($bookDetails);
     }
+
 
 
 
