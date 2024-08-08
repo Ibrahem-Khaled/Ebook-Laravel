@@ -21,7 +21,7 @@ return new class extends Migration {
             $table->boolean('is_read')->default(0);
             $table->boolean('is_deleted')->default(0);
             $table->boolean('is_blocked')->default(0);
-            $table->string('type')->default('text');
+            $table->string('type')->default('text'); 
             $table->boolean('is_archived')->default(0);
 
             $table->timestamps();

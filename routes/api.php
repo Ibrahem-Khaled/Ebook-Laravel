@@ -5,6 +5,7 @@ use App\Http\Controllers\api\authController;
 use App\Http\Controllers\api\BookRatingController;
 use App\Http\Controllers\api\booksController;
 use App\Http\Controllers\api\CartController;
+use App\Http\Controllers\api\ChatController;
 use App\Http\Controllers\api\homeController;
 use App\Http\Controllers\api\InstructionController;
 use App\Http\Controllers\api\searchController;
@@ -82,3 +83,7 @@ Route::post('/suggest/book', [SuggestBookController::class, 'store']);
 
 //rating book
 Route::post('/rating/book', [BookRatingController::class, 'store']);
+
+//chat api
+Route::get('/chats', [ChatController::class, 'show']);
+Route::post('/chats', [ChatController::class, 'store']);
