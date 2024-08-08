@@ -21,7 +21,6 @@ class ChatController extends Controller
     {
         $request->validate([
             'message' => 'required',
-            'receiver_id' => 'required|exists:users,id',
         ]);
         $recevier = User::where('role_id', 1)->first();
         $user = auth()->guard('api')->user();
