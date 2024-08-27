@@ -45,12 +45,12 @@ class booksController extends Controller
         } else {
             // إذا لم يكن المستخدم مسجل الدخول
             $bookDetails['is_favorite'] = 0;
-            $bookDetails['addtocart'] = 0;
+            $bookDetails['addtocart'] = null;
             $bookDetails['average_rating'] = $averageRating;
             $bookDetails['latest_paperback_link'] = $latestPaperbackLink ? $latestPaperbackLink->paper_url : null;
             $bookDetails['related_books'] = $relatedBooks;
         }
-
+ 
         return response()->json($bookDetails);
     }
 
