@@ -20,8 +20,9 @@ class booksController extends Controller
             return response()->json(['message' => 'Book not found'], 404);
         }
 
-        $isFavorite = $user->bookFav()->where('book_id', $book->id)->exists();
-        $ownsBook = $user->books()->where('book_id', $book->id)->exists();
+        // إعداد تفاصيل الكتاب
+        $bookDetails = $book->toArray();
+
         $relatedBooks = Book::where('category_id', $book->category_id)
             ->where('id', '!=', $book->id)
             ->take(5)
@@ -30,15 +31,29 @@ class booksController extends Controller
         $averageRating = $book->bookRatings()->avg('rating');
         $latestPaperbackLink = $book->bookInfo()->latest()->first();
 
-        $bookDetails = $book->toArray();
-        $bookDetails['is_favorite'] = $isFavorite;
-        $bookDetails['addtocart'] = !$ownsBook;
-        $bookDetails['average_rating'] = $averageRating;
-        $bookDetails['latest_paperback_link'] = $latestPaperbackLink ? $latestPaperbackLink->paper_url : null;
-        $bookDetails['related_books'] = $relatedBooks;
+        if ($user) {
+            // إذا كان المستخدم مسجل الدخول
+            $isFavorite = $user->bookFav()->where('book_id', $book->id)->exists();
+            $ownsBook = $user->books()->where('book_id', $book->id)->exists();
+
+            // إضافة تفاصيل إضافية للمستخدم
+            $bookDetails['is_favorite'] = $isFavorite;
+            $bookDetails['addtocart'] = !$ownsBook;
+            $bookDetails['average_rating'] = $averageRating;
+            $bookDetails['latest_paperback_link'] = $latestPaperbackLink ? $latestPaperbackLink->paper_url : null;
+            $bookDetails['related_books'] = $relatedBooks;
+        } else {
+            // إذا لم يكن المستخدم مسجل الدخول
+            $bookDetails['is_favorite'] = 0;
+            $bookDetails['addtocart'] = 0;
+            $bookDetails['average_rating'] = $averageRating;
+            $bookDetails['latest_paperback_link'] = $latestPaperbackLink ? $latestPaperbackLink->paper_url : null;
+            $bookDetails['related_books'] = $relatedBooks;
+        }
 
         return response()->json($bookDetails);
     }
+
 
 
 
