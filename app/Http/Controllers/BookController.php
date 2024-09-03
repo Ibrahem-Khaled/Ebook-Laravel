@@ -39,7 +39,7 @@ class BookController extends Controller
     {
         // Validate the incoming request
         $request->validate([
-            'book_isbn' => 'required|min:8',
+            'book_isbn' => 'nullable|min:8',
             'book_pdf' => 'nullable|file|max:102400',
             'category_id' => 'required|min:1|integer',
             'subcategory_id' => 'required|min:1|integer',
@@ -113,7 +113,7 @@ class BookController extends Controller
     public function update(Request $request, $id): RedirectResponse
     {
         $request->validate([
-            'book_isbn' => 'required|min:8|max:13',
+            'book_isbn' => 'nullable|min:8|max:13',
             'category_id' => 'required|integer',
             'subcategory_id' => 'required|integer',
             'book_title' => 'required',
@@ -293,6 +293,13 @@ class BookController extends Controller
 
         $books = DB::select($sql);
         return response()->json($books);
+    }
+
+    public function deleteBookTranslator($translatorId): RedirectResponse
+    {
+        $book = BookInfo::findOrFail($translatorId);
+        $book->delete();
+        return redirect()->back()->with('success', "تم حذف المترجم بنجاح");
     }
 
 }

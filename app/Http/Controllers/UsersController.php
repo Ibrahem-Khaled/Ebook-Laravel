@@ -22,12 +22,12 @@ class UsersController extends Controller
         if ($q) {
             $users = User::where('name', 'like', '%' . $q . '%')
                 ->orWhere('email', 'like', '%' . $q . '%')
-                ->get();
+                ->paginate(10);
             $books = Book::all();
             $roles = Role::all();
 
         } else {
-            $users = User::all();
+            $users = User::paginate(10);
             $books = Book::all();
             $roles = Role::all();
         }
@@ -93,24 +93,24 @@ class UsersController extends Controller
         }
     }
 
-    public function addBookFromUser(Request $request)
+    public function addBooksFromUser(Request $request)
     {
         $validatedData = $request->validate([
             'user_id' => 'required|exists:users,id',
-            'book_id' => 'required|exists:books,id',
+            'book_ids' => 'required|array',
+            'book_ids.*' => 'exists:books,id',
         ]);
 
-        $userBook = UserBook::create([
-            'user_id' => $validatedData['user_id'],
-            'book_id' => $validatedData['book_id'],
-        ]);
-
-        if ($userBook) {
-            return redirect()->back()->with('message', 'Book added successfully');
-        } else {
-            return redirect()->back()->with('message', 'Failed to add book');
+        foreach ($validatedData['book_ids'] as $bookId) {
+            UserBook::create([
+                'user_id' => $validatedData['user_id'],
+                'book_id' => $bookId,
+            ]);
         }
+
+        return redirect()->back()->with('message', 'Books added successfully');
     }
+
     public function addNewUser(Request $request)
     {
         $validatedData = $request->validate([
@@ -202,6 +202,31 @@ class UsersController extends Controller
             });
         }
         return view('users.author_publisher', compact('user', 'books'));
+    }
+
+    public function followedPublishersAndAuthors($userId)
+    {
+        $user = User::find($userId);
+        if (!$user) {
+            return redirect()->back()->with('error', 'User not found');
+        }
+
+        $followedPublishers = $user->publisher;
+        $followedAuthors = $user->author;
+
+        
+
+        return view('users.followeDpublisherSandAuthors', compact('user', 'followedPublishers', 'followedAuthors'));
+    }
+
+    public function deleteUserFollowedPublisherAndAuthor($id)
+    {
+        $followedPublisherAndAuthor = userAuthorPublisher::find($id);
+        if (!$followedPublisherAndAuthor) {
+            return redirect()->back()->with('error', 'Publisher or Author not found');
+        }
+        $followedPublisherAndAuthor->delete();
+        return redirect()->back()->with('message', 'Publisher deleted successfully');
     }
 
 

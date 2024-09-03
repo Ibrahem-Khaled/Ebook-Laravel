@@ -68,12 +68,12 @@ class User extends Authenticatable implements JWTSubject
 
     public function author()
     {
-        return $this->belongsToMany(Author::class, 'user_author_publishers', 'user_id', 'author_id');
+        return $this->belongsToMany(Author::class, 'user_author_publishers', 'user_id', 'author_id')->withPivot('id');
     }
 
     public function publisher()
     {
-        return $this->belongsToMany(Publisher::class, 'user_author_publishers', 'user_id', 'publisher_id');
+        return $this->belongsToMany(Publisher::class, 'user_author_publishers', 'user_id', 'publisher_id')->withPivot('id');
     }
 
     public function getJWTIdentifier()

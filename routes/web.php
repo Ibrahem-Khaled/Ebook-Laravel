@@ -107,6 +107,7 @@ Route::group(['middleware' => ['auth', 'UserAdmin']], function () {
     Route::get('/book/show/{book}', [BookController::class, 'show'])->name('book.show');
     Route::delete('/book/delete/{book}', [BookController::class, 'delete'])->name('book.delete');
     Route::get('/book/search/{search}', [BookController::class, 'searchSelect'])->name('book.searchSelect');
+    Route::delete('book/translator/delete/{translatorId}', [BookController::class, 'deleteBookTranslator'])->name('book.translator.delete');
 
     //Book sold data
     Route::get('/books/sold', [BookDashboardController::class, 'bookSold'])->name('book.sold');
@@ -123,10 +124,12 @@ Route::group(['middleware' => ['auth', 'UserAdmin']], function () {
     Route::post('user/update/{userId}/', [UsersController::class, 'update'])->name('user.update');
     Route::post('users/{userId}/books/{bookId}', [UsersController::class, 'destroyBook'])->name('user.books.destroy');
     Route::post('users/delete/{userId}', [UsersController::class, 'delete'])->name('user.delete');
-    Route::post('users/add/books', [UsersController::class, 'addBookFromUser'])->name('user.addBooks');
+    Route::post('users/add/books', [UsersController::class, 'addBooksFromUser'])->name('user.addBooks');
     Route::post('add/new/user', [UsersController::class, 'addNewUser'])->name('add.newUser');
     Route::post('update/user/role/{userId}', [UsersController::class, 'updateUserRole'])->name('update.user.role');
     Route::post('user/add/author/publisher/{userId}', [UsersController::class, 'addAuthorAndPublisherFromUser'])->name('user.addAuthorAndPublisher');
+    Route::get('followed/author/and/publisher/{userId}', [UsersController::class, 'followedPublishersAndAuthors'])->name('user.followed.AuthorAndPublisher');
+    Route::delete('user/delete/author/publisher/{id}', [UsersController::class, 'deleteUserFollowedPublisherAndAuthor'])->name('delete.user.followed.AuthorAndPublisher');
 
     //slideShow 
     Route::get('slide/show', [SlideShowController::class, 'index'])->name('index.slide');

@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('books', function (Blueprint $table) {
             $table->id();
-            $table->string('book_isbn', 20)->unique()->nullable(false);
+            $table->string('book_isbn', 20)->unique()->nullable();
             $table->string('book_title')->nullable(false)->unique();
             $table->string('book_pdf')->nullable();
             $table->integer('free_sample')->default(0)->nullable();

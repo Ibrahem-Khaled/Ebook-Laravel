@@ -12,6 +12,122 @@
     <link rel="stylesheet" href="{{ asset('icons/icons.css') }}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <link href="{{ asset('css/material-kit.css') }}" rel="stylesheet" />
+
+    <!-- إضافة مكتبة Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+
+    <!-- CSS مخصص -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .page-header {
+            background-image: url('{{ asset('img/bg-20.jpg') }}');
+            height: 400px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .page-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .page-header h1 {
+            color: white;
+            text-align: center;
+            padding-top: 150px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+
+        .btn-primary,
+        .btn-danger,
+        .btn-warn {
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-weight: 500;
+        }
+
+        .btn-warn {
+            background-color: #ff9800;
+            color: #fff;
+        }
+
+        .btn-warn:hover {
+            background-color: #e68900;
+        }
+
+        .btn-outline-primary {
+            border-color: #ff9800;
+            color: #ff9800;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #ff9800;
+            color: #fff;
+        }
+
+        .table th {
+            font-weight: 700;
+            background-color: #f8f9fa;
+        }
+
+        .table td,
+        .table th {
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .modal-header {
+            background-color: #ff9800;
+            color: #fff;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+
+        .modal-footer {
+            border-top: none;
+        }
+
+        .select2-container--default .select2-selection--multiple {
+            border-radius: 15px;
+        }
+
+        .form-control,
+        .select2-selection {
+            border-radius: 15px;
+            box-shadow: none;
+            border-color: #ddd;
+        }
+
+        .form-control:focus {
+            border-color: #ff9800;
+            box-shadow: 0 0 8px rgba(255, 152, 0, 0.4);
+        }
+
+        .input-group-text {
+            background-color: #ff9800;
+            color: #fff;
+            border-top-left-radius: 15px;
+            border-bottom-left-radius: 15px;
+        }
+    </style>
 </head>
 
 <body>
@@ -21,15 +137,15 @@
 
     @include('layouts.alerts')
 
-    <div class="page-header" style="background-image: url({{ asset('img/bg-20.jpg') }}); height: 500px">
+    <div class="page-header">
+        <h1>إدارة المستخدمين</h1>
     </div>
 
-    <div class="card card-body shadow-xl mt-n12 mx-3 mx-md-4">
+    <div class="card card-body shadow-xl mt-n5 mx-3 mx-md-4 p-4">
         <div class="row mt-4">
             <div class="col-md-3">
-                <a class="btn bg-white mb-0 mt-lg-auto w-100" href="{{ route('dashboard.books') }}"
-                    class="btn bg-gradient-faded-secondary">
-                    <svg style="margin-right: 1rem" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                <a class="btn btn-outline-primary mb-0 w-100" href="{{ route('dashboard.books') }}">
+                    <svg style="margin-right: 0.5rem" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                         fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
                         <path fill-rule="evenodd"
                             d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
@@ -88,7 +204,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="role" class="form-label">الصلاحية</label>
-                                        <select class="form-control" id="role" name="role">
+                                        <select class="form-control select2" id="role" name="role">
                                             @foreach ($roles as $role)
                                                 <option value="{{ $role->id }}">{{ $role->role_name }}</option>
                                             @endforeach
@@ -102,25 +218,20 @@
                 </div>
 
                 @if (isset($users) && count($users) > 0)
-                    <div class="card">
+                    <div class="card mt-4">
                         <div class="table-responsive">
                             <table class="table align-items-center mb-0">
                                 <thead>
                                     <tr>
-                                        <th
-                                            class="text-center text-uppercase text-secondary font-weight-bolder opacity-7">
+                                        <th class="text-uppercase text-secondary font-weight-bolder opacity-7">
                                             الدور</th>
-                                        <th
-                                            class="text-center text-uppercase text-secondary font-weight-bolder opacity-7">
+                                        <th class="text-uppercase text-secondary font-weight-bolder opacity-7">
                                             الاسم</th>
-                                        <th
-                                            class="text-center text-uppercase text-secondary font-weight-bolder opacity-7">
+                                        <th class="text-uppercase text-secondary font-weight-bolder opacity-7">
                                             الايميل</th>
-                                        <th
-                                            class="text-center text-uppercase text-secondary font-weight-bolder opacity-7">
+                                        <th class="text-uppercase text-secondary font-weight-bolder opacity-7">
                                             تاريخ الانضمام</th>
-                                        <th
-                                            class="text-center text-uppercase text-secondary font-weight-bolder opacity-7">
+                                        <th class="text-uppercase text-secondary font-weight-bolder opacity-7">
                                             تاريخ اخر تحديث</th>
                                         <th class="text-secondary opacity-7"></th>
                                     </tr>
@@ -128,10 +239,10 @@
                                 <tbody>
                                     @foreach ($users as $user)
                                         <tr>
-                                            <td class="align-middle text-center">
+                                            <td>
                                                 @if (Auth::user()->role->role_name == 'admin')
                                                     <button type="button"
-                                                        class="btn btn-secondary font-weight-normal"
+                                                        class="btn btn-outline-primary font-weight-normal"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#updateUserRoleModal{{ $user->id }}">
                                                         {{ $user->role->role_name }}
@@ -160,7 +271,7 @@
                                                                             <label for="role"
                                                                                 class="form-label">الصلاحية
                                                                                 الجديدة</label>
-                                                                            <select class="form-control"
+                                                                            <select class="form-control select2"
                                                                                 id="role" name="role">
                                                                                 @foreach ($roles as $role)
                                                                                     <option
@@ -186,19 +297,28 @@
                                             <td>
                                                 <p class="mb-0">{{ $user->name }}</p>
                                             </td>
-                                            <td class="align-middle text-center">
+                                            <td>
                                                 <p class="mb-0">{{ $user->email }}</p>
                                             </td>
-                                            <td class="align-middle text-center">
-                                                <p class="mb-0">{{ $user->created_at }}</p>
+                                            <td>
+                                                <p class="mb-0">{{ $user->created_at->format('Y-m-d') }}</p>
                                             </td>
-                                            <td class="align-middle text-center">
-                                                <p class="mb-0">{{ $user->updated_at }}</p>
+                                            <td>
+                                                <p class="mb-0">{{ $user->updated_at->format('Y-m-d') }}</p>
                                             </td>
-                                            <td class="align-middle text-center">
+                                            <td>
                                                 <a href="{{ route('user.show.books', $user->id) }}"
-                                                    class="text-secondary mx-3 font-weight-normal"
-                                                    data-toggle="tooltip" data-original-title="Edit user">عرض</a>
+                                                    class="btn btn-outline-primary mx-2 font-weight-normal"
+                                                    data-toggle="tooltip" data-original-title="عرض المستخدم">عرض</a>
+
+                                                @if ($user?->author()->exists() || $user?->publisher()->exists())
+                                                    <a href="{{ route('user.followed.AuthorAndPublisher', $user->id) }}"
+                                                        class="btn btn-outline-primary mx-2 font-weight-normal"
+                                                        data-toggle="tooltip" data-original-title=" عرض من يتابع المستخدم">
+                                                        عرض من يتابع المستخدم
+                                                    </a>
+                                                @endif
+
                                                 <button type="button" data-bs-toggle="modal"
                                                     data-bs-target="#addBookFromUser{{ $user->id }}"
                                                     class="btn btn-warn">اضافة كتب</button>
@@ -210,7 +330,7 @@
                                                         <div class="modal-content">
                                                             <div class="modal-header">
                                                                 <h5 class="modal-title" id="createCouponModalLabel">
-                                                                    اضافة كتاب للمستخدم</h5>
+                                                                    اضافة كتب للمستخدم</h5>
                                                                 <button type="button" class="btn-close"
                                                                     data-bs-dismiss="modal"
                                                                     aria-label="Close"></button>
@@ -226,11 +346,10 @@
                                                                             name="user_id">
                                                                     </div>
                                                                     <div class="mb-3">
-                                                                        <label for="book_id">اختر الكتاب:</label>
-                                                                        <select class="form-select" id="book_id"
-                                                                            name="book_id" required>
-                                                                            <option value="" selected disabled>
-                                                                                اختر الكتاب</option>
+                                                                        <label for="book_ids">اختر الكتب:</label>
+                                                                        <select class="form-select select2"
+                                                                            id="book_ids" name="book_ids[]"
+                                                                            multiple="multiple" required>
                                                                             @foreach ($books as $book)
                                                                                 <option value="{{ $book->id }}">
                                                                                     {{ $book->book_title }}</option>
@@ -238,7 +357,7 @@
                                                                         </select>
                                                                     </div>
                                                                     <button type="submit"
-                                                                        class="btn btn-primary">إنشاء</button>
+                                                                        class="btn btn-primary">اضافة</button>
                                                                 </form>
                                                             </div>
                                                         </div>
@@ -246,11 +365,11 @@
                                                 </div>
 
                                                 @if (Auth::user()->role->role_name == 'admin')
-                                                    <a href="#" class="text-secondary font-weight-normal"
+                                                    <a href="#" class="btn btn-danger mx-2 font-weight-normal"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#deleteConfirm{{ $user->id }}"
                                                         data-toggle="tooltip"
-                                                        data-original-title="Delete user">حذف</a>
+                                                        data-original-title="حذف المستخدم">حذف</a>
                                                 @endif
 
                                                 <button type="button" data-bs-toggle="modal"
@@ -393,6 +512,7 @@
                             </table>
                         </div>
                     </div>
+                    {{ $users->links() }}
                 @else
                     <br>
                     <div class="row">
@@ -404,6 +524,16 @@
             </div>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "اختر الكتب",
+                allowClear: true,
+                width: '100%'
+            });
+        });
+    </script>
 
     <script src="{{ asset('js/core/popper.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/core/bootstrap.min.js') }}" type="text/javascript"></script>
