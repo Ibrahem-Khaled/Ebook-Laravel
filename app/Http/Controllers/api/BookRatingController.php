@@ -35,6 +35,15 @@ class BookRatingController extends Controller
         return response()->json(['success' => 'Book rating added successfully']);
     }
 
+    public function getRatings($bookId)
+    {
+        $bookRatings = BookRating::where('book_id', $bookId)->get();
+        if (!$bookRatings) {
+            return response()->json(['error' => 'Book rating not found'], 404);
+        }
+        return response()->json($bookRatings);
+    }
+
     public function destroy($ratingBook)
     {
         BookRating::findOrFail($ratingBook)->delete();

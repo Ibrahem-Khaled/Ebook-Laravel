@@ -114,4 +114,22 @@ class CartController extends Controller
         }
     }
 
+
+    public function addFreeBookToUserBooks(Request $request)
+    {
+        $user = auth()->guard('api')->user();
+        $validatedData = $request->validate([
+            'book_id' => 'required|exists:books,id',
+        ]);
+        if ($user) {
+            UserBook::create([
+                'user_id' => $user->id,
+                'book_id' => $validatedData['book_id'],
+            ]);
+            return response()->json(['success' => 'Book added to user books successfully'], 200);
+        } else {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+    }
+
 }

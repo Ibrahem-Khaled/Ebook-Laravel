@@ -57,6 +57,7 @@ Route::get('user/cart', [CartController::class, 'index']);
 Route::post('user/add/cart', [CartController::class, 'addToCart']);
 Route::post('user/delete/cart', [CartController::class, 'deleteFromCart']);
 Route::get('user/books', [CartController::class, 'userBook']);
+Route::post('user/add/free/book', [CartController::class, 'addFreeBookToUserBooks']);
 
 //user favorite
 Route::get('user/favorite', [userFavoriteController::class, 'favorite']);
@@ -83,6 +84,7 @@ Route::post('/suggest/book', [SuggestBookController::class, 'store']);
 
 //rating book
 Route::post('/rating/book', [BookRatingController::class, 'store']);
+Route::get('/rating/book/{bookId}', [BookRatingController::class, 'getRatings']);
 
 //chat api
 Route::get('/chats', [ChatController::class, 'show']);
