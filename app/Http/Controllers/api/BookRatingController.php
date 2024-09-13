@@ -37,7 +37,8 @@ class BookRatingController extends Controller
 
     public function getRatings($bookId)
     {
-        $bookRatings = BookRating::where('book_id', $bookId)->get();
+        $bookRatings = BookRating::where('book_id', $bookId)->with('user')->get();
+
         if (!$bookRatings) {
             return response()->json(['error' => 'Book rating not found'], 404);
         }
