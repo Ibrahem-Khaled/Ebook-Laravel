@@ -113,8 +113,6 @@ class CartController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
     }
-
-
     public function addFreeBookToUserBooks(Request $request)
     {
         $user = auth()->guard('api')->user();
@@ -127,6 +125,28 @@ class CartController extends Controller
                 'book_id' => $validatedData['book_id'],
             ]);
             return response()->json(['success' => 'Book added to user books successfully'], 200);
+        } else {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+    }
+
+    public function sendBookAndRemoveInSender(Request $request)
+    {
+        $bookId = $request->bookId;
+        $reciver = User::where('email', $request->email)->first();
+        $user = auth()->guard('api')->user();
+        if (!$reciver) {
+            return response()->json(['error' => 'Reciver not found'], 404);
+        }
+        if ($user) {
+            $book = UserBook::where('user_id', $user->id)->where('book_id', $bookId)->first();
+            if ($book) {
+                $book->delete();
+                $reciver->books()->attach($bookId);
+                return response()->json(['success' => 'Book sent successfully'], 200);
+            } else {
+                return response()->json(['error' => 'Book not found in sender'], 404);
+            }
         } else {
             return response()->json(['error' => 'Unauthorized'], 401);
         }

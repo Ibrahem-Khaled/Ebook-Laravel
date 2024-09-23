@@ -58,7 +58,7 @@ Route::post('user/add/cart', [CartController::class, 'addToCart']);
 Route::post('user/delete/cart', [CartController::class, 'deleteFromCart']);
 Route::get('user/books', [CartController::class, 'userBook']);
 Route::post('user/add/free/book', [CartController::class, 'addFreeBookToUserBooks']);
-
+Route::post('gift/book', [CartController::class, 'sendBookAndRemoveInSender']);
 //user favorite
 Route::get('user/favorite', [userFavoriteController::class, 'favorite']);
 Route::post('user/add/favorite', [userFavoriteController::class, 'addForFavorite']);
