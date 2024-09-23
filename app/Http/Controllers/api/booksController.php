@@ -14,15 +14,21 @@ class booksController extends Controller
     public function show($id)
     {
         $user = auth()->guard('api')->user();
-        $book = Book::with(['bookInfo.author','bookWatchInfo'])->find($id);
+        $book = Book::with(['bookInfo.author', 'bookWatchInfo'])->find($id);
 
         if (!$book) {
             return response()->json(['message' => 'Book not found'], 404);
         }
 
-        $book->bookWatchInfo()->updateOrCreate([
-            'view_count' => $book->bookWatchInfo->view_count + 1,
-        ]);
+        $bookWatchInfo = $book->bookWatchInfo;
+        
+        if ($bookWatchInfo) {
+            $bookWatchInfo->update(['view_count' => $bookWatchInfo->view_count + 1]);
+        } else {
+            $book->bookWatchInfo()->create([
+                'view_count' => 1,
+            ]);
+        }
 
         // إعداد تفاصيل الكتاب
         $bookDetails = $book->toArray();
