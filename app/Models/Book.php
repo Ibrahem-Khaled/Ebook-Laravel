@@ -98,6 +98,6 @@ class Book extends Model
 
     public function bookWatchInfo()
     {
-        return $this->hasMany(BookWatchInfo::class, 'book_id');
+        return $this->hasOne(BookWatchInfo::class, 'book_id');
     }
 }
