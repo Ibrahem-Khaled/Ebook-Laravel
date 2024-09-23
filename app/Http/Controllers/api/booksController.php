@@ -20,26 +20,34 @@ class booksController extends Controller
             return response()->json(['message' => 'Book not found'], 404);
         }
 
+        // جلب بيانات bookWatchInfo
         $bookWatchInfo = $book->bookWatchInfo;
-        
+
+        // تحديث أو إنشاء view_count
         if ($bookWatchInfo) {
             $bookWatchInfo->update(['view_count' => $bookWatchInfo->view_count + 1]);
         } else {
             $book->bookWatchInfo()->create([
                 'view_count' => 1,
             ]);
+            // تحديث view_count بعد الإنشاء
+            $bookWatchInfo = $book->bookWatchInfo;
         }
 
-        // إعداد تفاصيل الكتاب
-        $bookDetails = $book->toArray();
-
+        // جلب الكتب المشابهة
         $relatedBooks = Book::where('category_id', $book->category_id)
             ->where('id', '!=', $book->id)
             ->take(5)
             ->get();
 
+        // جلب متوسط التقييم
         $averageRating = $book->bookRatings()->avg('rating');
+
+        // جلب الرابط الأخير لـ paperback
         $latestPaperbackLink = $book->bookInfo()->latest()->first();
+
+        // إعداد تفاصيل الكتاب
+        $bookDetails = $book->toArray();
 
         if ($user) {
             // إذا كان المستخدم مسجل الدخول
@@ -49,20 +57,24 @@ class booksController extends Controller
             // إضافة تفاصيل إضافية للمستخدم
             $bookDetails['is_favorite'] = $isFavorite;
             $bookDetails['addtocart'] = !$ownsBook;
-            $bookDetails['average_rating'] = $averageRating;
-            $bookDetails['latest_paperback_link'] = $latestPaperbackLink ? $latestPaperbackLink->paper_url : null;
-            $bookDetails['related_books'] = $relatedBooks;
         } else {
             // إذا لم يكن المستخدم مسجل الدخول
             $bookDetails['is_favorite'] = 0;
             $bookDetails['addtocart'] = null;
-            $bookDetails['average_rating'] = $averageRating;
-            $bookDetails['latest_paperback_link'] = $latestPaperbackLink ? $latestPaperbackLink->paper_url : null;
-            $bookDetails['related_books'] = $relatedBooks;
         }
+
+        // إضافة عدد المشاهدات وعدد القراء
+        $bookDetails['view_count'] = $bookWatchInfo ? $bookWatchInfo->view_count : 0;
+        $bookDetails['reader_count'] = $book->userBooks()->count();
+
+        // إضافة التقييم والكتب المشابهة
+        $bookDetails['average_rating'] = $averageRating;
+        $bookDetails['latest_paperback_link'] = $latestPaperbackLink ? $latestPaperbackLink->paper_url : null;
+        $bookDetails['related_books'] = $relatedBooks;
 
         return response()->json($bookDetails);
     }
+
 
 
 
