@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\Coupon;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -11,16 +12,27 @@ class CouponController extends Controller
 {
     public function index()
     {
-        $coupons = Coupon::get();
-        $books = Book::get();
-        return view('coupon.home', compact('coupons', 'books'));
+        // جلب الكتب التي تحتوي على كوبونات فقط
+        $booksWithCoupons = Book::whereHas('coupons', function ($query) {
+            $query->where('type', 'book');
+        })->get();
+
+        // جلب الاشتراكات التي تحتوي على كوبونات فقط
+        $subscriptionsWithCoupons = Subscription::whereHas('coupons', function ($query) {
+            $query->where('type', 'subscription');
+        })->get();
+
+        $books = Book::all();
+        $subscriptions = Subscription::all();
+        return view('coupon.home', compact('booksWithCoupons', 'subscriptionsWithCoupons', 'books', 'subscriptions'));
     }
     public function store(Request $request)
     {
         $request->validate([
-            'discount' => 'required|numeric|min:0',
+            'discount' => 'required|numeric|min:0|max:100',
             'count' => 'required|integer|min:1',
-            'book_id' => 'required',
+            'type' => 'required|in:book,subscription',
+            'reference_id' => 'required|integer', // إما book_id أو subscription_id بناءً على النوع
         ]);
 
         for ($i = 0; $i < $request->count; $i++) {
@@ -29,15 +41,19 @@ class CouponController extends Controller
                 $code .= mt_rand(0, 9);
             }
 
+            // إنشاء الكوبون بناءً على النوع
             Coupon::create([
-                'book_id' => $request->book_id,
+                'type' => $request->type,
+                'book_id' => $request->type === 'book' ? $request->reference_id : null,
+                'subscription_id' => $request->type === 'subscription' ? $request->reference_id : null,
                 'code' => $code,
                 'discount' => $request->discount,
             ]);
         }
 
-        return redirect()->route('coupons.index')->with('success', 'Coupons created successfully!');
+        return redirect()->route('coupons.index')->with('success', 'تم إنشاء الكوبونات بنجاح!');
     }
+
 
     public function deleteCoupons(Request $request)
     {
@@ -69,5 +85,24 @@ class CouponController extends Controller
         }
 
         return view('coupon.bookCoupons', compact('coupons'));
+    }
+
+    public function showSubscriptionCoupons(Request $request, $id)
+    {
+        $subscription = Subscription::find($id);
+        $q = $request->query('query');
+
+        if (!$subscription) {
+            return response()->json(['error' => 'Subscription not found.'], 404);
+        }
+
+        if ($q) {
+            $coupons = Coupon::where('code', 'like', '%' . $q . '%')
+                ->get();
+        } else {
+            $coupons = $subscription->coupons;
+        }
+
+        return view('coupon.subscriptionCoupons', compact('coupons', 'subscription'));
     }
 }

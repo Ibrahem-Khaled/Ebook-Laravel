@@ -12,6 +12,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\CouponController;
+use App\Http\Controllers\historyReadBookController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InstructionController;
 use App\Http\Controllers\NotifcationsController;
@@ -20,6 +21,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublisherController;
 use App\Http\Controllers\SlideShowController;
 use App\Http\Controllers\SubcategoryController;
+use App\Http\Controllers\subscriptionController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
@@ -117,7 +119,8 @@ Route::group(['middleware' => ['auth', 'UserAdmin']], function () {
     Route::post('/coupon/store', [CouponController::class, 'store'])->name('coupon.store');
     Route::delete('/coupons/delete', [CouponController::class, 'deleteCoupons'])->name('coupons.delete');
     Route::get('/book/coupons/{bookId}', [CouponController::class, 'bookCoupon'])->name('book.coupons');
-
+    Route::get('/subscriptions/{id}/coupons', [CouponController::class, 'showSubscriptionCoupons'])
+        ->name('subscription.coupons');
     //users information
     Route::get('users', [UsersController::class, 'index'])->name('users.index');
     Route::get('users/{userId}', [UsersController::class, 'showBook'])->name('user.show.books');
@@ -176,6 +179,14 @@ Route::group(['middleware' => ['auth', 'UserAdmin']], function () {
     Route::put('chats/{id}', [ChatController::class, 'update'])->name('chats.update');
     Route::delete('chats/{id}', [ChatController::class, 'destroy'])->name('chats.destroy');
 
+    //this route subscription
+    Route::resource('subscriptions', subscriptionController::class);
+    Route::get('/subscriptions/{subscription}/users', [SubscriptionController::class, 'manageUsers'])->name('subscriptions.users');
+    Route::post('subscriptions/{subscription}/users', [SubscriptionController::class, 'addUser'])->name('subscriptions.users.add');
+    Route::delete('subscriptions/{subscription}/user/{user}', [SubscriptionController::class, 'removeUser'])->name('subscriptions.users.remove');
+
+    //this 
+    Route::get('history/read/book/{user}', [historyReadBookController::class, 'index'])->name('history.read.index');
 });
 
 //payment pages

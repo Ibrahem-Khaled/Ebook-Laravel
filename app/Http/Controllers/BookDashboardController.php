@@ -12,6 +12,7 @@ use App\Models\Payment;
 use App\Models\Publisher;
 use App\Models\SlideShow;
 use App\Models\Subcategory;
+use App\Models\Subscription;
 use App\Models\User;
 use App\Models\UserBook;
 use Illuminate\Http\Request;
@@ -33,6 +34,8 @@ class BookDashboardController extends Controller
         $authors = Author::all();
         $publishers = Publisher::all();
         $books = Book::all();
+        $subscriptions = Subscription::all();
+        $subscribersCount = User::whereHas('subscription')->count();
         return view(
             'dashboard.books_dashboard',
             compact(
@@ -48,6 +51,8 @@ class BookDashboardController extends Controller
                 'publishers',
                 'books',
                 'payment',
+                'subscriptions',
+                'subscribersCount'
             )
         );
     }

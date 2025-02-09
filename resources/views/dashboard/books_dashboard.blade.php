@@ -220,6 +220,24 @@
                     </div>
                 @endif
             </div>
+            <div class="col my-2">
+                <a href="{{ route('subscriptions.index') }}">
+                    <div class="card move-on-hover">
+                        <div class="card-body text-center">
+                            <h1 class="text-gradient text-info">
+                                <span id="subscriptions_count">{{ count($subscriptions) }}</span>
+                            </h1>
+                            <h6 class="mb-0">عدد الاشتراكات</h6>
+                        </div>
+                        <div class="card-body text-center">
+                            <h1 class="text-gradient text-info">
+                                <span id="subscriptions_count">{{ $subscribersCount }}</span>
+                            </h1>
+                            <h6 class="mb-0">عدد المشتركين</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
             @if (Auth::user()->role->role_name !== 'supervisor')
                 <div class="row my-4">
                     <div class="col my-2">

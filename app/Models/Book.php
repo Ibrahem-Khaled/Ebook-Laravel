@@ -100,4 +100,10 @@ class Book extends Model
     {
         return $this->hasOne(BookWatchInfo::class, 'book_id');
     }
+
+    public function userBookReadHistories()
+    {
+        return $this->belongsToMany(User::class, 'user_book_read_histories', 'book_id', 'user_id')
+            ->withPivot('id', 'page');
+    }
 }

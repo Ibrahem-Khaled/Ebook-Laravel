@@ -16,9 +16,7 @@
     <!-- Material Kit CSS -->
     <link href={{ asset('css/material-kit.css') }} rel="stylesheet" />
 
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
-
 </head>
 
 <body>
@@ -28,14 +26,11 @@
 
     @include('layouts.alerts')
 
-    <div class="page-header" style="background-image: url({{ asset('img/bg-20.jpg') }}); height: 500px">
-        {{-- <span class="mask bg-gradient-dark opacity-6"></span> --}}
-    </div>
-
+    <div class="page-header" style="background-image: url({{ asset('img/bg-20.jpg') }}); height: 500px"></div>
 
     <div style="" class="card card-body shadow-xl mt-n12 mx-3 mx-md-4">
         <div class="row mt-4">
-            <form action="{{ route('book.coupons', Route::current()->parameter('bookId')) }}" method="GET"
+            <form action="{{ route('subscription.coupons', Route::current()->parameter('id')) }}" method="GET"
                 class="mb-3">
                 <div class="input-group">
                     <input type="text" class="form-control" name="query" placeholder="ابحث عن code">
@@ -43,13 +38,11 @@
                 </div>
             </form>
 
-
             <div class="col-md-3">
                 <a class="btn bg-white mb-0 mt-lg-auto w-100" href="{{ route('dashboard.books') }}"
-                    class="btn bg-gradient-faded-secondary"
-                    style="max-width: 233px; width: -webkit-fill-available;"><svg style="margin-right: 1rem"
-                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    class="btn bg-gradient-faded-secondary" style="max-width: 233px; width: -webkit-fill-available;">
+                    <svg style="margin-right: 1rem" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
                         <path fill-rule="evenodd"
                             d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
                     </svg>العودة
@@ -89,7 +82,7 @@
                                             </th>
                                             <th
                                                 class="text-center text-uppercase text-secondary font-weight-bolder opacity-7">
-                                                اسم الكتاب
+                                                اسم الاشتراك
                                             </th>
                                             <th
                                                 class="text-center text-uppercase text-secondary font-weight-bolder opacity-7">
@@ -123,7 +116,7 @@
                                                     <p class="mb-0">{{ $coupon->discount }} %</p>
                                                 </td>
                                                 <td>
-                                                    <p class="mb-0">{{ $coupon->book->book_title }}</p>
+                                                    <p class="mb-0">{{ $coupon->subscription->title }}</p>
                                                 </td>
                                                 <td>
                                                     <p class="mb-0">{{ $coupon->user?->name }}</p>
@@ -143,9 +136,9 @@
                                                     @endif
                                                 </td>
                                                 {{-- <td class="align-middle" style="text-align: center;">
-                                                    <a href="{{ route('category.show', $coupon->id) }}"
+                                                    <a href="{{ route('subscription.coupon.details', $coupon->id) }}"
                                                         class="text-secondary mx-3 font-weight-normal "
-                                                        data-toggle="tooltip" data-original-title="Edit user">
+                                                        data-toggle="tooltip" data-original-title="عرض">
                                                         عرض
                                                     </a>
                                                 </td> --}}
@@ -185,7 +178,7 @@
                 return buf;
             }
 
-            var fileName = "data.xlsx";
+            var fileName = "subscription_coupons.xlsx";
             saveAs(new Blob([s2ab(wbout)], {
                 type: "application/octet-stream"
             }), fileName);
@@ -204,7 +197,6 @@
     <script src="{{ asset('js/core/popper.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/core/bootstrap.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/plugins/perfect-scrollbar.min.js') }}"></script>
-    <!-- مركز التحكم لواجهة المستخدم المادية: تأثيرات التدرج، النصوص لصفحات المثال وما إلى ذلك -->
     <script src="{{ asset('js/material-kit.min.js') }}" type="text/javascript"></script>
 </body>
 
