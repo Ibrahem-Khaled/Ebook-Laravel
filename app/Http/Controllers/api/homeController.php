@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Author;
 use App\Models\Book;
 use App\Models\Category;
 use App\Models\Notifcation;
+use App\Models\Publisher;
 use App\Models\SlideShow;
 use Illuminate\Http\Request;
 
@@ -45,7 +47,15 @@ class homeController extends Controller
     public function slideShow()
     {
         $slide = SlideShow::all();
-        return response()->json($slide, 200);
+        $authors = Author::count();
+        $books = Book::count();
+        $publishers = Publisher::count();
+        return response()->json([
+            'sliders' => $slide,
+            'authors' => $authors,
+            'books' => $books,
+            'publishers' => $publishers
+        ]);
     }
 
 
