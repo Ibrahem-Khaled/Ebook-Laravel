@@ -9,6 +9,7 @@ use App\Http\Controllers\api\ChatController;
 use App\Http\Controllers\api\homeController;
 use App\Http\Controllers\api\InstructionController;
 use App\Http\Controllers\api\searchController;
+use App\Http\Controllers\api\subscriptionController;
 use App\Http\Controllers\api\SuggestBookController;
 use App\Http\Controllers\api\userFavoriteController;
 use App\Http\Controllers\ContactUsController;
@@ -90,3 +91,6 @@ Route::get('/rating/book/{bookId}', [BookRatingController::class, 'getRatings'])
 //chat api
 Route::get('/chats', [ChatController::class, 'show']);
 Route::post('/chats', [ChatController::class, 'store']);
+
+//this subscription api 
+Route::get('/subscriptions', [subscriptionController::class, 'index']);
