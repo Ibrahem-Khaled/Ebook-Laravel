@@ -50,12 +50,7 @@ class homeController extends Controller
         $authors = Author::count();
         $books = Book::count();
         $publishers = Publisher::count();
-        return response()->json([
-            'sliders' => $slide,
-            'authors' => $authors,
-            'books' => $books,
-            'publishers' => $publishers
-        ]);
+        return response()->json($slide);
     }
 
 

@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Author;
 use App\Models\Book;
 use App\Models\Publisher;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class booksController extends Controller
 {
