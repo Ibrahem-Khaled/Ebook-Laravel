@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\Author;
 use App\Models\Book;
+use App\Models\BookWatchInfo;
 use App\Models\Category;
 use App\Models\Notifcation;
 use App\Models\Publisher;
@@ -55,10 +56,12 @@ class homeController extends Controller
         $authors = Author::count();
         $books = Book::count();
         $publishers = Publisher::count();
+        $watches = BookWatchInfo::sum('view_count');
         return response()->json([
             'authors' => $authors,
             'books' => $books,
-            'publishers' => $publishers
+            'publishers' => $publishers,
+            'watches' => $watches
         ]);
     }
 
