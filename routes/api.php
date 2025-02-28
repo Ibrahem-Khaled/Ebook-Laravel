@@ -42,6 +42,7 @@ Route::post('change/password', [authController::class, 'changePassword']);
 Route::get('home/lastadded', [homeController::class, 'lastAdded']);
 Route::get('notifications', [homeController::class, 'notifications']);
 Route::get('home/slide', [homeController::class, 'slideshow']);
+Route::get('home/analysis', [homeController::class, 'analysis']);
 Route::get('home/categories', [homeController::class, 'index']);
 Route::get('home/category/{id}', [homeController::class, 'category']);
 

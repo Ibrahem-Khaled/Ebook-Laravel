@@ -47,12 +47,20 @@ class homeController extends Controller
     public function slideShow()
     {
         $slide = SlideShow::all();
-        $authors = Author::count();
-        $books = Book::count();
-        $publishers = Publisher::count();
         return response()->json($slide);
     }
 
+    public function analysis()
+    {
+        $authors = Author::count();
+        $books = Book::count();
+        $publishers = Publisher::count();
+        return response()->json([
+            'authors' => $authors,
+            'books' => $books,
+            'publishers' => $publishers
+        ]);
+    }
 
 
 
