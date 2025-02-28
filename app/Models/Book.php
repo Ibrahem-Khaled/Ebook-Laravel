@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\File;
 class Book extends Model
 {
     protected $guarded = ['id'];
-
+    protected $appends = ['is_user_subscribed'];
+    
     public function author(): BelongsTo
     {
         return $this->belongsTo(Author::class);

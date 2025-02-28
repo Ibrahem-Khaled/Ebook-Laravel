@@ -10,7 +10,7 @@ class subscriptionController extends Controller
 {
     public function index()
     {
-        $subscription = Subscription::get();
+        $subscription = Subscription::where('is_active', 1)->get();
 
         return response()->json($subscription);
     }

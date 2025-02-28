@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->string('icon')->nullable();
             $table->bigInteger('price')->default(50);
             $table->string('duration')->default(1)->comment('1 = 1 month, 2 = 2 month, 3 = 3 month, 12 = 12 year');
-            $table->boolean('is_active')->default(0);
+            $table->boolean('is_active')->default(1);
             $table->timestamps();
         });
     }
