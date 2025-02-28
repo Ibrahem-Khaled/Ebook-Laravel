@@ -32,6 +32,9 @@ class Subscription extends Model
     //this accessors methods 
     public function getIsUserSubscribedAttribute()
     {
+        if (!auth()->guard('api')->check()) {
+            return false;
+        }
         return $this->users()->where('user_id', auth()->guard('api')->user()->id)->exists();
     }
 }
