@@ -39,7 +39,9 @@ class subscriptionController extends Controller
         $coupon->save();
 
         $subscription = Subscription::find($coupon->subscription_id);
-        $subscription->users()->attach(auth()->guard('api')->id());
+        $expiryDate = now()->addMonths($subscription->duration);
+
+        $subscription->users()->attach(auth()->guard('api')->id(), ['expiry_date' => $expiryDate]);
 
         return response()->json(['message' => 'Coupon added to subscription successfully'], 200);
     }
