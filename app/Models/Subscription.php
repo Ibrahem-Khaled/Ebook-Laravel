@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Subscription extends Model
 {
     use HasFactory;
-
+    protected $appends = ['is_user_subscribed'];
     protected $fillable = [
         'title',
         'description',
@@ -23,9 +23,15 @@ class Subscription extends Model
         return $this->belongsToMany(User::class, 'user_subscriptions', 'subscription_id', 'user_id')->withPivot('id', 'expiry_date');
 
     }
-
     public function coupons()
     {
         return $this->hasMany(Coupon::class, 'subscription_id');
+    }
+
+
+    //this accessors methods 
+    public function getIsUserSubscribedAttribute()
+    {
+        return $this->users()->where('user_id', auth()->guard('api')->user()->id)->exists();
     }
 }
