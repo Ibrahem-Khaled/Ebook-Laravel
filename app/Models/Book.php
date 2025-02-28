@@ -20,18 +20,6 @@ class Book extends Model
     {
         return $this->belongsTo(Publisher::class, 'publisher_id');
     }
-
-    // public function category(): HasOneThrough // TODO: Check this function later (edit)
-    // {
-    //     return $this->hasOneThrough(
-    //         Category::class,
-    //         Subcategory::class,
-    //         'category_id', // Foreign key on the subcategory table
-    //         'id', // Foreign key on the country table...
-    //         'id', // Local key on the category table...
-    //         'category_id' // Local key on the product table...
-    //     );
-    // }
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id');
@@ -105,5 +93,15 @@ class Book extends Model
     {
         return $this->belongsToMany(User::class, 'user_book_read_histories', 'book_id', 'user_id')
             ->withPivot('id', 'page');
+    }
+
+
+    // this accessors methods
+    public function getIsUserSubscribedAttribute()
+    {
+        if (!auth()->guard('api')->check()) {
+            return true;
+        }
+        return auth()->guard('api')->user()->subscriptions()->exists();
     }
 }
