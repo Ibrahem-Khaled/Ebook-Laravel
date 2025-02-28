@@ -24,7 +24,7 @@ return new class extends Migration {
             $table->foreign('book_id')->references('id')->on('books')->onDelete('cascade');
         });
     }
-
+ 
     /**
      * Reverse the migrations.
      */
