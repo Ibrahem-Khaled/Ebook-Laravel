@@ -103,6 +103,6 @@ class Book extends Model
         if (!auth()->guard('api')->check()) {
             return true;
         }
-        return auth()->guard('api')->user()->subscriptions()->exists();
+        return auth()->guard('api')->user()->subscription()->exists();
     }
 }
