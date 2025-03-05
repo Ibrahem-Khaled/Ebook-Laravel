@@ -45,4 +45,19 @@ class subscriptionController extends Controller
 
         return response()->json(['message' => 'Coupon added to subscription successfully'], 200);
     }
+
+    public function addUserIsSubscribedPageReader(Request $request)
+    {
+        $user = auth()->guard('api')->user();
+        if ($user->is_subscribed == 0) {
+            return response()->json(['message' => 'User is not subscribed'], 404);
+        }
+        
+        $book = $request->book_id;
+        $page = $request->page_number;
+
+        $user->bookReadHistory()->attach($book, ['page' => $page]);
+
+        return response()->json(['message' => 'Page read successfully'], 200);
+    }
 }

@@ -96,3 +96,4 @@ Route::post('/chats', [ChatController::class, 'store']);
 //this subscription api 
 Route::get('/subscriptions', [subscriptionController::class, 'index']);
 Route::post('/add/coupon/subscription', [subscriptionController::class, 'addCouponSubscription']);
+Route::post('/add/user/is/subscribed/page/reader', [subscriptionController::class, 'addUserIsSubscribedPageReader']);

@@ -101,7 +101,7 @@ class Book extends Model
     public function getIsUserSubscribedAttribute()
     {
         if (!auth()->guard('api')->check()) {
-            return true;
+            return false;
         }
         return auth()->guard('api')->user()->subscription()->exists();
     }

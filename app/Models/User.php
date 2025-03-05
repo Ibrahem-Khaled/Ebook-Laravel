@@ -86,6 +86,19 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsToMany(Book::class, 'user_book_read_histories', 'user_id', 'book_id')
             ->withPivot('id', 'page');
     }
+
+
+    //this accessors methods
+    public function getIsUserSubscribedAttribute()
+    {
+        if (!auth()->guard('api')->check()) {
+            return false;
+        }
+        return auth()->guard('api')->user()->subscription()->exists();
+    }
+
+
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
