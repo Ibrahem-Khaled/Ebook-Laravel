@@ -52,12 +52,28 @@ class subscriptionController extends Controller
         if ($user->is_subscribed == 0) {
             return response()->json(['message' => 'User is not subscribed'], 404);
         }
-        
-        $book = $request->book_id;
-        $page = $request->page_number;
-
-        $user->bookReadHistory()->attach($book, ['page' => $page]);
-
-        return response()->json(['message' => 'Page read successfully'], 200);
+    
+        $bookId = $request->input('book_id');
+        // قيمة الصفحة التي تريد إضافتها أو زيادتها
+        $pageIncrement = $request->input('page_number', 1);
+    
+        // نفحص إن كانت هناك قيمة سابقة في pivot أم لا
+        $pivotRow = $user->bookReadHistory()
+                         ->wherePivot('book_id', $bookId) // pivot عادةً يُسمى بنفس اسم المفتاح
+                         ->first();
+    
+        if ($pivotRow) {
+            // إذا كان هناك قيمة سابقة، نزيدها بالقيمة الجديدة
+            $user->bookReadHistory()->updateExistingPivot($bookId, [
+                'page' => DB::raw("page + {$pageIncrement}")
+            ]);
+        } else {
+            // إن لم يكن هناك سجل سابق، ننشئ سجلاً جديداً بقيمة أولية
+            $user->bookReadHistory()->attach($bookId, [
+                'page' => $pageIncrement
+            ]);
+        }
+    
+        return response()->json(['message' => 'Page updated successfully'], 200);
     }
 }
