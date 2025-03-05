@@ -50,7 +50,7 @@ class subscriptionController extends Controller
     public function addUserIsSubscribedPageReader(Request $request)
     {
         $user = auth()->guard('api')->user();
-        if ($user->is_subscribed == 0) {
+        if ($user->is_user_subscribed == 0) {
             return response()->json(['message' => 'User is not subscribed'], 404);
         }
     

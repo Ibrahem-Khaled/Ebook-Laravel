@@ -13,6 +13,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
+    protected $appends = ['is_user_subscribed'];
     protected $fillable = [
         'name',
         'email',
