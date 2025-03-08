@@ -81,7 +81,7 @@ Route::get('/instruction', [InstructionController::class, 'index']);
 Route::post('/payment/test', [paymentController::class, 'PaymentWeb']);
 
 //this route paypal api
-Route::get('paypal/checkout', [PayPalController::class, 'checkout'])->name('paypal.checkout');
+Route::post('paypal/checkout', [PayPalController::class, 'checkout'])->name('paypal.checkout');
 Route::get('paypal/success', [PayPalController::class, 'success'])->name('paypal.success');
 Route::get('paypal/cancel', [PayPalController::class, 'cancel'])->name('paypal.cancel');
 
