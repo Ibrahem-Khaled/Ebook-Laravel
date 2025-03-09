@@ -21,7 +21,7 @@ class PayPalController extends Controller
             "purchase_units" => [
                 [
                     "amount" => [
-                        "currency_code" => "DZD", // العملة المستخدمة للدفع باستخدام بايبال هي الدينار الجزائري
+                        "currency_code" => "USD", // العملة المستخدمة للدفع باستخدام بايبال هي الدينار الجزائري
                         "value" => $price // قيمة المبلغ المراد دفعه
                     ]
                 ]
