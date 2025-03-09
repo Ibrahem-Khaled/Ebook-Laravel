@@ -11,7 +11,7 @@ class PayPalController extends Controller
     public function checkout(Request $request)
     {
         $price = $request->price;
-        
+
         $provider = new PayPalClient;
         $provider->setApiCredentials(config('paypal'));
         $provider->getAccessToken();
@@ -43,7 +43,7 @@ class PayPalController extends Controller
             }
         }
 
-        return redirect()->route('home')->with('error', $response['message'] ?? 'حدث خطأ أثناء الاتصال بـ PayPal');
+        return response()->json(['error' => 'فشلت عملية الدفع']);
     }
 
     // عند نجاح الدفع
