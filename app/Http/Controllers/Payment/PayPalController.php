@@ -35,10 +35,10 @@ class PayPalController extends Controller
         $response = $provider->createOrder($order);
 
         if (isset($response['id']) && $response['id'] != null) {
-            // استخرج رابط الموافقة من بايبال
+            // استخراج رابط الموافقة من بايبال
             foreach ($response['links'] as $link) {
                 if ($link['rel'] == 'approve') {
-                    return redirect()->away($link['href']);
+                    return response()->json(['approval_url' => $link['href']]);
                 }
             }
         }
