@@ -1,0 +1,14 @@
+[
+    {
+        "relation": [
+            "delegate_permission/common.handle_all_urls"
+        ],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "com.khaznz",
+            "sha256_cert_fingerprints": [
+                "54:c3:80:7e:1b:6e:26:d0:93:66:cb:9c:7c:3d:0c:4b:10:09:01:57:a6:bc:a2:91:b2:22:6d:f4:f8:2e:90:af"
+            ]
+        }
+    }
+]
