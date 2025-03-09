@@ -34,11 +34,11 @@ class PaymentController extends Controller
         $amount = $request->price;
         $currency = 'dzd'; // التأكد من استخدام الأحرف الكبيرة للعملة
         $successUrl = route('payment.page.successfuly', [
-            'id' => $user->id,
+            'userId' => $user->id,
             'type' => $request->type,
             'subscriptionId' => $request->subscriptionId,
         ]);
-        
+
         // إنشاء الحمولة للطلب
         $payload = json_encode([
             'amount' => $amount,
