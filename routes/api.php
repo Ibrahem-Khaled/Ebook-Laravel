@@ -82,8 +82,8 @@ Route::post('/payment/test', [paymentController::class, 'PaymentWeb']);
 
 //this route paypal api
 Route::post('paypal/checkout', [PayPalController::class, 'checkout']);
-Route::get('paypal/success', [PayPalController::class, 'success']);
-Route::get('paypal/cancel', [PayPalController::class, 'cancel']);
+Route::get('paypal/success', [PayPalController::class, 'success'])->name('paypal.success');
+Route::get('paypal/cancel', [PayPalController::class, 'cancel'])->name('paypal.cancel');
 
 //payment route
 Route::post('/payment/store', [\App\Http\Controllers\api\PaymentController::class, 'store']);
