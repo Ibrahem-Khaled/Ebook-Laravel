@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
+            $table->text('fcm_token')->nullable();
             $table->boolean('is_login')->default(0)->nullable();
             $table->unsignedBigInteger('role_id')->nullable()->default(2);
             $table->rememberToken();

@@ -154,6 +154,23 @@ class authController extends Controller
         }
     }
 
+    public function setFcmToken(Request $request)
+    {
+        $user = auth()->guard('api')->user();
+        if ($user) {
+            $user->fcm_token = $request->fcm_token;
+            $user->save();
+            return response()->json([
+                'success' => true,
+                'message' => 'تم تحديث التوكن بنجاح'
+            ], 200);
+        }
+        return response()->json([
+            'success' => false,
+            'message' => 'لم يتم العثور على المستخدم أو لم يتم التحقق من صحته'
+        ], 404);
+    }
+
     public function logout()
     {
         $user = auth()->guard('api')->user();

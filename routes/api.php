@@ -38,6 +38,7 @@ Route::get('me', [authController::class, 'me']);
 Route::get('delete/user', [authController::class, 'deleteUser']);
 Route::post('auth/update', [authController::class, 'update']);
 Route::post('change/password', [authController::class, 'changePassword']);
+Route::put('set/fcm/token', [authController::class, 'setFcmToken']);
 
 //this the home api
 Route::get('home/lastadded', [homeController::class, 'lastAdded']);
