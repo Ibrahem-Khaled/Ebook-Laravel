@@ -82,10 +82,15 @@ class CartController extends Controller
         }
     }
 
-    public function removedBooksFromCartAndAddToUserBooks($userId)
+    public function removedBooksFromCartAndAddToUserBooks($userId, $type, $subscriptionId)
     {
         $user = User::find($userId);
         if ($user) {
+            if ($type == 'subscription') {
+                $user->subscription()->detach($subscriptionId);
+                return view('payment.success');
+            }
+            
             $carts = $user->carts;
             foreach ($carts as $cart) {
                 UserBook::create([

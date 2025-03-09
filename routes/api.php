@@ -15,7 +15,6 @@ use App\Http\Controllers\api\userFavoriteController;
 use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\Payment\paymentController;
 use App\Http\Controllers\Payment\PayPalController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -85,9 +84,6 @@ Route::post('/payment/test', [paymentController::class, 'PaymentWeb']);
 Route::post('paypal/checkout', [PayPalController::class, 'checkout']);
 Route::get('paypal/success', [PayPalController::class, 'success'])->name('paypal.success');
 Route::get('paypal/cancel', [PayPalController::class, 'cancel'])->name('paypal.cancel');
-
-//payment route
-Route::post('/payment/store', [\App\Http\Controllers\api\PaymentController::class, 'store']);
 
 //suggest book
 Route::post('/suggest/book', [SuggestBookController::class, 'store']);
