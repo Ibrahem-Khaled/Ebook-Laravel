@@ -43,7 +43,7 @@ class PayPalController extends Controller
             }
         }
 
-        return response()->json(['error' => 'فشلت عملية الدفع']);
+        return response()->json(['error' => 'فشلت عملية الدفع'], 400);
     }
 
     // عند نجاح الدفع
