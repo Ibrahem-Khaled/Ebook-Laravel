@@ -82,7 +82,7 @@ class CartController extends Controller
         }
     }
 
-    public function removedBooksFromCartAndAddToUserBooks($userId, $type, $subscriptionId)
+    public function removedBooksFromCartAndAddToUserBooks($userId, $type, $subscriptionId=null)
     {
         $user = User::find($userId);
         if ($user) {
