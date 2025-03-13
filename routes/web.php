@@ -190,7 +190,7 @@ Route::group(['middleware' => ['auth', 'UserAdmin']], function () {
 });
 
 //payment pages
-Route::get('payment/page/successfuly/{userId}/{type}/{subscriptionId}', [CartController::class, 'removedBooksFromCartAndAddToUserBooks'])->name('payment.page.successfuly');
+Route::get('payment/page/successfuly/{userId}/{type}/{subscriptionId?}', [CartController::class, 'removedBooksFromCartAndAddToUserBooks'])->name('payment.page.successfuly');
 
 //public books
 Route::get('/book/view/{book}', [BookController::class, 'view'])->name('book.view');
