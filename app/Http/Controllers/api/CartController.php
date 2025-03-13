@@ -4,9 +4,11 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Book;
+use App\Models\Subscription;
 use App\Models\User;
 use App\Models\UserBook;
 use App\Models\UserCarts;
+use App\Models\UserSubscription;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -87,8 +89,11 @@ class CartController extends Controller
         $user = User::find($userId);
         if ($user) {
             if ($type == 'subscription') {
-                // $user->subscription()->detach($subscriptionId);
-                // return view('payment.success');
+                UserSubscription::create([
+                    'user_id' => $user->id,
+                    'subscription_id' => $subscriptionId,
+                    'expiry_date' => now()->addMonths(Subscription::find($subscriptionId)->duration),
+                ]);
 
                 return response()->json(['success' => 'subscription added successfully'], 200);
             }
