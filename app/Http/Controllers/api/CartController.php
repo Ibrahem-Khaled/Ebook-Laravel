@@ -87,8 +87,10 @@ class CartController extends Controller
         $user = User::find($userId);
         if ($user) {
             if ($type == 'subscription') {
-                $user->subscription()->detach($subscriptionId);
-                return view('payment.success');
+                // $user->subscription()->detach($subscriptionId);
+                // return view('payment.success');
+
+                return response()->json(['success' => 'subscription added successfully'], 200);
             }
 
             $carts = $user->carts;
