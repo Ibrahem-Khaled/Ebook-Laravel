@@ -89,13 +89,16 @@ class CartController extends Controller
         $user = User::find($userId);
         if ($user) {
             if ($type == 'subscription') {
-                UserSubscription::create([
+                $userSubscription = UserSubscription::create([
                     'user_id' => $user->id,
                     'subscription_id' => $subscriptionId,
                     'expiry_date' => now()->addMonths(Subscription::find($subscriptionId)->duration),
                 ]);
 
-                return response()->json(['success' => 'subscription added successfully'], 200);
+                return response()->json([
+                    'success' => 'subscription added successfully',
+                    'userSubscription' => $userSubscription,
+                ], 200);
             }
 
             $carts = $user->carts;
