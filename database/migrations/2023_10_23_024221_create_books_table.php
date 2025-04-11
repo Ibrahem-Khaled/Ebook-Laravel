@@ -26,6 +26,8 @@ return new class extends Migration {
             $table->string('book_image_url', 255)->nullable()->unique();
             $table->double('book_price')->nullable();
             $table->integer('book_discount')->nullable()->default(0);
+            $table->bigInteger('sort_order')->nullable();
+            $table->boolean('is_active')->default(1);
             $table->timestamps();
             $table->foreign('author_id')->references('id')->on('authors')->onDelete('cascade');
             $table->foreign('publisher_id')->references('id')->on('publishers')->onDelete('cascade');

@@ -13,6 +13,8 @@ return new class extends Migration {
         Schema::create('slide_shows', function (Blueprint $table) {
             $table->id();
             $table->string('image')->nullable();
+            $table->unsignedBigInteger('related_id')->nullable();
+            $table->enum('type_related', ['book', 'author', 'publisher'])->nullable();
             $table->timestamps();
         });
     }

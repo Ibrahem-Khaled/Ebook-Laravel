@@ -18,69 +18,68 @@ class UsersController extends Controller
     public function index(Request $request)
     {
         $q = $request->query('query');
+        $books = Book::all();
+        $roles = Role::all();
 
         if ($q) {
             $users = User::where('name', 'like', '%' . $q . '%')
                 ->orWhere('email', 'like', '%' . $q . '%')
                 ->paginate(10);
-            $books = Book::all();
-            $roles = Role::all();
-
         } else {
             $users = User::paginate(10);
-            $books = Book::all();
-            $roles = Role::all();
         }
 
         $publishers = Publisher::all();
         $authors = Author::all();
-        return view('users.index', compact('users', 'books', 'roles', 'publishers', 'authors'));
+        return view('dashboard.users.index', compact('users', 'books', 'roles', 'publishers', 'authors'));
     }
 
-    public function update(Request $request, $userId)
+    // حفظ مستخدم جديد
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'role_id' => 'required|exists:roles,id',
+            'is_active'=>'required|boolean',
+            'password' => 'required|string|min:8',
+        ]);
+
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'is_active' => $request->is_active,
+            'role_id' => $request->role_id,
+            'password' => bcrypt($request->password),
+        ]);
+
+        return redirect()->route('users.index')->with('success', 'تمت إضافة المستخدم بنجاح');
+    }
+
+    public function update(Request $request, User $user)
     {
         $request->validate([
             'name' => 'required',
             'email' => 'required|email',
+            'is_active'=>'required|boolean',
+            'role_id' => 'required|exists:roles,id',
         ]);
-        $user = User::find($userId);
+
         if (!$user) {
             return redirect()->back()->withErrors(['error' => 'User not found']);
         }
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
+            'is_active' => $request->is_active,
+            'role_id' => $request->role_id,
             'password' => Hash::make($request->password),
         ]);
         return redirect()->back()->with('success', 'User updated successfully');
     }
 
-
-    public function showBook($userId)
+    public function destroy(User $user)
     {
-        $user = User::find($userId);
-        if (!$user) {
-            return response()->json(['error' => 'User not found'], 404);
-        }
-        $userBooks = $user->books()->get();
-        return view('users.show', compact('userBooks', 'userId'));
-    }
-
-    public function destroyBook($userId, $bookId)
-    {
-        $user = User::find($userId);
-        if (!$user) {
-            return redirect()->back()->withErrors(['error' => 'User not found']);
-        }
-
-        $user->books()->detach($bookId);
-        return redirect()->route('user.show.books', $userId)->with('success', 'Book detached successfully');
-    }
-
-    public function delete($userId)
-    {
-        $user = User::find($userId);
-
         if (!$user) {
             return response()->json(['error' => 'User not found'], 404);
         }
@@ -93,63 +92,54 @@ class UsersController extends Controller
         }
     }
 
-    public function addBooksFromUser(Request $request)
+
+    //this function for add book to user ///
+    public function showBook($userId)
+    {
+        $user = User::find($userId);
+        if (!$user) {
+            return redirect()->route('users.index')->with('error', 'المستخدم غير موجود');
+        }
+        $userBooks = $user->books()->paginate(6); // عرض 6 كتب في الصفحة
+        return view('dashboard.users.books', compact('userBooks', 'user'));
+    }
+
+    public function destroyBook($userId, $bookId)
+    {
+        $user = User::find($userId);
+        if (!$user) {
+            return redirect()->back()->withErrors(['error' => 'User not found']);
+        }
+
+        $user->books()->detach($bookId);
+
+        return redirect()->back()->with('success', 'Book removed successfully');
+    }
+
+    public function addBooksFromUser(Request $request, $userId)
     {
         $validatedData = $request->validate([
-            'user_id' => 'required|exists:users,id',
             'book_ids' => 'required|array',
             'book_ids.*' => 'exists:books,id',
         ]);
 
         foreach ($validatedData['book_ids'] as $bookId) {
-            UserBook::create([
-                'user_id' => $validatedData['user_id'],
-                'book_id' => $bookId,
-            ]);
-        }
+            // التحقق من عدم وجود الكتاب للمستخدم قبل الإضافة
+            $exists = UserBook::where('user_id', $userId)
+                ->where('book_id', $bookId)
+                ->exists();
 
+            if (!$exists) {
+                UserBook::create([
+                    'user_id' => $userId,
+                    'book_id' => $bookId,
+                ]);
+            }
+        }
         return redirect()->back()->with('message', 'Books added successfully');
     }
 
-    public function addNewUser(Request $request)
-    {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|unique:users,email',
-            'password' => 'required|string|min:8',
-        ]);
-
-        $user = User::create([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'password' => Hash::make($validatedData['password']),
-            'role' => $request->role,
-        ]);
-
-        return redirect()->back()->with('message', 'User added successfully');
-    }
-    public function updateUserRole(Request $request, $userId)
-    {
-        $request->validate([
-            'role' => 'required|exists:roles,id',
-        ]);
-        $user = User::find($userId);
-        if (!$user) {
-            return redirect()->back()->with('error', 'User not found');
-        }
-        $user->update([
-            'role_id' => $request->role,
-        ]);
-
-        return redirect()->back()->with('message', 'User role updated successfully');
-    }
-
-    public function profile()
-    {
-        $user = User::find(auth()->user()->id);
-        return view('users.profile', compact('user'));
-    }
-
+    //this function for add author and publisher to user ///
     public function addAuthorAndPublisherFromUser(Request $request, $userId)
     {
         $user = User::find($userId);
@@ -214,7 +204,7 @@ class UsersController extends Controller
         $followedPublishers = $user->publisher;
         $followedAuthors = $user->author;
 
-        
+
 
         return view('users.followeDpublisherSandAuthors', compact('user', 'followedPublishers', 'followedAuthors'));
     }

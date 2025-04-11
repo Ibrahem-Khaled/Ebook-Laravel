@@ -11,36 +11,36 @@ use Illuminate\Support\Str;
 
 class PublisherController extends Controller
 {
+
+    // عرض قائمة الناشرين مع إمكانية البحث (اختياري)
     public function index(Request $request)
     {
         $q = $request->query('query');
 
         $publishers = Publisher::query()
+            ->withCount('books') // إضافة عدد الكتب لكل ناشر
             ->when($q, function ($query, $q) {
-                return $query->where('publisher_name', 'like', '%' . $q . '%');
+                return $query->where('publisher_name', 'like', '%' . $q . '%')
+                    ->orWhere('desc', 'like', '%' . $q . '%');
             })
             ->get();
 
-        return view('publisher.index', compact('publishers', 'q'));
+        return view('dashboard.publishers.index', compact('publishers', 'q'));
     }
 
-    public function create()
-    {
-        return view('publisher.create');
-    }
-
-    public function save(Request $request)
+    // تخزين بيانات الناشر الجديد مع رفع الصورة إن وُجدت
+    public function store(Request $request)
     {
         $request->validate([
-            'publisher_name' => 'required|string|max:255',
+            'publisher_name' => 'required|min:3',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
         $profilePath = null;
         if ($request->hasFile('image')) {
-            $pdfFile = $request->file('image');
-            $pdfFileName = Str::slug($request->publisher_name) . '.' . $pdfFile->getClientOriginalExtension();
-            $profilePath = $pdfFile->storeAs('profiles', $pdfFileName, 'public');
+            $file = $request->file('image');
+            $fileName = Str::slug($request->publisher_name) . '.' . $file->getClientOriginalExtension();
+            $profilePath = $file->storeAs('profiles', $fileName, 'public');
         }
 
         Publisher::create([
@@ -52,31 +52,16 @@ class PublisherController extends Controller
             'telegram' => $request->telegram,
             'whatsapp' => $request->whatsapp,
             'instagram' => $request->instagram,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
         ]);
 
-        return redirect()->route('publisher.index')->with('success', 'تم إنشاء دار النشر بنجاح');
+        return redirect()->route('publisher.index')->with('success', 'تم إنشاء الناشر بنجاح.');
     }
 
-    public function show($id)
-    {
-        $publisher = Publisher::findOrFail($id);
-
-        return view('publisher.show', compact('publisher'));
-    }
-
-    public function edit($id)
-    {
-        $publisher = Publisher::findOrFail($id);
-
-        return view('publisher.edit', compact('publisher'));
-    }
-
+    // تحديث بيانات الناشر وتعديل الصورة إن وُجدت
     public function update(Request $request, $id)
     {
         $request->validate([
-            'publisher_name' => 'required|string|max:255',
+            'publisher_name' => 'required|min:3',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
@@ -87,9 +72,9 @@ class PublisherController extends Controller
             if ($publisher->image) {
                 Storage::disk('public')->delete($publisher->image);
             }
-            $pdfFile = $request->file('image');
-            $pdfFileName = Str::slug($request->publisher_name) . '.' . $pdfFile->getClientOriginalExtension();
-            $profilePath = $pdfFile->storeAs('profiles', $pdfFileName, 'public');
+            $file = $request->file('image');
+            $fileName = Str::slug($request->publisher_name) . '.' . $file->getClientOriginalExtension();
+            $profilePath = $file->storeAs('profiles', $fileName, 'public');
         }
 
         $publisher->update([
@@ -101,13 +86,13 @@ class PublisherController extends Controller
             'telegram' => $request->telegram,
             'whatsapp' => $request->whatsapp,
             'instagram' => $request->instagram,
-            'updated_at' => Carbon::now()
         ]);
 
-        return redirect()->route('publisher.index')->with('success', 'تم تحديث دار النشر بنجاح');
+        return redirect()->route('publisher.index')->with('success', 'تم تحديث الناشر بنجاح.');
     }
 
-    public function delete($id)
+    // حذف الناشر مع حذف الصورة إن وُجدت
+    public function destroy($id)
     {
         $publisher = Publisher::findOrFail($id);
         if ($publisher->image) {
@@ -115,18 +100,7 @@ class PublisherController extends Controller
         }
         $publisher->delete();
 
-        return redirect()->route('publisher.index')->with('success', 'تم حذف دار النشر بنجاح');
+        return redirect()->route('publisher.index')->with('success', 'تم حذف الناشر بنجاح.');
     }
 
-    public function searchSelect(Request $request)
-    {
-        $search = $request->input('search', '');
-        $publishers = DB::table('publishers')
-            ->select('id', 'publisher_name')
-            ->where('publisher_name', 'like', '%' . $search . '%')
-            ->limit(5)
-            ->get();
-
-        return response()->json($publishers, 200);
-    }
 }

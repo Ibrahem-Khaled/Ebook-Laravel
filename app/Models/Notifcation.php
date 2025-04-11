@@ -9,5 +9,11 @@ class Notifcation extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $guarded = ['id'];
+
+    // علاقة مع المستخدم (إذا كان لديك موديل User)
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

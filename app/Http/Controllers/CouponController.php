@@ -24,7 +24,7 @@ class CouponController extends Controller
 
         $books = Book::all();
         $subscriptions = Subscription::all();
-        return view('coupon.home', compact('booksWithCoupons', 'subscriptionsWithCoupons', 'books', 'subscriptions'));
+        return view('dashboard.coupons.index', compact('booksWithCoupons', 'subscriptionsWithCoupons', 'books', 'subscriptions'));
     }
     public function store(Request $request)
     {
@@ -84,7 +84,7 @@ class CouponController extends Controller
             $coupons = $book->coupons;
         }
 
-        return view('coupon.bookCoupons', compact('coupons'));
+        return view('dashboard.coupons.bookCoupons', compact('coupons'));
     }
 
     public function showSubscriptionCoupons(Request $request, $id)
@@ -103,6 +103,6 @@ class CouponController extends Controller
             $coupons = $subscription->coupons;
         }
 
-        return view('coupon.subscriptionCoupons', compact('coupons', 'subscription'));
+        return view('dashboard.coupons.subscriptionCoupons', compact('coupons', 'subscription'));
     }
 }

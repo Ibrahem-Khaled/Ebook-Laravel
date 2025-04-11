@@ -16,28 +16,36 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
-
 class BookController extends Controller
 {
-    // in admin dashbhoard
+    // عرض قائمة الكتب في لوحة التحكم
     public function index(): View
     {
+        $books = Book::with(['category', 'subcategory', 'author', 'publisher'])->get();
+        $totalBooks = $books->count();
+        $activeBooks = $books->where('is_active', true)->count();
+        $inactiveBooks = $books->where('is_active', false)->count();
 
-        $books = Book::all();
-        return view('book.index', compact('books'));
-    }
-
-    public function create(): View
-    {
-        $authors = Author::all();
         $publishers = Publisher::all();
+        $authors = Author::all();
         $categories = Category::all();
-        return view('book.create', compact('authors', 'publishers', 'categories'));
+        $subcategories = Subcategory::all();
+
+        return view('dashboard.books.index', compact(
+            'books',
+            'totalBooks',
+            'activeBooks',
+            'inactiveBooks',
+            'publishers',
+            'authors',
+            'categories',
+            'subcategories',
+        ));
     }
 
-    public function save(Request $request): RedirectResponse
+    // حفظ كتاب جديد
+    public function store(Request $request): RedirectResponse
     {
-        // Validate the incoming request
         $request->validate([
             'book_isbn' => 'nullable|min:8',
             'book_pdf' => 'nullable|file|max:102400',
@@ -49,22 +57,21 @@ class BookController extends Controller
             'book_publication_date' => 'required|date',
             'book_image' => 'required|image',
             'book_number_pages' => 'required|integer|min:1',
-            'book_discount' => 'integer|max:100'
+            'book_discount' => 'integer|max:100',
+            'is_active' => 'boolean',
         ]);
 
+        $pdfFilePath = null;
         if ($request->hasFile('book_pdf')) {
             $pdfFile = $request->file('book_pdf');
             $pdfFileName = Str::slug($request->book_isbn) . '.' . $pdfFile->getClientOriginalExtension();
             $pdfFilePath = $pdfFile->storeAs('pdfs', $pdfFileName, 'public');
-        } else {
-            $pdfFilePath = null;
         }
 
         if ($request->hasFile("book_image")) {
             $image = $request->file("book_image");
             $imageName = Str::slug($request->book_isbn) . "." . $image->guessExtension();
             $destinationPath = public_path("img/books/");
-
             $image->move($destinationPath, $imageName);
 
             $book = Book::create([
@@ -82,12 +89,14 @@ class BookController extends Controller
                 'book_image_url' => 'img/books/' . $imageName,
                 'book_price' => $request->book_price,
                 'book_discount' => $request->book_discount,
+                'is_active' => $request->is_active ?? true, // تفعيل الكتاب افتراضيًا
             ]);
-            if ($book && $request->author_id_2 || $request->paper_url) {
+
+            if ($book && ($request->author_id_2 || $request->paper_url)) {
                 BookInfo::create([
                     'book_id' => $book->id,
                     'author_id' => $request->author_id_2,
-                    'paper_url' => $request->paper_url
+                    'paper_url' => $request->paper_url,
                 ]);
             }
         }
@@ -95,21 +104,7 @@ class BookController extends Controller
         return redirect()->route('book.index')->with('success', 'تم إنشاء الكتاب بنجاح.');
     }
 
-
-    public function edit($id): View
-    {
-        $book = Book::findOrFail($id);
-        $subcategory = Subcategory::findOrFail($book->subcategory_id);
-        $category = Category::findOrFail($subcategory->category_id);
-        $author = Author::findOrFail($book->author_id);
-        $publisher = Publisher::findOrFail($book->publisher_id);
-
-        $authors = Author::all();
-        $publishers = Publisher::all();
-        $categories = Category::all();
-        return view('book.edit', compact('book', 'subcategory', 'category', 'author', 'publisher', 'authors', 'publishers', 'categories'));
-    }
-
+    // تحديث كتاب
     public function update(Request $request, $id): RedirectResponse
     {
         $request->validate([
@@ -121,12 +116,13 @@ class BookController extends Controller
             'publisher_id' => 'required|integer',
             'book_publication_date' => 'required|date',
             'book_number_pages' => 'required|integer|min:1',
-            'book_discount' => 'integer|max:100|nullable'
+            'book_discount' => 'integer|max:100|nullable',
+            'is_active' => 'boolean',
         ]);
 
         $book = Book::findOrFail($id);
 
-        // Update PDF if a new file is uploaded
+        // تحديث ملف PDF إذا تم تحميل ملف جديد
         $pdfFilePath = $book->book_pdf;
         if ($request->hasFile('book_pdf')) {
             $pdfFile = $request->file('book_pdf');
@@ -134,7 +130,7 @@ class BookController extends Controller
             $pdfFilePath = $pdfFile->storeAs('pdfs', $pdfFileName, 'public');
         }
 
-        // Update image if a new file is uploaded
+        // تحديث الصورة إذا تم تحميل صورة جديدة
         $bookImageUrl = $book->book_image_url;
         if ($request->hasFile('book_image')) {
             if (Storage::disk('public')->exists($book->book_image_url)) {
@@ -147,7 +143,7 @@ class BookController extends Controller
             $bookImageUrl = 'img/books/' . $imageName;
         }
 
-        // Update book record
+        // تحديث بيانات الكتاب
         $book->update([
             'book_isbn' => $request->book_isbn,
             'category_id' => $request->category_id,
@@ -162,139 +158,43 @@ class BookController extends Controller
             'book_pdf' => $pdfFilePath,
             'book_image_url' => $bookImageUrl,
             'book_price' => $request->book_price,
-            'book_discount' => $request->book_discount
+            'book_discount' => $request->book_discount,
+            'is_active' => $request->is_active ?? $book->is_active, // الحفاظ على الحالة الحالية إذا لم يتم التحديث
         ]);
-        if ($book && $request->author_id_2 || $request->paper_url) {
-            BookInfo::create([
-                'book_id' => $book->id,
-                'author_id' => $request->author_id_2,
-                'paper_url' => $request->paper_url
-            ]);
+
+        if ($book && ($request->author_id_2 || $request->paper_url)) {
+            BookInfo::updateOrCreate(
+                ['book_id' => $book->id],
+                [
+                    'author_id' => $request->author_id_2,
+                    'paper_url' => $request->paper_url,
+                ]
+            );
         }
 
         return redirect()->route('book.index')->with('success', 'تم تحديث الكتاب بنجاح.');
     }
 
-    public function show($id): View
+    // تفعيل/إلغاء تفعيل الكتاب
+    public function toggleActivation($id): RedirectResponse
     {
         $book = Book::findOrFail($id);
-        return view('book.show', compact('book'));
+        $book->update(['is_active' => !$book->is_active]);
+
+        $status = $book->is_active ? 'مفعل' : 'غير مفعل';
+        return redirect()->back()->with('success', "تم تغيير حالة الكتاب إلى {$status} بنجاح.");
     }
 
-    public function view($id): View
+    // حذف كتاب
+    public function destroy($id): RedirectResponse
     {
         $book = Book::findOrFail($id);
-        $categories = Category::all();
-        return view('book.view', compact('book', 'categories'));
-    }
-
-    public function search(): View
-    {
-        $categories = Category::all();
-
-        $sql = 'SELECT
-        books.id,
-        books.book_isbn,
-        books.book_title,
-        books.book_price,
-        books.book_image_url,
-        authors.author_name,
-        publishers.publisher_name,
-        categories.category_name,
-        subcategories.subcategory_name
-        FROM books, authors, publishers, categories, subcategories
-        WHERE books.author_id = authors.id
-        AND books.publisher_id = publishers.id
-        AND books.subcategory_id = subcategories.id
-        AND subcategories.category_id = categories.id
-        ORDER BY books.updated_at DESC
-        LIMIT 30';
-        $books = DB::select($sql);
-
-        return view('book.search', compact('categories', 'books'));
-    }
-    public function search2(Request $request): View
-    {
-        $categorySelected = null;
-        if (isset($request->category)) {
-            $categorySelected = Category::findOrFail($request->category);
-        }
-
-        $subcategorySelected = null;
-        if (isset($request->subcategory)) {
-            $subcategorySelected = Subcategory::findOrFail($request->subcategory);
-        }
-        $categories = Category::all();
-        $sql = 'SELECT
-        books.id,
-        books.book_isbn,
-        books.book_title,
-        books.book_price,
-        books.book_image_url,
-        authors.author_name,
-        publishers.publisher_name,
-        categories.category_name,
-        subcategories.subcategory_name
-        FROM books, authors, publishers, categories, subcategories
-        WHERE books.author_id = authors.id
-        AND books.publisher_id = publishers.id
-        AND books.subcategory_id = subcategories.id
-        AND subcategories.category_id = categories.id';
-
-        if (isset($request->category)) {
-            $sql = $sql . " AND categories.id = " . $request->category . " ";
-        }
-
-        if (isset($request->subcategory)) {
-            $sql = $sql . "AND subcategories.id = " . $request->subcategory;
-        }
-
-        $sql = $sql . ' ORDER BY books.updated_at DESC LIMIT 50';
-
-
-
-        $books = DB::select($sql);
-
-        return view('book.search', compact('categories', 'categorySelected', 'subcategorySelected', 'books'));
-    }
-
-    public function delete($id): RedirectResponse
-    {
-        $book = Book::findOrFail($id);
-
         $book->delete();
 
-        return redirect()->route('book.index')->with('success', "Libro eliminado correctamente");
+        return redirect()->route('book.index')->with('success', 'تم حذف الكتاب بنجاح.');
     }
 
-    public function searchSelect($search): JsonResponse
-    {
-        $sql = "SELECT
-    books.id,
-    books.book_isbn,
-    books.book_title,
-    books.book_price,
-    authors.author_name,
-    publishers.publisher_name,
-    categories.category_name,
-    subcategories.subcategory_name
-    FROM books, authors, publishers, categories, subcategories
-    WHERE books.author_id = authors.id
-    AND books.publisher_id = publishers.id
-    AND books.subcategory_id = subcategories.id
-    AND subcategories.category_id = categories.id
-    AND(
-        books.book_title LIKE '%$search%' OR
-        books.book_isbn LIKE '%$search%' OR
-        authors.author_name LIKE '%$search%' OR
-        publishers.publisher_name LIKE '%$search%')
-        ORDER BY books.updated_at DESC
-        LIMIT 30";
-
-        $books = DB::select($sql);
-        return response()->json($books);
-    }
-
+    // حذف مترجم الكتاب
     public function deleteBookTranslator($translatorId): RedirectResponse
     {
         $book = BookInfo::findOrFail($translatorId);
@@ -302,4 +202,24 @@ class BookController extends Controller
         return redirect()->back()->with('success', "تم حذف المترجم بنجاح");
     }
 
+    // عرض الكتب التابعة لفئة معينة
+    public function showBooks($categoryId)
+    {
+        $category = Category::findOrFail($categoryId);
+        $books = $category->books()->orderBy('sort_order')->get();
+
+        return view('dashboard.books.index', compact('category', 'books'));
+    }
+
+    // تحديث ترتيب الكتب
+    public function updateBooksOrder(Request $request, $categoryId): JsonResponse
+    {
+        $order = $request->order;
+
+        foreach ($order as $index => $id) {
+            Book::where('id', $id)->update(['sort_order' => $index + 1]);
+        }
+
+        return response()->json(['success' => true]);
+    }
 }

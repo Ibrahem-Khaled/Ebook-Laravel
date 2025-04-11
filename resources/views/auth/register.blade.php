@@ -1,147 +1,131 @@
+<!DOCTYPE html>
 <html lang="ar">
+
 <head>
-    <title>التسجيل</title>
-    <!-- العناصر الأساسية المطلوبة -->
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    @include('components.seo')
 
-    <!--     الخطوط والرموز     -->
-    <link rel="stylesheet" type="text/css"
-          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons"/>
 
-    <!-- Material Icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
-    <!-- Material Kit CSS -->
-    <link href={{asset('css/material-kit.css')}} rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.min.css" rel="stylesheet" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            text-align: right;
+        }
+    </style>
 </head>
 
 <body>
-<!-- شريط التنقل -->
-<nav class="navbar navbar-expand-lg position-absolute top-0 z-index-3 w-100 shadow-none my-3">
-    <div class="container">
-        <a class="navbar-brand  text-dark " href="{{ route('home') }}" rel="tooltip"
-           title="تصميم وتشفير بواسطة ديبي ب." data-placement="bottom">
-            مثال للتجارة الإلكترونية
-        </a>
+    <section class="h-100 gradient-form" style="background-color: #eee;">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-xl-10">
+                    <div class="card rounded-3 text-black">
+                        <div class="row g-0">
+                            <div class="col-lg-6">
+                                <div class="card-body p-md-5 mx-md-4">
 
-    </div>
-</nav>
+                                    <div class="text-center">
+                                        <img src="{{ asset('assets/img/logo-ct-dark.png') }}" style="width: 185px;"
+                                            alt="الشعار">
+                                        <h4 class="mt-1 mb-5 pb-1">إنشاء حساب جديد</h4>
+                                    </div>
 
-<!-- نهاية شريط التنقل -->
+                                    @if (session('error'))
+                                        <div class="alert alert-danger text-center">
+                                            {{ session('error') }}
+                                        </div>
+                                    @endif
 
-<div class="page-header align-items-start min-vh-100 mb-2" style="background-color: #f9f9f9;" loading="lazy">
-    {{--    <span class="mask bg-gradient-dark opacity-6"></span>--}}
-    <br><br>
-    <div class="container my-auto mx-auto">
-        <div class="row">
-            <div class="col-lg-4 col-md-8 col-12 mx-auto">
-                <div class="card z-index-0 fadeIn3 fadeInBottom">
-                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                        <div class="bg-gradient-warning shadow-warning border-radius-lg py-3 pe-1">
-                            <h4 class="text-white font-weight-bolder text-center mt-2 mb-0">سجل</h4>
-                            <br><br>
+                                    @if ($errors->any())
+                                        <div class="alert alert-danger">
+                                            <ul>
+                                                @foreach ($errors->all() as $error)
+                                                    <li>{{ $error }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @endif
+
+                                    <form method="POST" action="{{ route('customRegister') }}">
+                                        @csrf
+
+                                        <p>يرجى ملء البيانات لإنشاء حساب جديد</p>
+
+                                        <div data-mdb-input-init class="form-outline mb-4">
+                                            <input type="text" name="name" id="formName" class="form-control"
+                                                placeholder="أدخل اسمك الكامل" required />
+                                            <label class="form-label" for="formName">الاسم الكامل</label>
+                                        </div>
+                                        <div data-mdb-input-init class="form-outline mb-4">
+                                            <input type="email" name="email" id="formEmail" class="form-control"
+                                                placeholder="أدخل بريدك الإلكتروني" required />
+                                            <label class="form-label" for="formEmail">البريد الإلكتروني</label>
+                                        </div>
+
+                                        <div data-mdb-input-init class="form-outline mb-4">
+                                            <input type="text" name="phone" id="formPhone" class="form-control"
+                                                placeholder="أدخل رقم هاتفك" required />
+                                            <label class="form-label" for="formPhone">رقم الهاتف</label>
+                                        </div>
+
+                                        <div data-mdb-input-init class="form-outline mb-4">
+                                            <input type="text" name="address" id="formAddress" class="form-control"
+                                                placeholder="أدخل عنوانك" required />
+                                            <label class="form-label" for="formAddress">العنوان</label>
+                                        </div>
+
+                                        <div data-mdb-input-init class="form-outline mb-4">
+                                            <input type="password" name="password" id="formPassword"
+                                                class="form-control" placeholder="أدخل كلمة المرور" required />
+                                            <label class="form-label" for="formPassword">كلمة المرور</label>
+                                        </div>
+
+                                        <div data-mdb-input-init class="form-outline mb-4">
+                                            <input type="password" name="password_confirmation"
+                                                id="formPasswordConfirmation" class="form-control"
+                                                placeholder="أعد إدخال كلمة المرور" required />
+                                            <label class="form-label" for="formPasswordConfirmation">تأكيد كلمة
+                                                المرور</label>
+                                        </div>
+                                        <div class="text-center pt-1 mb-5 pb-1">
+                                            <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3"
+                                                style="background-color: #4a2f85" type="submit">إنشاء حساب</button>
+                                        </div>
+
+                                        <div class="d-flex align-items-center justify-content-center pb-4">
+                                            <p class="mb-0 me-2">لديك حساب بالفعل؟</p>
+                                            <a href="{{ route('login') }}" class="btn btn-outline-danger">تسجيل
+                                                الدخول</a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 d-flex align-items-center gradient-custom-2"
+                                style="background-image: url('https://mdbcdn.b-cdn.net/img/Photos/Others/images/76.jpg'); 
+                                background-size: cover; background-position: center;">
+                                <div class="text-white px-3 py-4 p-md-5 mx-md-4">
+                                    <h4 class="mb-4">نحن هنا لمساعدتك</h4>
+                                    <p class="small mb-0">إذا كنت تواجه أي مشاكل، يرجى التواصل معنا وسنقوم بمساعدتك بكل
+                                        سرور.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <form method="POST" action="{{ route('register') }}" role="form" class="text-start">
-                            @csrf
-                            <div class="input-group input-group-outline my-3">
-                                <label class="form-label">الاسم</label>
-                                <input name="name" type="text" class="form-control">
-                                <x-input-error :messages="$errors->get('name')" class="mt-2" />
-                            </div>
-                            <div class="input-group input-group-outline my-3">
-                                <label class="form-label">البريد الإلكتروني</label>
-                                <input name="email" type="email" class="form-control">
-                            </div>
-                            <div class="input-group input-group-outline mb-3">
-                                <label class="form-label">كلمة المرور</label>
-                                <input name="password" type="password" class="form-control">
-                            </div>
-                            <div class="input-group input-group-outline mb-3">
-                                <label class="form-label">تأكيد كلمة المرور</label>
-                                <input name="password_confirmation" type="password" class="form-control">
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" class="btn bg-gradient-warning w-100 my-1">متابعة</button>
-                            </div>
-                            <div class="text-center">
-                                <a href="{{ route('login.google') }}" class="btn bg-outline-warning w-100 my-1">متابعة
-                                    مع جوجل
-                                    <svg style="margin-left: 3%; margin-top: -2%" xmlns="http://www.w3.org/2000/svg"
-                                         height="24" viewBox="0 0 24 24" width="24">
-                                        <path
-                                            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                                            fill="#4285F4"/>
-                                        <path
-                                            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                                            fill="#34A853"/>
-                                        <path
-                                            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                                            fill="#FBBC05"/>
-                                        <path
-                                            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                                            fill="#EA4335"/>
-                                        <path d="M1 1h22v22H1z" fill="none"/>
-                                    </svg>
-                                </a>
-                            </div>
-                            <p class="mt-4 text-sm text-center">
-                                هل لديك حساب؟ <a href="{{route('login')}}" class="text-warning">تسجيل الدخول</a>
-                            </p>
-                        </form>
-                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <footer class="footer position-absolute bottom-2 py-2 w-100">
-        <div class="container">
-            <div class="row align-items-center justify-content-lg-between">
-                <div class="col-12 col-md-6 my-auto">
-                    <div class="copyright text-center text-sm text-dark text-lg-start">
-                        ©
-                        <script>
-                            document.write(new Date().getFullYear())
-                        </script>
-                        ,
-                        تصميم بواسطة
-                        <a href="https://www.creative-tim.com" class="font-weight-bold text-dark" target="_blank">ديبي ب.</a>
-
-                    </div>
-                </div>
-                <div class="col-12 col-md-6">
-                    <ul class="nav nav-footer justify-content-center justify-content-lg-end">
-                        <li class="nav-item">
-                            <a href="https://www.creative-tim.com" class="nav-link text-dark" target="_blank"></a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="https://www.creative-tim.com/presentation" class="nav-link text-dark"
-                               target="_blank">معلومات عنا</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="https://www.creative-tim.com/blog" class="nav-link text-dark"
-                               target="_blank">مدونة</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="https://www.creative-tim.com/license" class="nav-link pe-0 text-dark"
-                               target="_blank">اتصل بنا</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </footer>
-</div>
-
-<!--   العناصر الأساسية لجافا سكريبت   -->
-<script src="{{asset('js/core/popper.min.js')}}" type="text/javascript"></script>
-<script src="{{asset('js/core/bootstrap.min.js')}}" type="text/javascript"></script>
-<script src="{{asset('js/plugins/perfect-scrollbar.min.js')}}"></script>
-<!-- مركز التحكم لـ Material UI Kit: تأثيرات البارالاكس، النصوص للصفحات المثالية الخ. -->
-
-<script src="{{asset('js/material-kit.min.js')}}" type="text/javascript"></script>
+    </section>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.umd.min.js"></script>
 </body>
 
 </html>
