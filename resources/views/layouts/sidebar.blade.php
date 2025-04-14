@@ -64,6 +64,11 @@
             <i class="fas fa-fw fa-bell"></i>
             <span>الاشعارات</span></a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('subscriptions.index') }}">
+            <i class="fas fa-fw fa-crown"></i>
+            <span>الاشتراكات</span></a>
+    </li>
 
 
     <!-- Sidebar Toggler (Sidebar) -->

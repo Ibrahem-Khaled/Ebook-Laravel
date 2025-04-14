@@ -11,7 +11,7 @@ class subscriptionController extends Controller
     public function index()
     {
         $subscriptions = Subscription::withCount('users')->get();
-        return view('subscriptions.index', compact('subscriptions'));
+        return view('dashboard.subscriptions.index', compact('subscriptions'));
     }
 
     // إنشاء اشتراك جديد
@@ -23,7 +23,7 @@ class subscriptionController extends Controller
             'icon' => 'nullable|string',
             'price' => 'required|numeric',
             'duration' => 'required|string',
-            'is_active' => 'required|boolean',
+            // 'is_active' => 'required|boolean',
         ]);
 
         Subscription::create($validated);
@@ -40,7 +40,7 @@ class subscriptionController extends Controller
             'icon' => 'nullable|string',
             'price' => 'required|numeric',
             'duration' => 'required|string',
-            'is_active' => 'required|boolean',
+            // 'is_active' => 'required|boolean',
         ]);
 
         $subscription = Subscription::findOrFail($id);
@@ -58,13 +58,11 @@ class subscriptionController extends Controller
         return redirect()->back()->with('success', 'Subscription deleted successfully!');
     }
 
-
-
     public function manageUsers(Subscription $subscription)
     {
         $users = $subscription->users; // المستخدمون المشتركين
         $allUsers = User::all(); // جميع المستخدمين لإضافتهم
-        return view('subscriptions.users', compact('subscription', 'users', 'allUsers'));
+        return view('dashboard.subscriptions.users', compact('subscription', 'users', 'allUsers'));
     }
 
     // إضافة مستخدم إلى الاشتراك
@@ -83,11 +81,27 @@ class subscriptionController extends Controller
         return redirect()->route('subscriptions.users', $subscription->id)->with('success', 'تم إضافة المستخدم بنجاح.');
     }
 
-    // إزالة مستخدم من الاشتراك
-    public function removeUser(Subscription $subscription, User $user)
+    // حذف مستخدم من الاشتراك
+    public function removeUser(Request $request, Subscription $subscription, User $user)
     {
         $subscription->users()->detach($user->id);
 
-        return redirect()->route('subscriptions.users', $subscription->id)->with('success', 'تم إزالة المستخدم بنجاح.');
+        return redirect()->route('subscriptions.users', $subscription->id)
+            ->with('success', 'تم حذف المستخدم من الاشتراك بنجاح');
+    }
+
+    // إزالة مستخدم من الاشتراك
+    public function renewUser(Request $request, Subscription $subscription, User $user)
+    {
+        $request->validate([
+            'expiry_date' => 'required|date|after_or_equal:today'
+        ]);
+
+        $subscription->users()->updateExistingPivot($user->id, [
+            'expiry_date' => $request->expiry_date
+        ]);
+
+        return redirect()->route('subscriptions.users', $subscription->id)
+            ->with('success', 'تم تجديد اشتراك المستخدم بنجاح');
     }
 }

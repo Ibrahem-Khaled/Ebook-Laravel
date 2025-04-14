@@ -21,7 +21,7 @@ class BookController extends Controller
     // عرض قائمة الكتب في لوحة التحكم
     public function index(): View
     {
-        $books = Book::with(['category', 'subcategory', 'author', 'publisher'])->get();
+        $books = Book::with(['category', 'subcategory', 'author', 'publisher'])->paginate(10);
         $totalBooks = $books->count();
         $activeBooks = $books->where('is_active', true)->count();
         $inactiveBooks = $books->where('is_active', false)->count();

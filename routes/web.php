@@ -11,6 +11,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublisherController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SlideShowController;
+use App\Http\Controllers\subscriptionController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
@@ -68,6 +69,11 @@ Route::group(['middleware' => ['auth', 'UserAdmin'], 'prefix' => 'admin'], funct
     Route::resource('slides', SlideShowController::class);
     Route::resource('notifcations', NotifcationsController::class);
 
+    Route::resource('subscriptions', subscriptionController::class);
+    Route::get('subscriptions/{subscription}/users', [subscriptionController::class, 'manageUsers'])->name('subscriptions.users');
+    Route::post('subscriptions/{subscription}/add-user', [subscriptionController::class, 'addUser'])->name('subscriptions.addUser');
+    Route::post('/subscriptions/{subscription}/remove-user', [SubscriptionController::class, 'removeUser'])->name('subscriptions.removeUser');
+    Route::post('/subscriptions/{subscription}/renew/{user}', [SubscriptionController::class, 'renewUser'])->name('subscriptions.renewUser');
 });
 
 //payment pages

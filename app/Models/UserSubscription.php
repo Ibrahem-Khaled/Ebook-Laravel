@@ -14,4 +14,17 @@ class UserSubscription extends Model
         'subscription_id',
         'expiry_date',
     ];
+    protected $casts = [
+        'expiry_date' => 'datetime',
+    ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function subscription()
+    {
+        return $this->belongsTo(Subscription::class);
+    }
+
 }

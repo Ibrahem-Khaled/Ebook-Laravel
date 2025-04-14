@@ -20,7 +20,13 @@ class Subscription extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_subscriptions', 'subscription_id', 'user_id')->withPivot('id', 'expiry_date');
+        return $this->belongsToMany(
+            User::class,
+            'user_subscriptions',
+            'subscription_id',
+            'user_id'
+        )
+            ->withPivot('id', 'expiry_date');
 
     }
     public function coupons()
