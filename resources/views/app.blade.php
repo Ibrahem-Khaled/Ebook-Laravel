@@ -186,7 +186,7 @@
                                     <div
                                         class="bg-white rounded-lg shadow-md overflow-hidden group transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-xl border border-transparent hover:border-gray-200">
                                         <a href="{{ route('books.show', $book->id) }}" class="block overflow-hidden">
-                                            <img src="{{ asset($book->book_image_url) }}" alt="{{ $book->book_name }}"
+                                            <img src="{{ asset($book->book_image_url) }}" alt="{{ $book->book_title }}"
                                                 class="w-full h-64 object-cover transition duration-500 ease-in-out group-hover:scale-105">
                                             @if ($book->discount > 0)
                                                 <span
@@ -197,14 +197,14 @@
                                         </a>
                                         <div class="p-4">
                                             <h3 class="font-semibold text-md mb-1 truncate"
-                                                title="{{ $book->book_name }}">
+                                                title="{{ $book->book_title }}">
                                                 <a href="#" class="text-gray-800 hover:text-primary transition">
-                                                    {{ $book->book_name }}"
+                                                    {{ $book->book_title }}"
                                                 </a>
                                             </h3>
                                             <p class="text-sm text-gray-500 mb-2 truncate">
                                                 <a href="#" class="hover:text-primary hover:underline">
-                                                    {{ $book->author->name }}
+                                                    {{ $book->author->author_name }}
                                                 </a>
                                             </p>
                                             <div class="flex items-center mb-2">
@@ -222,7 +222,7 @@
                                                     @endif
                                                 @endfor
                                                 <span
-                                                    class="text-xs text-gray-500 mr-1">({{ $book->reviews_count }})</span>
+                                                    class="text-xs text-gray-500 mr-1">({{ $book->bookRatings->count() }})</span>
                                             </div>
                                             <div
                                                 class="flex justify-between items-center pt-2 border-t border-gray-100">
@@ -232,11 +232,11 @@
                                                             class="text-primary font-bold text-lg">{{ number_format($book->price_after_discount, 2) }}
                                                             د.ج</span>
                                                         <span
-                                                            class="text-xs text-gray-500 line-through mr-2">{{ number_format($book->price, 2) }}
+                                                            class="text-xs text-gray-500 line-through mr-2">{{ number_format($book->book_price, 2) }}
                                                             د.ج</span>
                                                     @else
                                                         <span
-                                                            class="text-primary font-bold text-lg">{{ number_format($book->price, 2) }}
+                                                            class="text-primary font-bold text-lg">{{ number_format($book->book_price, 2) }}
                                                             د.ج</span>
                                                     @endif
                                                 </div>
