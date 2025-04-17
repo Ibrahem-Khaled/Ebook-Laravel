@@ -63,18 +63,18 @@ class HomeController extends Controller
     public function show()
     {
 
-        return redirect()->route('home.dashboard');
+        // return redirect()->route('home.dashboard');
 
-        //     $books = Book::take(5)->get();
-        //     $categories = Category::all();
-        //     $categories->each(function ($category) {
-        //         $category->setRelation('books', $category->books()->limit(4)->get());
-        //     });
+        $books = Book::take(5)->get();
+        $categories = Category::all();
+        $categories->each(function ($category) {
+            $category->setRelation('books', $category->books()->limit(5)->get());
+        });
 
-        //     $authors = Author::all();
-        //     $publishers = Publisher::all();
+        $authors = Author::all();
+        $publishers = Publisher::all();
 
-        //     return view('home', compact('categories', 'books', 'authors', 'publishers'));
+        return view('app', compact('categories', 'books', 'authors', 'publishers'));
     }
 
     public function author($id)
