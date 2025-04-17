@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>متجر الكتب الفاخر</title>
+    <title>الخزانة للكتب الالكترونية</title>
 
     {{-- Google Fonts: Tajawal --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -186,7 +186,7 @@
                                     <div
                                         class="bg-white rounded-lg shadow-md overflow-hidden group transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-xl border border-transparent hover:border-gray-200">
                                         <a href="{{ route('books.show', $book->id) }}" class="block overflow-hidden">
-                                            <img src="{{ asset($book->book_image_url) }}" alt="{{ $book->title }}"
+                                            <img src="{{ asset($book->book_image_url) }}" alt="{{ $book->book_name }}"
                                                 class="w-full h-64 object-cover transition duration-500 ease-in-out group-hover:scale-105">
                                             @if ($book->discount > 0)
                                                 <span
@@ -197,9 +197,9 @@
                                         </a>
                                         <div class="p-4">
                                             <h3 class="font-semibold text-md mb-1 truncate"
-                                                title="{{ $book->title }}">
+                                                title="{{ $book->book_name }}">
                                                 <a href="#" class="text-gray-800 hover:text-primary transition">
-                                                    {{ $book->title }}
+                                                    {{ $book->book_name }}"
                                                 </a>
                                             </h3>
                                             <p class="text-sm text-gray-500 mb-2 truncate">
