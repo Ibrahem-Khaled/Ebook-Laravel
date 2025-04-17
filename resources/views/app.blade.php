@@ -276,10 +276,10 @@
                 loop: true,
                 slidesPerView: 2,
                 spaceBetween: 20,
-                pagination: {
-                    el: '.authors-swiper .swiper-pagination',
-                    clickable: true,
-                },
+                // pagination: {
+                //     el: '.authors-swiper .swiper-pagination',
+                //     clickable: true,
+                // },
                 navigation: {
                     nextEl: '.authors-swiper .swiper-button-next',
                     prevEl: '.authors-swiper .swiper-button-prev',
@@ -311,10 +311,10 @@
                 loop: true,
                 slidesPerView: 3,
                 spaceBetween: 30,
-                pagination: {
-                    el: '.publishers-swiper .swiper-pagination',
-                    clickable: true,
-                },
+                // pagination: {
+                //     el: '.publishers-swiper .swiper-pagination',
+                //     clickable: true,
+                // },
                 navigation: {
                     nextEl: '.publishers-swiper .swiper-button-next',
                     prevEl: '.publishers-swiper .swiper-button-prev',
