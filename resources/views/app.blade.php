@@ -12,18 +12,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 
-    {{-- Tailwind CSS via CDN (for demonstration) --}}
-    {{-- في مشروع Laravel حقيقي، ستستخدم Vite أو Mix لتضمين Tailwind --}}
+    {{-- Tailwind CSS via CDN --}}
     <script src="https://cdn.tailwindcss.com"></script>
+
+    {{-- Swiper CSS --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
 
     {{-- ستايلات مخصصة إضافية --}}
     <style>
-        /* تطبيق الخط الافتراضي */
         body {
             font-family: 'Tajawal', sans-serif;
         }
 
-        /* تعريف ألوان مخصصة لتجاوز أو تكملة Tailwind */
         .text-primary {
             color: #D1935E;
         }
@@ -40,7 +40,6 @@
             background-color: #B87D4D;
         }
 
-        /* درجة أغمق للـ hover */
         .hover\:text-primary:hover {
             color: #D1935E;
         }
@@ -48,33 +47,25 @@
         .hover\:border-primary:hover {
             border-color: #D1935E;
         }
-
-        /* يمكنك إضافة المزيد من الستايلات المخصصة هنا إذا لزم الأمر */
     </style>
-
 </head>
 
 <body class="bg-gray-50 text-gray-800 antialiased">
 
     <nav class="bg-white shadow-md border-b-2 border-primary">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            {{-- الشعار --}}
             <a class="text-xl font-bold text-primary" href="#">
                 <img src="{{ asset('img/logo-ct-dark.png') }}" alt="الشعار" style="width: 105px;">
             </a>
-            {{-- الروابط --}}
             <div class="hidden md:flex items-center space-x-5 space-x-reverse">
                 <a href="#" class="text-gray-700 hover:text-primary transition duration-300">الرئيسية</a>
                 <a href="#" class="text-gray-700 hover:text-primary transition duration-300">الفئات</a>
                 <a href="#" class="text-gray-700 hover:text-primary transition duration-300">المؤلفون</a>
                 <a href="#" class="text-gray-700 hover:text-primary transition duration-300">الناشرون</a>
-                {{-- أضف روابط أخرى هنا (سلة، تسجيل دخول) --}}
             </div>
-            {{-- زر القائمة للموبايل --}}
             <div class="md:hidden">
                 <button class="text-gray-700 focus:outline-none">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 6h16M4 12h16m-7 6h7"></path>
                     </svg>
@@ -84,10 +75,9 @@
     </nav>
 
     <main>
-
+        {{-- سلايد رئيسي --}}
         <section id="slideshow"
             class="mb-12 bg-gradient-to-r from-gray-100 to-gray-200 h-72 md:h-96 flex items-center justify-center text-gray-800 relative overflow-hidden">
-            {{-- يمكنك إضافة صورة خلفية للسلايد هنا --}}
             <img src="{{ asset('img/logo-ct-dark.png') }}"
                 class="absolute inset-0 w-full h-full object-cover opacity-20" alt="">
             <div class="text-center z-10 p-6">
@@ -100,68 +90,81 @@
             </div>
         </section>
 
+        {{-- إحصائيات --}}
         <section id="stats" class="py-12 bg-white">
             <div class="container mx-auto px-6">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
                     <div class="p-6 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition">
-                        <div class="text-5xl font-bold text-primary">1250+</div> {{-- مثال: عدد الكتب --}}
+                        <div class="text-5xl font-bold text-primary">1250+</div>
                         <div class="mt-3 text-lg text-gray-600">كتاب متاح</div>
                     </div>
                     <div class="p-6 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition">
-                        <div class="text-5xl font-bold text-primary">300+</div> {{-- مثال: عدد المؤلفين --}}
+                        <div class="text-5xl font-bold text-primary">300+</div>
                         <div class="mt-3 text-lg text-gray-600">مؤلف مبدع</div>
                     </div>
                     <div class="p-6 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition">
-                        <div class="text-5xl font-bold text-primary">50+</div> {{-- مثال: عدد الناشرين --}}
+                        <div class="text-5xl font-bold text-primary">50+</div>
                         <div class="mt-3 text-lg text-gray-600">ناشر معتمد</div>
                     </div>
                 </div>
             </div>
         </section>
 
+        {{-- كاروسيل المؤلفين --}}
         <section id="authors" class="py-16 bg-gray-50">
             <div class="container mx-auto px-6">
                 <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">تعرف على مؤلفينا</h2>
                 <div class="w-24 h-1 bg-primary mx-auto mb-10"></div>
 
-                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                    {{-- مثال لمؤلف 1 --}}
-                    @foreach ($authors as $item)
-                        <a href="#"
-                            class="block text-center p-4 bg-white rounded-lg shadow-sm border border-transparent hover:border-primary hover:shadow-lg transition duration-300 group">
-                            <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->author_name }}"
-                                class="w-24 h-24 rounded-full mx-auto mb-3 object-cover border-2 border-gray-200 group-hover:border-primary transition duration-300">
-                            <h3 class="font-semibold text-gray-800 group-hover:text-primary transition duration-300">اسم
-                                {{ $item->author_name }}</h3>
-                            <p class="text-sm text-gray-500">{{ $item->books()->count() }} كتاب</p>
-                        </a>
-                    @endforeach
-                </div>
-                <div class="text-center mt-10">
-                    <a href="#" class="text-primary hover:underline font-medium">عرض كل المؤلفين &rarr;</a>
+                <div class="swiper authors-swiper">
+                    <div class="swiper-wrapper">
+                        @foreach ($authors as $item)
+                            <div class="swiper-slide">
+                                <a href="#"
+                                    class="block text-center p-4 bg-white rounded-lg shadow-sm border border-transparent hover:border-primary hover:shadow-lg transition duration-300 group">
+                                    <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->author_name }}"
+                                        class="w-24 h-24 rounded-full mx-auto mb-3 object-cover border-2 border-gray-200 group-hover:border-primary transition duration-300">
+                                    <h3
+                                        class="font-semibold text-gray-800 group-hover:text-primary transition duration-300">
+                                        {{ $item->author_name }}
+                                    </h3>
+                                    <p class="text-sm text-gray-500">{{ $item->books()->count() }} كتاب</p>
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="swiper-pagination mt-4"></div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
                 </div>
             </div>
         </section>
 
+        {{-- كاروسيل الناشرين --}}
         <section id="publishers" class="py-16 bg-white">
             <div class="container mx-auto px-6">
                 <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">شركاؤنا من الناشرين</h2>
                 <div class="w-24 h-1 bg-primary mx-auto mb-10"></div>
 
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 items-center">
-                    @foreach ($publishers as $item)
-                        <a href="#" class="block text-center p-4 group">
-                            <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->publisher_name }}"
-                                class="h-16 mx-auto mb-2 object-contain transition duration-300 ease-in-out transform group-hover:scale-110">
-                        </a>
-                    @endforeach
-                </div>
-                <div class="text-center mt-10">
-                    <a href="#" class="text-primary hover:underline font-medium">عرض كل الناشرين &rarr;</a>
+                <div class="swiper publishers-swiper">
+                    <div class="swiper-wrapper">
+                        @foreach ($publishers as $item)
+                            <div class="swiper-slide">
+                                <a href="#" class="block text-center p-4 group">
+                                    <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->publisher_name }}"
+                                        class="h-16 mx-auto mb-2 object-contain transition duration-300 ease-in-out transform group-hover:scale-110">
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="swiper-pagination mt-4"></div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
                 </div>
             </div>
         </section>
 
+        {{-- بقية الأقسام (الفئات والكتب) --}}
         <section id="categories-books" class="py-16 bg-gray-50">
             <div class="container mx-auto px-6">
                 @foreach ($categories as $category)
@@ -188,7 +191,7 @@
                                             @if ($book->discount > 0)
                                                 <span
                                                     class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                                                    خصص {{ $book->discount }}%
+                                                    خصم {{ $book->discount }}%
                                                 </span>
                                             @endif
                                         </a>
@@ -204,27 +207,23 @@
                                                     {{ $book->author->name }}
                                                 </a>
                                             </p>
-
                                             <div class="flex items-center mb-2">
                                                 @for ($i = 1; $i <= 5; $i++)
                                                     @if ($i <= $book->rating)
                                                         <svg class="w-4 h-4 text-yellow-400" fill="currentColor"
                                                             viewBox="0 0 20 20">
-                                                            <path
-                                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                            <path d="M9.049 2.927c.3-.921 ..." />
                                                         </svg>
                                                     @else
                                                         <svg class="w-4 h-4 text-gray-300" fill="currentColor"
                                                             viewBox="0 0 20 20">
-                                                            <path
-                                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                            <path d="M9.049 2.927c.3-.921 ..." />
                                                         </svg>
                                                     @endif
                                                 @endfor
                                                 <span
                                                     class="text-xs text-gray-500 mr-1">({{ $book->reviews_count }})</span>
                                             </div>
-
                                             <div
                                                 class="flex justify-between items-center pt-2 border-t border-gray-100">
                                                 <div class="flex items-center">
@@ -241,9 +240,8 @@
                                                             د.ج</span>
                                                     @endif
                                                 </div>
-                                                <button
-                                                    class="text-xs bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-md font-semibold transition duration-300 shadow"
-                                                    onclick="addToCart({{ $book->id }})">
+                                                <button onclick="addToCart({{ $book->id }})"
+                                                    class="text-xs bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-md font-semibold transition duration-300 shadow">
                                                     أضف للسلة
                                                 </button>
                                             </div>
@@ -256,8 +254,7 @@
                                 <svg class="w-16 h-16 mx-auto text-gray-400" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
-                                    </path>
+                                        d="M12 6.253v13m0-13C10.832 5.477 ..." />
                                 </svg>
                                 <h4 class="mt-4 text-lg font-medium text-gray-700">لا توجد كتب متاحة في هذه الفئة</h4>
                                 <p class="mt-1 text-gray-500">سنقوم بإضافة كتب جديدة قريباً</p>
@@ -271,9 +268,77 @@
 
     @include('components.web.footer')
 
-    {{-- يمكنك إضافة أي سكربتات JavaScript هنا في الأسفل إذا لزم الأمر --}}
-    {{-- <script src="/path/to/your/script.js"></script> --}}
+    {{-- Swiper JS --}}
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            new Swiper('.authors-swiper', {
+                loop: true,
+                slidesPerView: 2,
+                spaceBetween: 20,
+                pagination: {
+                    el: '.authors-swiper .swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.authors-swiper .swiper-button-next',
+                    prevEl: '.authors-swiper .swiper-button-prev',
+                },
+                breakpoints: {
+                    640: {
+                        slidesPerView: 3,
+                        spaceBetween: 24
+                    },
+                    768: {
+                        slidesPerView: 4,
+                        spaceBetween: 28
+                    },
+                    1024: {
+                        slidesPerView: 5,
+                        spaceBetween: 32
+                    },
+                    1280: {
+                        slidesPerView: 6,
+                        spaceBetween: 36
+                    },
+                },
+                autoplay: {
+                    delay: 3000
+                },
+            });
 
+            new Swiper('.publishers-swiper', {
+                loop: true,
+                slidesPerView: 3,
+                spaceBetween: 30,
+                pagination: {
+                    el: '.publishers-swiper .swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.publishers-swiper .swiper-button-next',
+                    prevEl: '.publishers-swiper .swiper-button-prev',
+                },
+                breakpoints: {
+                    640: {
+                        slidesPerView: 4,
+                        spaceBetween: 24
+                    },
+                    768: {
+                        slidesPerView: 5,
+                        spaceBetween: 28
+                    },
+                    1024: {
+                        slidesPerView: 6,
+                        spaceBetween: 32
+                    },
+                },
+                autoplay: {
+                    delay: 3500
+                },
+            });
+        });
+    </script>
 </body>
 
 </html>
