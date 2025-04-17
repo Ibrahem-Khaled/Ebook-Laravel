@@ -129,7 +129,7 @@
                     @foreach ($authors as $item)
                         <a href="#"
                             class="block text-center p-4 bg-white rounded-lg shadow-sm border border-transparent hover:border-primary hover:shadow-lg transition duration-300 group">
-                            <img src="{{ asset('storage/' . $author->image) }}" alt="{{ $author->author_name }}"
+                            <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->author_name }}"
                                 class="w-24 h-24 rounded-full mx-auto mb-3 object-cover border-2 border-gray-200 group-hover:border-primary transition duration-300">
                             <h3 class="font-semibold text-gray-800 group-hover:text-primary transition duration-300">اسم
                                 {{ $item->author_name }}</h3>
