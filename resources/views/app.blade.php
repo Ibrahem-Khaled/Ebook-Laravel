@@ -196,13 +196,13 @@
                                         <div class="p-4">
                                             <h3 class="font-semibold text-md mb-1 truncate"
                                                 title="{{ $book->title }}">
-                                                <a href="{{ route('books.show', $book->id) }}"
+                                                <a href="#"
                                                     class="text-gray-800 hover:text-primary transition">
                                                     {{ $book->title }}
                                                 </a>
                                             </h3>
                                             <p class="text-sm text-gray-500 mb-2 truncate">
-                                                <a href="{{ route('authors.show', $book->author->id) }}"
+                                                <a href="#"
                                                     class="hover:text-primary hover:underline">
                                                     {{ $book->author->name }}
                                                 </a>
