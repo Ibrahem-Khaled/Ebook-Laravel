@@ -168,12 +168,12 @@
                     <div class="mb-16">
                         <div class="flex justify-between items-baseline mb-8">
                             <h2 class="text-3xl font-bold text-gray-800 relative inline-block">
-                                {{ $category->name }}
+                                {{ $category->category_name }}
                                 <span class="absolute -bottom-2 left-0 w-1/2 h-0.5 bg-primary"></span>
                             </h2>
                             <a href="{{ route('categories.show', $category->id) }}"
                                 class="text-primary hover:underline font-medium">
-                                عرض المزيد في {{ $category->name }} &rarr;
+                                عرض المزيد في {{ $category->category_name }} &rarr;
                             </a>
                         </div>
 
@@ -183,8 +183,7 @@
                                     <div
                                         class="bg-white rounded-lg shadow-md overflow-hidden group transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-xl border border-transparent hover:border-gray-200">
                                         <a href="{{ route('books.show', $book->id) }}" class="block overflow-hidden">
-                                            <img src="{{ asset('storage/' . $book->cover_image) }}"
-                                                alt="{{ $book->title }}"
+                                            <img src="{{ asset($book->book_image_url) }}" alt="{{ $book->title }}"
                                                 class="w-full h-64 object-cover transition duration-500 ease-in-out group-hover:scale-105">
                                             @if ($book->discount > 0)
                                                 <span
@@ -196,14 +195,12 @@
                                         <div class="p-4">
                                             <h3 class="font-semibold text-md mb-1 truncate"
                                                 title="{{ $book->title }}">
-                                                <a href="#"
-                                                    class="text-gray-800 hover:text-primary transition">
+                                                <a href="#" class="text-gray-800 hover:text-primary transition">
                                                     {{ $book->title }}
                                                 </a>
                                             </h3>
                                             <p class="text-sm text-gray-500 mb-2 truncate">
-                                                <a href="#"
-                                                    class="hover:text-primary hover:underline">
+                                                <a href="#" class="hover:text-primary hover:underline">
                                                     {{ $book->author->name }}
                                                 </a>
                                             </p>
