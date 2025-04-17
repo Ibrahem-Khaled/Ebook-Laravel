@@ -278,7 +278,7 @@
     </div>
 
     <div class="d-flex justify-content-center mt-3">
-        {{ $users->links() }}
+        {{ $books->links() }}
     </div>
 @endsection
 
