@@ -41,6 +41,94 @@
             <i class="fas fa-plus"></i> إضافة كتاب جديد
         </button>
 
+        <!-- مودال إضافة كتاب جديد -->
+        <div class="modal fade" id="addBookModal" tabindex="-1" aria-labelledby="addBookModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addBookModalLabel">إضافة كتاب جديد</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="إغلاق">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="{{ route('books.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="book_title" class="form-label">عنوان الكتاب</label>
+                                <input type="text" class="form-control" id="book_title" name="book_title" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="book_description" class="form-label">الوصف</label>
+                                <textarea class="form-control" id="book_description" name="book_description"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="book_image" class="form-label">الصورة</label>
+                                <input type="file" class="form-control" id="book_image" name="book_image">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="book_number_pages" class="form-label">عدد الصفحات</label>
+                                    <input type="number" class="form-control" id="book_number_pages"
+                                        name="book_number_pages">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="book_price" class="form-label">السعر</label>
+                                    <input type="number" step="0.01" class="form-control" id="book_price"
+                                        name="book_price">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <label for="author_id" class="form-label">المؤلف</label>
+                                    <select name="author_id" id="author_id" class="form-control">
+                                        <option value="">اختر المؤلف</option>
+                                        @foreach ($authors as $author)
+                                            <option value="{{ $author->id }}">{{ $author->author_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="publisher_id" class="form-label">الناشر</label>
+                                    <select name="publisher_id" id="publisher_id" class="form-control">
+                                        <option value="">اختر الناشر</option>
+                                        @foreach ($publishers as $publisher)
+                                            <option value="{{ $publisher->id }}">{{ $publisher->publisher_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="category_id" class="form-label">الفئة</label>
+                                    <select name="category_id" id="category_id" class="form-control">
+                                        <option value="">اختر الفئة</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="subcategory_id" class="form-label">الفئة الفرعية</label>
+                                    <select name="subcategory_id" id="subcategory_id" class="form-control">
+                                        <option value="">اختر الفئة الفرعية</option>
+                                        @foreach ($subcategories as $subcategory)
+                                            <option value="{{ $subcategory->id }}">{{ $subcategory->subcategory_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
+                            <button type="submit" class="btn btn-primary">حفظ</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
         <!-- شريط البحث -->
         <form action="{{ route('books.index') }}" method="GET" class="mb-3">
             <div class="input-group">
@@ -75,8 +163,8 @@
                         <td>{{ $book->book_title }}</td>
                         <td>
                             @if ($book->book_image_url)
-                                <img src="{{ asset($book->book_image_url) }}" alt="{{ $book->book_title }}" width="50"
-                                    class="img-thumbnail">
+                                <img src="{{ asset($book->book_image_url) }}" alt="{{ $book->book_title }}"
+                                    width="50" class="img-thumbnail">
                             @else
                                 <span class="text-muted">لا يوجد صورة</span>
                             @endif
@@ -140,9 +228,9 @@
                                         <div class="mb-3">
                                             <label for="book_title{{ $book->id }}" class="form-label">عنوان
                                                 الكتاب</label>
-                                            <input type="text" class="form-control" id="book_title{{ $book->id }}"
-                                                name="book_title" value="{{ old('book_title', $book->book_title) }}"
-                                                required>
+                                            <input type="text" class="form-control"
+                                                id="book_title{{ $book->id }}" name="book_title"
+                                                value="{{ old('book_title', $book->book_title) }}" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="book_description{{ $book->id }}"
@@ -157,8 +245,8 @@
                                                         alt="{{ $book->book_title }}" width="100">
                                                 </div>
                                             @endif
-                                            <input type="file" class="form-control" id="book_image{{ $book->id }}"
-                                                name="book_image">
+                                            <input type="file" class="form-control"
+                                                id="book_image{{ $book->id }}" name="book_image">
                                         </div>
                                         <!-- يمكنك إضافة باقي الحقول مثل رقم الصفحات، السعر، ISBN، وتواريخ النشر -->
                                         <div class="row">
