@@ -51,7 +51,7 @@
                                 <p><strong>القسم الرئيسي:</strong> {{ $book->category->name ?? 'غير محدد' }}</p>
                                 <p><strong>القسم الفرعي:</strong> {{ $book->subcategory->name ?? 'غير محدد' }}</p>
                                 <p><strong>تاريخ النشر:</strong>
-                                    {{ $book->book_publication_date ? $book->book_publication_date->format('Y-m-d') : 'غير محدد' }}
+                                    {{ $book?->book_publication_date ? $book?->book_publication_date->format('Y-m-d') : 'غير محدد' }}
                                 </p>
                             </div>
                         </div>

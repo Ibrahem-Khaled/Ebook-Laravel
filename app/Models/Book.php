@@ -11,7 +11,9 @@ class Book extends Model
 {
     protected $guarded = ['id'];
     protected $appends = ['is_user_subscribed'];
-    
+    protected $casts = [
+        'book_publication_date' => 'date',
+    ];
     public function author(): BelongsTo
     {
         return $this->belongsTo(Author::class);
