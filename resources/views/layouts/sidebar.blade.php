@@ -45,6 +45,11 @@
             <span>المؤلفين</span></a>
     </li>
     <li class="nav-item">
+        <a class="nav-link" href="{{ route('publishers.index') }}">
+            <i class="fas fa-fw fa-building"></i>
+            <span>الناشرين</span></a>
+    </li>
+    <li class="nav-item">
         <a class="nav-link" href="{{ route('books.index') }}">
             <i class="fas fa-fw fa-book"></i>
             <span>الكتب</span></a>

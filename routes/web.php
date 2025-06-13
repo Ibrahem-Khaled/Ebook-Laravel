@@ -54,9 +54,13 @@ Route::group(['middleware' => ['auth', 'UserAdmin'], 'prefix' => 'admin'], funct
     Route::post('/categories/{id}/books/update-order', [BookController::class, 'updateBooksOrder'])->name('categories.books.updateOrder');
 
     Route::resource('author', AuthorController::class);
-    Route::resource('publisher', PublisherController::class);
+    Route::resource('publishers', PublisherController::class);
 
     Route::resource('books', BookController::class);
+    Route::get('/api/subcategories/{category_id}', function ($category_id) {
+        $subcategories = \App\Models\Subcategory::where('category_id', $category_id)->pluck('name', 'id');
+        return response()->json($subcategories);
+    });
     Route::post('books/{id}/toggle-activation', [BookController::class, 'toggleActivation'])->name('books.toggleActivation');
     Route::delete('books/translator/{translatorId}', [BookController::class, 'deleteBookTranslator'])->name('books.deleteTranslator');
     Route::post('books/update-order/{categoryId}', [BookController::class, 'updateBooksOrder'])->name('books.updateOrder');

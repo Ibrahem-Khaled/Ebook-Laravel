@@ -227,6 +227,17 @@
                         الناشرون
                         <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
                     </a>
+                    @if (Auth::check())
+                    <a href="{{ route('home.dashboard') }}" class="relative text-gray-700 hover:text-primary transition duration-300 group">
+                         لوحة التحكم
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    @else
+                    <a href="{{ route('login') }}" class="relative text-gray-700 hover:text-primary transition duration-300 group">
+                        تسجيل الدخول
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    @endif
                 </div>
 
                 <button class="md:hidden text-gray-700 focus:outline-none" id="mobile-menu-btn">

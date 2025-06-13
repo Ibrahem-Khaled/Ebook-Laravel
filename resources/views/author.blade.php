@@ -120,7 +120,7 @@
 
 <body>
     <div class="profile-header">
-        <img src="{{ asset('public/storage/' . $author->image) }}" alt="{{ $author->name }}" class="profile-img">
+        <img src="{{ asset('public/storage/' . $author->image) }}" alt="{{ $author->author_name }}" class="profile-img">
     </div>
     <div class="profile-info">
         <h2>{{ $author->author_name }}</h2>

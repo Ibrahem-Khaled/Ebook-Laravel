@@ -11,96 +11,94 @@ use Illuminate\Support\Str;
 
 class PublisherController extends Controller
 {
-
-    // عرض قائمة الناشرين مع إمكانية البحث (اختياري)
     public function index(Request $request)
     {
-        $q = $request->query('query');
+        $publishersQuery = Publisher::query()->orderBy('created_at', 'desc');
 
-        $publishers = Publisher::query()
-            ->withCount('books') // إضافة عدد الكتب لكل ناشر
-            ->when($q, function ($query, $q) {
-                return $query->where('publisher_name', 'like', '%' . $q . '%')
-                    ->orWhere('desc', 'like', '%' . $q . '%');
-            })
-            ->get();
+        if ($request->has('search')) {
+            $search = $request->get('search');
+            $publishersQuery->where(function ($query) use ($search) {
+                $query->where('publisher_name', 'like', "%$search%")
+                    ->orWhere('desc', 'like', "%$search%");
+            });
+        }
 
-        return view('dashboard.publishers.index', compact('publishers', 'q'));
+        $publishers = $publishersQuery->paginate(10);
+
+        $totalPublishers = Publisher::count();
+        $publishersWithSocial = Publisher::whereNotNull('fb')
+            ->orWhereNotNull('yt')
+            ->orWhereNotNull('telegram')
+            ->orWhereNotNull('whatsapp')
+            ->orWhereNotNull('instagram')
+            ->count();
+
+        return view('dashboard.publishers.index', compact(
+            'publishers',
+            'totalPublishers',
+            'publishersWithSocial'
+        ));
     }
 
-    // تخزين بيانات الناشر الجديد مع رفع الصورة إن وُجدت
     public function store(Request $request)
     {
         $request->validate([
-            'publisher_name' => 'required|min:3',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'publisher_name' => 'required|string|max:255|unique:publishers',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'desc' => 'nullable|string',
+            'fb' => 'nullable|url',
+            'yt' => 'nullable|url',
+            'telegram' => 'nullable|url',
+            'whatsapp' => 'nullable|string',
+            'instagram' => 'nullable|url',
         ]);
 
-        $profilePath = null;
+        $data = $request->except(['image']);
+
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $fileName = Str::slug($request->publisher_name) . '.' . $file->getClientOriginalExtension();
-            $profilePath = $file->storeAs('profiles', $fileName, 'public');
+            $data['image'] = $request->file('image')->store('publishers/images', 'public');
         }
 
-        Publisher::create([
-            'publisher_name' => $request->publisher_name,
-            'desc' => $request->desc,
-            'image' => $profilePath,
-            'fb' => $request->fb,
-            'yt' => $request->yt,
-            'telegram' => $request->telegram,
-            'whatsapp' => $request->whatsapp,
-            'instagram' => $request->instagram,
-        ]);
+        Publisher::create($data);
 
-        return redirect()->route('publisher.index')->with('success', 'تم إنشاء الناشر بنجاح.');
+        return redirect()->route('publishers.index')->with('success', 'تم إضافة الناشر بنجاح');
     }
 
-    // تحديث بيانات الناشر وتعديل الصورة إن وُجدت
-    public function update(Request $request, $id)
+    public function update(Request $request, Publisher $publisher)
     {
         $request->validate([
-            'publisher_name' => 'required|min:3',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'publisher_name' => 'required|string|max:255|unique:publishers,publisher_name,' . $publisher->id,
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'desc' => 'nullable|string',
+            'fb' => 'nullable|url',
+            'yt' => 'nullable|url',
+            'telegram' => 'nullable|url',
+            'whatsapp' => 'nullable|string',
+            'instagram' => 'nullable|url',
         ]);
 
-        $publisher = Publisher::findOrFail($id);
+        $data = $request->except(['image']);
 
-        $profilePath = $publisher->image;
         if ($request->hasFile('image')) {
             if ($publisher->image) {
                 Storage::disk('public')->delete($publisher->image);
             }
-            $file = $request->file('image');
-            $fileName = Str::slug($request->publisher_name) . '.' . $file->getClientOriginalExtension();
-            $profilePath = $file->storeAs('profiles', $fileName, 'public');
+            $data['image'] = $request->file('image')->store('publishers/images', 'public');
         }
 
-        $publisher->update([
-            'publisher_name' => $request->publisher_name,
-            'desc' => $request->desc,
-            'image' => $profilePath,
-            'fb' => $request->fb,
-            'yt' => $request->yt,
-            'telegram' => $request->telegram,
-            'whatsapp' => $request->whatsapp,
-            'instagram' => $request->instagram,
-        ]);
+        $publisher->update($data);
 
-        return redirect()->route('publisher.index')->with('success', 'تم تحديث الناشر بنجاح.');
+        return redirect()->route('publishers.index')->with('success', 'تم تحديث الناشر بنجاح');
     }
 
-    // حذف الناشر مع حذف الصورة إن وُجدت
-    public function destroy($id)
+    public function destroy(Publisher $publisher)
     {
-        $publisher = Publisher::findOrFail($id);
         if ($publisher->image) {
             Storage::disk('public')->delete($publisher->image);
         }
+
         $publisher->delete();
 
-        return redirect()->route('publisher.index')->with('success', 'تم حذف الناشر بنجاح.');
+        return redirect()->route('publishers.index')->with('success', 'تم حذف الناشر بنجاح');
     }
-
 }

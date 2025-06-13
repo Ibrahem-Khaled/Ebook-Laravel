@@ -2,177 +2,146 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Author;
 use App\Models\Book;
 use App\Models\BookInfo;
 use App\Models\Category;
-use App\Models\Publisher;
-use App\Models\Subcategory;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
-    // عرض قائمة الكتب في لوحة التحكم
-    public function index(): View
+    public function index(Request $request)
     {
-        $books = Book::with(['category', 'subcategory', 'author', 'publisher'])->paginate(10);
-        $totalBooks = $books->count();
-        $activeBooks = $books->where('is_active', true)->count();
-        $inactiveBooks = $books->where('is_active', false)->count();
+        $selectedCategory = $request->get('category', 'all');
 
-        $publishers = Publisher::all();
-        $authors = Author::all();
+        $booksQuery = Book::with(['author', 'publisher', 'category', 'subcategory'])
+            ->orderBy('sort_order', 'asc');
+
+        if ($selectedCategory !== 'all') {
+            $booksQuery->where('category_id', $selectedCategory);
+        }
+
+        if ($request->has('search')) {
+            $search = $request->get('search');
+            $booksQuery->where(function ($query) use ($search) {
+                $query->where('book_title', 'like', "%$search%")
+                    ->orWhere('book_isbn', 'like', "%$search%")
+                    ->orWhere('book_description', 'like', "%$search%");
+            });
+        }
+
+        $books = $booksQuery->paginate(10);
+
         $categories = Category::all();
-        $subcategories = Subcategory::all();
+        $totalBooks = Book::count();
+        $activeBooks = Book::where('is_active', 1)->count();
+        $freeBooks = Book::where('free_sample', 1)->count();
+        $discountedBooks = Book::where('book_discount', '>', 0)->count();
 
         return view('dashboard.books.index', compact(
             'books',
+            'categories',
+            'selectedCategory',
             'totalBooks',
             'activeBooks',
-            'inactiveBooks',
-            'publishers',
-            'authors',
-            'categories',
-            'subcategories',
+            'freeBooks',
+            'discountedBooks'
         ));
     }
 
-    // حفظ كتاب جديد
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
         $request->validate([
-            'book_isbn' => 'nullable|min:8',
-            'book_pdf' => 'nullable|file|max:102400',
-            'category_id' => 'required|min:1|integer',
-            'subcategory_id' => 'required|min:1|integer',
-            'book_title' => 'required|unique:books,book_title',
-            'author_id' => 'required|min:1|integer',
-            'publisher_id' => 'required|min:1|integer',
-            'book_publication_date' => 'required|date',
-            'book_image' => 'required|image',
-            'book_number_pages' => 'required|integer|min:1',
-            'book_discount' => 'integer|max:100',
+            'book_isbn' => 'nullable|string|max:20|unique:books',
+            'book_title' => 'required|string|max:255|unique:books',
+            'book_pdf' => 'nullable|file|max:20480',
+            'book_image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'author_id' => 'nullable|exists:authors,id',
+            'publisher_id' => 'nullable|exists:publishers,id',
+            'subcategory_id' => 'nullable|exists:subcategories,id',
+            'category_id' => 'nullable|exists:categories,id',
+            'book_number_pages' => 'nullable|integer|min:1',
+            'book_publication_date' => 'nullable|date',
+            'book_description' => 'nullable|string',
+            'book_price' => 'nullable|numeric|min:0',
+            'book_discount' => 'nullable|integer|min:0|max:100',
+            'sort_order' => 'nullable|integer',
             'is_active' => 'boolean',
+            'free_sample' => 'boolean',
         ]);
 
-        $pdfFilePath = null;
+        $data = $request->except(['book_pdf', 'book_image_url']);
+
         if ($request->hasFile('book_pdf')) {
-            $pdfFile = $request->file('book_pdf');
-            $pdfFileName = Str::slug($request->book_isbn) . '.' . $pdfFile->getClientOriginalExtension();
-            $pdfFilePath = $pdfFile->storeAs('pdfs', $pdfFileName, 'public');
+            $data['book_pdf'] = $request->file('book_pdf')->store('books/pdfs', 'public');
         }
 
-        if ($request->hasFile("book_image")) {
-            $image = $request->file("book_image");
-            $imageName = Str::slug($request->book_isbn) . "." . $image->guessExtension();
-            $destinationPath = public_path("img/books/");
-            $image->move($destinationPath, $imageName);
-
-            $book = Book::create([
-                'book_isbn' => $request->book_isbn,
-                'book_pdf' => $pdfFilePath,
-                'book_title' => $request->book_title,
-                'subcategory_id' => $request->subcategory_id,
-                'category_id' => $request->category_id,
-                'author_id' => $request->author_id,
-                'publisher_id' => $request->publisher_id,
-                'free_sample' => $request->free_sample,
-                'book_number_pages' => $request->book_number_pages,
-                'book_publication_date' => $request->book_publication_date,
-                'book_description' => $request->book_description,
-                'book_image_url' => 'img/books/' . $imageName,
-                'book_price' => $request->book_price,
-                'book_discount' => $request->book_discount,
-                'is_active' => $request->is_active ?? true, // تفعيل الكتاب افتراضيًا
-            ]);
-
-            if ($book && ($request->author_id_2 || $request->paper_url)) {
-                BookInfo::create([
-                    'book_id' => $book->id,
-                    'author_id' => $request->author_id_2,
-                    'paper_url' => $request->paper_url,
-                ]);
-            }
+        if ($request->hasFile('book_image_url')) {
+            $data['book_image_url'] = $request->file('book_image_url')->store('books/images', 'public');
         }
 
-        return redirect()->route('book.index')->with('success', 'تم إنشاء الكتاب بنجاح.');
+        Book::create($data);
+
+        return redirect()->route('books.index')->with('success', 'تم إضافة الكتاب بنجاح');
     }
 
-    // تحديث كتاب
-    public function update(Request $request, $id): RedirectResponse
+    public function update(Request $request, Book $book)
     {
         $request->validate([
-            'book_isbn' => 'nullable|min:8|max:13',
-            'category_id' => 'required|integer',
-            'subcategory_id' => 'required|integer',
-            'book_title' => 'required',
-            'author_id' => 'required|integer',
-            'publisher_id' => 'required|integer',
-            'book_publication_date' => 'required|date',
-            'book_number_pages' => 'required|integer|min:1',
-            'book_discount' => 'integer|max:100|nullable',
+            'book_isbn' => 'nullable|string|max:20|unique:books,book_isbn,' . $book->id,
+            'book_title' => 'required|string|max:255|unique:books,book_title,' . $book->id,
+            'book_pdf' => 'nullable|file|max:20480',
+            'book_image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'author_id' => 'nullable|exists:authors,id',
+            'publisher_id' => 'nullable|exists:publishers,id',
+            'subcategory_id' => 'nullable|exists:subcategories,id',
+            'category_id' => 'nullable|exists:categories,id',
+            'book_number_pages' => 'nullable|integer|min:1',
+            'book_publication_date' => 'nullable|date',
+            'book_description' => 'nullable|string',
+            'book_price' => 'nullable|numeric|min:0',
+            'book_discount' => 'nullable|integer|min:0|max:100',
+            'sort_order' => 'nullable|integer',
             'is_active' => 'boolean',
+            'free_sample' => 'boolean',
         ]);
 
-        $book = Book::findOrFail($id);
+        $data = $request->except(['book_pdf', 'book_image_url']);
 
-        // تحديث ملف PDF إذا تم تحميل ملف جديد
-        $pdfFilePath = $book->book_pdf;
         if ($request->hasFile('book_pdf')) {
-            $pdfFile = $request->file('book_pdf');
-            $pdfFileName = Str::slug($request->book_isbn) . '.' . $pdfFile->getClientOriginalExtension();
-            $pdfFilePath = $pdfFile->storeAs('pdfs', $pdfFileName, 'public');
+            if ($book->book_pdf) {
+                Storage::disk('public')->delete($book->book_pdf);
+            }
+            $data['book_pdf'] = $request->file('book_pdf')->store('books/pdfs', 'public');
         }
 
-        // تحديث الصورة إذا تم تحميل صورة جديدة
-        $bookImageUrl = $book->book_image_url;
-        if ($request->hasFile('book_image')) {
-            if (Storage::disk('public')->exists($book->book_image_url)) {
+        if ($request->hasFile('book_image_url')) {
+            if ($book->book_image_url) {
                 Storage::disk('public')->delete($book->book_image_url);
             }
-            $image = $request->file("book_image");
-            $imageName = Str::slug($request->book_isbn) . "." . $image->guessExtension();
-            $destinationPath = public_path("img/books/");
-            $image->move($destinationPath, $imageName);
-            $bookImageUrl = 'img/books/' . $imageName;
+            $data['book_image_url'] = $request->file('book_image_url')->store('books/images', 'public');
         }
 
-        // تحديث بيانات الكتاب
-        $book->update([
-            'book_isbn' => $request->book_isbn,
-            'category_id' => $request->category_id,
-            'subcategory_id' => $request->subcategory_id,
-            'book_title' => $request->book_title,
-            'author_id' => $request->author_id,
-            'publisher_id' => $request->publisher_id,
-            'book_publication_date' => $request->book_publication_date,
-            'book_number_pages' => $request->book_number_pages,
-            'free_sample' => $request->free_sample,
-            'book_description' => $request->book_description,
-            'book_pdf' => $pdfFilePath,
-            'book_image_url' => $bookImageUrl,
-            'book_price' => $request->book_price,
-            'book_discount' => $request->book_discount,
-            'is_active' => $request->is_active ?? $book->is_active, // الحفاظ على الحالة الحالية إذا لم يتم التحديث
-        ]);
+        $book->update($data);
 
-        if ($book && ($request->author_id_2 || $request->paper_url)) {
-            BookInfo::updateOrCreate(
-                ['book_id' => $book->id],
-                [
-                    'author_id' => $request->author_id_2,
-                    'paper_url' => $request->paper_url,
-                ]
-            );
+        return redirect()->route('books.index')->with('success', 'تم تحديث الكتاب بنجاح');
+    }
+
+    public function destroy(Book $book)
+    {
+        if ($book->book_pdf) {
+            Storage::disk('public')->delete($book->book_pdf);
         }
 
-        return redirect()->route('book.index')->with('success', 'تم تحديث الكتاب بنجاح.');
+        if ($book->book_image_url) {
+            Storage::disk('public')->delete($book->book_image_url);
+        }
+
+        $book->delete();
+
+        return redirect()->route('books.index')->with('success', 'تم حذف الكتاب بنجاح');
     }
 
     // تفعيل/إلغاء تفعيل الكتاب
@@ -183,15 +152,6 @@ class BookController extends Controller
 
         $status = $book->is_active ? 'مفعل' : 'غير مفعل';
         return redirect()->back()->with('success', "تم تغيير حالة الكتاب إلى {$status} بنجاح.");
-    }
-
-    // حذف كتاب
-    public function destroy($id): RedirectResponse
-    {
-        $book = Book::findOrFail($id);
-        $book->delete();
-
-        return redirect()->route('book.index')->with('success', 'تم حذف الكتاب بنجاح.');
     }
 
     // حذف مترجم الكتاب
