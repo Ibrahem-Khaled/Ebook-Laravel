@@ -62,12 +62,12 @@
                                     @foreach ($categories as $category)
                                         <option value="{{ $category->id }}"
                                             {{ $book->category_id == $category->id ? 'selected' : '' }}>
-                                            {{ $category->name }}</option>
+                                            {{ $category->category_name }}</option>
                                     @endforeach
                                 </select>
                             </div>
 
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <label for="edit_subcategory_id_{{ $book->id }}">القسم الفرعي</label>
                                 <select class="form-control select2" id="edit_subcategory_id_{{ $book->id }}"
                                     name="subcategory_id">
@@ -80,7 +80,7 @@
                                         @endforeach
                                     @endif
                                 </select>
-                            </div>
+                            </div> --}}
                         </div>
 
                         <div class="col-md-6">

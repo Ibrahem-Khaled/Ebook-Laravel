@@ -48,17 +48,17 @@
                                 <select class="form-control select2" id="category_id" name="category_id">
                                     <option value="">اختر القسم الرئيسي...</option>
                                     @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                        <option value="{{ $category->id }}">{{ $category->category_name }}</option>
                                     @endforeach
                                 </select>
                             </div>
 
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <label for="subcategory_id">القسم الفرعي</label>
                                 <select class="form-control select2" id="subcategory_id" name="subcategory_id">
                                     <option value="">اختر القسم الفرعي...</option>
                                 </select>
-                            </div>
+                            </div> --}}
                         </div>
 
                         <div class="col-md-6">
