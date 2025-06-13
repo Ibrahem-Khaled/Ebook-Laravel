@@ -49,7 +49,7 @@
                                     @foreach (App\Models\Publisher::all() as $publisher)
                                         <option value="{{ $publisher->id }}"
                                             {{ $book->publisher_id == $publisher->id ? 'selected' : '' }}>
-                                            {{ $author->publisher_name }}</option>
+                                            {{ $publisher->publisher_name }}</option>
                                     @endforeach
                                 </select>
                             </div>

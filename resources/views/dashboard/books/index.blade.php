@@ -104,8 +104,8 @@
                                         @endif
                                     </td>
                                     <td>{{ $book->book_title }}</td>
-                                    <td>{{ $book->author->name ?? 'غير محدد' }}</td>
-                                    <td>{{ $book->publisher->name ?? 'غير محدد' }}</td>
+                                    <td>{{ $book->author->author_name ?? 'غير محدد' }}</td>
+                                    <td>{{ $book->publisher->publisher_name ?? 'غير محدد' }}</td>
                                     <td>
                                         @if ($book->book_discount > 0)
                                             <span class="text-danger"><del>{{ $book->book_price }} ر.س</del></span>

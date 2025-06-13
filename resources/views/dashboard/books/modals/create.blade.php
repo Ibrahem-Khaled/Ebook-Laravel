@@ -38,7 +38,7 @@
                                 <select class="form-control select2" id="publisher_id" name="publisher_id">
                                     <option value="">اختر الناشر...</option>
                                     @foreach (App\Models\Publisher::all() as $publisher)
-                                        <option value="{{ $publisher->id }}">{{ $author->publisher_name }}</option>
+                                        <option value="{{ $publisher->id }}">{{ $publisher->publisher_name }}</option>
                                     @endforeach
                                 </select>
                             </div>
