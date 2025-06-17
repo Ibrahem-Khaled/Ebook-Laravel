@@ -21,6 +21,7 @@ return new class extends Migration {
             $table->text('fcm_token')->nullable();
             $table->boolean('is_login')->default(0)->nullable();
             $table->boolean('is_active')->default(1)->nullable();
+            $table->boolean('is_verified')->default(0)->nullable();
             $table->unsignedBigInteger('role_id')->nullable()->default(2);
             $table->rememberToken();
             $table->timestamps();
@@ -29,7 +30,6 @@ return new class extends Migration {
         DB::table('users')->insert([
             ['id' => 1, 'name' => 'admin', 'email' => 'admin@admin.com', 'password' => Hash::make('admin123'), 'role_id' => 1]
         ]);
-
     }
 
     /**

@@ -101,4 +101,9 @@ class PublisherController extends Controller
 
         return redirect()->route('publishers.index')->with('success', 'تم حذف الناشر بنجاح');
     }
+
+    public function analysis(Publisher $publisher)
+    {
+        return view('dashboard.publishers.analysis', compact('publisher'));
+    }
 }

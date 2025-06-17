@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotifcationsController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublisherController;
 use App\Http\Controllers\RoleController;
@@ -44,6 +45,8 @@ Route::group(['middleware' => ['auth', 'UserAdmin'], 'prefix' => 'admin'], funct
     Route::get('users/{user}/books', [UsersController::class, 'showBook'])->name('users.books');
     Route::delete('/users/{userId}/books/{bookId}', [UsersController::class, 'destroyBook'])->name('user.book.destroy');
     Route::post('/users/{user}/add-author-publisher', [UsersController::class, 'addAuthorAndPublisherFromUser'])->name('users.addAuthorAndPublisher');
+    Route::patch('/users/{user}/toggle-active', [UsersController::class, 'toggleActive'])->name('users.toggleActive');
+    Route::patch('/users/{user}/toggle-verified', [UsersController::class, 'toggleVerified'])->name('users.toggleVerified');
 
     Route::resource('roles', RoleController::class);
 
@@ -54,9 +57,12 @@ Route::group(['middleware' => ['auth', 'UserAdmin'], 'prefix' => 'admin'], funct
     Route::post('/categories/{id}/books/update-order', [BookController::class, 'updateBooksOrder'])->name('categories.books.updateOrder');
 
     Route::resource('author', AuthorController::class);
+
     Route::resource('publishers', PublisherController::class);
+    Route::get('/publishers/analysis/{publisher}', [PublisherController::class, 'analysis'])->name('publishers.analysis');
 
     Route::resource('books', BookController::class);
+    Route::put('books/{id}/toggle-activation', [BookController::class, 'toggleActivation'])->name('books.toggleActivation');
     Route::get('/api/subcategories/{category_id}', function ($category_id) {
         $subcategories = \App\Models\Subcategory::where('category_id', $category_id)->pluck('name', 'id');
         return response()->json($subcategories);
@@ -78,6 +84,8 @@ Route::group(['middleware' => ['auth', 'UserAdmin'], 'prefix' => 'admin'], funct
     Route::post('subscriptions/{subscription}/add-user', [subscriptionController::class, 'addUser'])->name('subscriptions.addUser');
     Route::post('/subscriptions/{subscription}/remove-user', [SubscriptionController::class, 'removeUser'])->name('subscriptions.removeUser');
     Route::post('/subscriptions/{subscription}/renew/{user}', [SubscriptionController::class, 'renewUser'])->name('subscriptions.renewUser');
+
+    Route::resource('posts', PostController::class);
 });
 
 //payment pages

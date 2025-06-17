@@ -127,34 +127,42 @@
                                         </div>
                                     </td>
                                     <td>
-                                        {{-- زر عرض --}}
-                                        <button type="button" class="btn btn-sm btn-circle btn-info" data-toggle="modal"
-                                            data-target="#showPublisherModal{{ $publisher->id }}" title="عرض">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
+                                        {{-- عرض الاحصاءيات --}}
+                                        <a href="{{ route('publishers.analysis', $publisher->id) }}"
+                                            class="btn btn-sm btn-circle btn-secondary" title="الاحصاءيات">
+                                            <i class="fas fa-chart-bar"></i>
+                                        </a>
+                                            {{-- زر عرض --}}
+                                            <button type="button" class="btn btn-sm btn-circle btn-info"
+                                                data-toggle="modal" data-target="#showPublisherModal{{ $publisher->id }}"
+                                                title="عرض">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
 
-                                        {{-- زر تعديل --}}
-                                        <button type="button" class="btn btn-sm btn-circle btn-primary" data-toggle="modal"
-                                            data-target="#editPublisherModal{{ $publisher->id }}" title="تعديل">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
+                                            {{-- زر تعديل --}}
+                                            <button type="button" class="btn btn-sm btn-circle btn-primary"
+                                                data-toggle="modal" data-target="#editPublisherModal{{ $publisher->id }}"
+                                                title="تعديل">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
 
-                                        {{-- زر حذف --}}
-                                        <button type="button" class="btn btn-sm btn-circle btn-danger" data-toggle="modal"
-                                            data-target="#deletePublisherModal{{ $publisher->id }}" title="حذف">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
+                                            {{-- زر حذف --}}
+                                            <button type="button" class="btn btn-sm btn-circle btn-danger"
+                                                data-toggle="modal"
+                                                data-target="#deletePublisherModal{{ $publisher->id }}" title="حذف">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
 
-                                        {{-- تضمين المودالات لكل ناشر --}}
-                                        @include('dashboard.publishers.modals.show', [
-                                            'publisher' => $publisher,
-                                        ])
-                                        @include('dashboard.publishers.modals.edit', [
-                                            'publisher' => $publisher,
-                                        ])
-                                        @include('dashboard.publishers.modals.delete', [
-                                            'publisher' => $publisher,
-                                        ])
+                                            {{-- تضمين المودالات لكل ناشر --}}
+                                            @include('dashboard.publishers.modals.show', [
+                                                'publisher' => $publisher,
+                                            ])
+                                            @include('dashboard.publishers.modals.edit', [
+                                                'publisher' => $publisher,
+                                            ])
+                                            @include('dashboard.publishers.modals.delete', [
+                                                'publisher' => $publisher,
+                                            ])
                                     </td>
                                 </tr>
                             @empty

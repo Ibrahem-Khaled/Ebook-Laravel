@@ -125,6 +125,16 @@
                                         @endif
                                     </td>
                                     <td>
+                                        <form action="{{ route('books.toggleActivation', $book->id) }}" method="POST"
+                                            style="display:inline;">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit"
+                                                class="btn btn-sm btn-circle btn-{{ $book->is_active ? 'danger' : 'success' }}"
+                                                title="{{ $book->is_active ? 'غير نشط' : 'نشط' }}">
+                                                <i class="fas fa-toggle-{{ $book->is_active ? 'off' : 'on' }}"></i>
+                                            </button>
+                                        </form>
                                         {{-- زر عرض --}}
                                         <button type="button" class="btn btn-sm btn-circle btn-info" data-toggle="modal"
                                             data-target="#showBookModal{{ $book->id }}" title="عرض">

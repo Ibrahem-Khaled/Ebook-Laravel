@@ -60,6 +60,11 @@
             <span>الكوبونات</span></a>
     </li>
     <li class="nav-item">
+        <a class="nav-link" href="{{ route('posts.index') }}">
+            <i class="fas fa-fw fa-newspaper"></i>
+            <span>المقالات</span></a>
+    </li>
+    <li class="nav-item">
         <a class="nav-link" href="{{ route('slides.index') }}">
             <i class="fas fa-fw fa-images"></i>
             <span>السلايدر شو</span></a>

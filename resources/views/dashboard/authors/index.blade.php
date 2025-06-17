@@ -79,6 +79,10 @@
                         <td>{{ Str::limit($author->desc, 50) }}</td>
                         <td>{{ $author->books_count }}</td>
                         <td>
+                            <a href="{{ route('publishers.analysis', $author->id) }}"
+                                class="btn btn-sm btn-circle btn-secondary" title="الاحصاءيات">
+                                <i class="fas fa-chart-bar"></i>
+                            </a>
                             <!-- زر تعديل يفتح نافذة تعديل خاصة بهذا المؤلف -->
                             <button type="button" class="btn btn-warning btn-sm" data-toggle="modal"
                                 data-target="#editAuthorModal{{ $author->id }}">
@@ -179,8 +183,7 @@
                                     هل أنت متأكد من حذف المؤلف <strong>{{ $author->author_name }}</strong>؟
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-dismiss="modal">إلغاء</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
                                     <form action="{{ route('author.destroy', $author->id) }}" method="POST"
                                         class="d-inline">
                                         @csrf

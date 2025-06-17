@@ -41,7 +41,7 @@ class UsersController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'role_id' => 'required|exists:roles,id',
-            'is_active'=>'required|boolean',
+            'is_active' => 'required|boolean',
             'password' => 'required|string|min:8',
         ]);
 
@@ -61,7 +61,7 @@ class UsersController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|email',
-            'is_active'=>'required|boolean',
+            'is_active' => 'required|boolean',
             'role_id' => 'required|exists:roles,id',
         ]);
 
@@ -219,6 +219,19 @@ class UsersController extends Controller
         return redirect()->back()->with('message', 'Publisher deleted successfully');
     }
 
+    public function toggleActive(User $user)
+    {
+        $user->update([
+            'is_active' => !$user->is_active,
+        ]);
+        return redirect()->back()->with('message', 'User status updated successfully');
+    }
 
-
+    public function toggleVerified(User $user)
+    {
+        $user->update([
+            'is_verified' => !$user->is_verified,
+        ]);
+        return redirect()->back()->with('message', 'User status updated successfully');
+    }
 }

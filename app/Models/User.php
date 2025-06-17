@@ -21,6 +21,7 @@ class User extends Authenticatable implements JWTSubject
         'is_active',
         'fcm_token',
         'role_id',
+        'is_verified',
     ];
     protected $hidden = [
         'password',
@@ -29,6 +30,8 @@ class User extends Authenticatable implements JWTSubject
     ];
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'is_active' => 'boolean',
+        'is_verified' => 'boolean',
         'password' => 'hashed',
     ];
 
@@ -90,6 +93,10 @@ class User extends Authenticatable implements JWTSubject
             ->withPivot('id', 'page');
     }
 
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
 
     //this accessors methods
     public function getIsUserSubscribedAttribute()
@@ -110,5 +117,4 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
-
 }

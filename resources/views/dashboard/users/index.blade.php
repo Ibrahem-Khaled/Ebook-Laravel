@@ -39,8 +39,25 @@
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
                         <td>{{ optional($user->role)->role_name ?? 'غير محدد' }}</td>
-                        <td class="badge bg-{{ $user->is_active ? 'success' : 'danger' }}" >{{ $user->is_active ? 'نشط' : 'غير نشط' }}</td>
+                        <td class="badge bg-{{ $user->is_active ? 'success' : 'danger' }}">
+                            {{ $user->is_active ? 'نشط' : 'غير نشط' }}</td>
                         <td>
+                            <form action="{{ route('users.toggleActive', $user->id) }}" method="POST"
+                                style="display: inline;">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" class="btn btn-{{ $user->is_active ? 'danger' : 'success' }} btn-sm">
+                                    {{ $user->is_active ? 'غير نشط' : 'نشط' }}
+                                </button>
+                            </form>
+                            <form action="{{ route('users.toggleVerified', $user->id) }}" method="POST"
+                                style="display: inline;">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit"
+                                    class="btn btn-{{ $user->is_verified ? 'danger' : 'success' }} btn-sm">
+                                    {{ $user->is_verified ? 'غير موثق' : 'موثق' }}</button>
+                            </form>
                             <!-- زر التعديل -->
                             <button type="button" class="btn btn-warning btn-sm" data-toggle="modal"
                                 data-target="#editUserModal{{ $user->id }}">
